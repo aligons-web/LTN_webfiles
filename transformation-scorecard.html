@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Transformation Audit Scorecard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1c1a17;
+    --paper:#f6f1e7;
+    --paper-2:#fbf8f1;
+    --line:#ddd2bd;
+    --gold:#b8893b;
+    --gold-deep:#8a6321;
+    --clay:#a8472e;
+    --moss:#5a6b47;
+    --sky:#3d6b78;
+    --muted:#6f685c;
+    --shadow:0 1px 2px rgba(40,32,18,.05),0 8px 24px rgba(40,32,18,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 12% -5%,rgba(184,137,59,.10),transparent 42%),radial-gradient(circle at 90% 0%,rgba(61,107,120,.08),transparent 40%);
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px}
+
+  /* ---- Hero ---- */
+  header{padding:60px 0 30px;text-align:center}
+  .eyebrow{
+    font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--gold-deep);font-weight:600;margin-bottom:18px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;
+    letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--clay)}
+  .sub{
+    margin:18px auto 0;max-width:540px;color:var(--muted);
+    font-size:1.02rem;
+  }
+  .legend{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
+    margin:24px auto 0;max-width:600px;
+  }
+  .legend span{
+    font-size:.74rem;font-weight:600;letter-spacing:.02em;
+    padding:6px 12px;border-radius:999px;border:1px solid var(--line);
+    background:var(--paper-2);
+  }
+  .legend span b{font-family:'Fraunces',serif;margin-right:5px}
+  .lg-crit{color:var(--clay)} .lg-crit b{color:var(--clay)}
+  .lg-need{color:var(--gold-deep)} .lg-need b{color:var(--gold-deep)}
+  .lg-good{color:var(--sky)} .lg-good b{color:var(--sky)}
+  .lg-strong{color:var(--moss)} .lg-strong b{color:var(--moss)}
+
+  /* ---- Sticky live total ---- */
+  .ticker{
+    position:sticky;top:0;z-index:50;
+    background:rgba(246,241,231,.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    padding:12px 0;margin-top:34px;
+  }
+  .ticker-inner{
+    display:flex;align-items:center;justify-content:space-between;gap:18px;
+  }
+  .ticker-score{display:flex;align-items:baseline;gap:10px}
+  .ticker-num{
+    font-family:'Fraunces',serif;font-size:2rem;font-weight:600;
+    color:var(--ink);line-height:1;
+  }
+  .ticker-num span{font-size:1rem;color:var(--muted);font-family:'Inter'}
+  .ticker-stage{
+    font-size:.82rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    padding:7px 14px;border-radius:999px;
+    background:var(--ink);color:var(--paper);
+    transition:background .4s ease;
+  }
+  .bar-track{
+    flex:1;height:7px;border-radius:99px;background:var(--line);
+    overflow:hidden;min-width:80px;
+  }
+  .bar-fill{height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,var(--clay),var(--gold),var(--moss));
+    transition:width .5s cubic-bezier(.2,.8,.2,1);}
+
+  /* ---- Categories ---- */
+  main{padding:36px 0 60px}
+  .cat{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:26px 26px 22px;
+    margin-bottom:20px;
+    box-shadow:var(--shadow);
+  }
+  .cat-head{
+    display:flex;align-items:flex-start;justify-content:space-between;
+    gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line);
+    margin-bottom:4px;
+  }
+  .cat-title{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .cat-num{
+    font-family:'Fraunces',serif;font-style:italic;color:var(--gold);
+    font-size:1.1rem;font-weight:500;
+  }
+  .cat-name{
+    font-family:'Fraunces',serif;font-weight:600;font-size:1.32rem;
+    letter-spacing:-.01em;
+  }
+  .cat-weight{
+    font-size:.72rem;font-weight:600;color:var(--gold-deep);
+    background:rgba(184,137,59,.12);padding:3px 9px;border-radius:6px;
+    letter-spacing:.04em;align-self:center;
+  }
+  .cat-sub{text-align:right;white-space:nowrap}
+  .cat-sub b{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:600}
+  .cat-sub small{display:block;font-size:.7rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+
+  .item{
+    display:grid;grid-template-columns:1fr auto;gap:6px 18px;
+    align-items:center;padding:15px 0;border-bottom:1px dashed var(--line);
+  }
+  .item:last-child{border-bottom:none}
+  .item-label{font-weight:600;font-size:.98rem}
+  .item-desc{grid-column:1;color:var(--muted);font-size:.88rem;margin-top:1px}
+  .stepper{
+    grid-row:1/3;grid-column:2;
+    display:flex;align-items:center;gap:4px;
+  }
+  .stepper button{
+    width:30px;height:30px;border-radius:8px;border:1px solid var(--line);
+    background:var(--paper);font-size:1.1rem;color:var(--gold-deep);
+    cursor:pointer;font-weight:600;line-height:1;
+    transition:transform .08s,background .15s;
+  }
+  .stepper button:hover{background:rgba(184,137,59,.14)}
+  .stepper button:active{transform:scale(.9)}
+  .stepper input{
+    width:52px;height:34px;text-align:center;font-size:1.05rem;
+    font-weight:700;font-family:'Fraunces',serif;
+    border:1px solid var(--line);border-radius:8px;background:#fff;
+    color:var(--ink);
+  }
+  .stepper input:focus{outline:2px solid var(--gold);outline-offset:1px}
+  .scale-hint{font-size:.68rem;color:var(--muted);text-align:center;margin-top:8px;letter-spacing:.04em}
+
+  /* ---- Result panel ---- */
+  .result{
+    background:var(--ink);color:var(--paper);
+    border-radius:20px;padding:38px 32px;margin:14px 0 30px;
+    box-shadow:var(--shadow);
+  }
+  .result h2{font-family:'Fraunces',serif;font-weight:500;font-size:1rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);text-align:center}
+  .result .big{
+    font-family:'Fraunces',serif;font-size:clamp(3rem,11vw,5.2rem);
+    font-weight:600;text-align:center;line-height:1;margin:14px 0 4px;
+  }
+  .result .big span{font-size:1.6rem;color:rgba(246,241,231,.5)}
+  .stage-name{text-align:center;font-family:'Fraunces',serif;font-style:italic;font-size:1.6rem;margin-top:10px}
+  .stage-desc{text-align:center;color:rgba(246,241,231,.72);max-width:440px;margin:8px auto 0;font-size:.95rem}
+
+  .stage-ladder{display:flex;gap:6px;margin-top:26px}
+  .rung{flex:1;text-align:center;font-size:.62rem;letter-spacing:.04em;text-transform:uppercase;color:rgba(246,241,231,.4);padding-top:8px;border-top:2px solid rgba(246,241,231,.18);transition:.3s}
+  .rung.on{color:var(--paper);border-top-color:var(--gold);font-weight:700}
+
+  .breakdown{display:grid;grid-template-columns:1fr 1fr;gap:10px 26px;margin-top:30px}
+  @media(max-width:560px){.breakdown{grid-template-columns:1fr}}
+  .brow{display:flex;align-items:center;gap:10px}
+  .brow .nm{font-size:.84rem;width:120px;flex-shrink:0;color:rgba(246,241,231,.85)}
+  .brow .tr{flex:1;height:6px;background:rgba(246,241,231,.14);border-radius:99px;overflow:hidden}
+  .brow .fl{height:100%;background:var(--gold);border-radius:99px;width:0;transition:width .6s}
+  .brow .vl{font-size:.78rem;font-variant-numeric:tabular-nums;width:48px;text-align:right;color:rgba(246,241,231,.7)}
+
+  /* ---- Six questions ---- */
+  .reflect{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:30px 28px;margin-bottom:24px;box-shadow:var(--shadow)}
+  .reflect h2{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:600;margin-bottom:6px}
+  .reflect .lead{color:var(--muted);font-size:.92rem;margin-bottom:22px}
+  .q{margin-bottom:18px}
+  .q label{display:block;font-weight:600;font-size:.94rem;margin-bottom:7px}
+  .q label b{color:var(--gold-deep);font-family:'Fraunces',serif;margin-right:6px}
+  .q textarea{width:100%;min-height:58px;resize:vertical;font-family:inherit;font-size:.92rem;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+  .q textarea:focus{outline:2px solid var(--gold);outline-offset:1px}
+  .auto{font-style:italic;color:var(--moss);font-size:.86rem;margin-top:4px;min-height:1.1em}
+
+  /* ---- actions ---- */
+  .actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding-bottom:70px}
+  .btn{font-family:inherit;font-weight:600;font-size:.92rem;padding:13px 26px;border-radius:10px;cursor:pointer;border:1px solid var(--line);background:var(--paper-2);color:var(--ink);transition:.15s}
+  .btn:hover{background:#fff}
+  .btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .btn.primary:hover{background:#332f29}
+
+  footer{text-align:center;color:var(--muted);font-size:.78rem;padding:0 0 40px}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <p class="eyebrow">Life Transformation Assessment</p>
+  <h1>Where you are.<br>Where you're <em>headed.</em></h1>
+  <p class="sub">Rate yourself from 1–10 in each category. Your total reveals your current stage of transformation — and the next move that matters most.</p>
+  <div class="legend">
+    <span class="lg-crit"><b>1–3</b>Critical</span>
+    <span class="lg-need"><b>4–6</b>Needs Improvement</span>
+    <span class="lg-good"><b>7–8</b>Good</span>
+    <span class="lg-strong"><b>9–10</b>Strong</span>
+  </div>
+</header>
+
+<div class="ticker">
+  <div class="wrap ticker-inner">
+    <div class="ticker-score">
+      <div class="ticker-num"><span id="liveScore">0</span><span> / 330</span></div>
+    </div>
+    <div class="bar-track"><div class="bar-fill" id="liveBar"></div></div>
+    <div class="ticker-stage" id="liveStage">Begin</div>
+  </div>
+</div>
+
+<main class="wrap" id="form"></main>
+
+<div class="wrap">
+  <section class="result" id="result">
+    <h2>Life Transformation Score</h2>
+    <div class="big"><span id="rScore">0</span><span> / 330</span></div>
+    <div class="stage-name" id="rStageName">—</div>
+    <p class="stage-desc" id="rStageDesc">Complete your scorecard to reveal your stage.</p>
+
+    <div class="stage-ladder" id="ladder">
+      <div class="rung" data-stage="Reset">Reset</div>
+      <div class="rung" data-stage="Repositioning">Repositioning</div>
+      <div class="rung" data-stage="Awakening">Awakening</div>
+      <div class="rung" data-stage="Advancing">Advancing</div>
+      <div class="rung" data-stage="Thriving">Thriving</div>
+    </div>
+
+    <div class="breakdown" id="breakdown"></div>
+  </section>
+
+  <section class="reflect">
+    <h2>The Six Questions</h2>
+    <p class="lead">Reflection turns a score into a strategy. Your highest and lowest areas are filled in automatically.</p>
+    <div class="q"><label><b>1</b>What area scored highest?</label><div class="auto" id="qHigh">—</div></div>
+    <div class="q"><label><b>2</b>What area scored lowest?</label><div class="auto" id="qLow">—</div></div>
+    <div class="q"><label><b>3</b>What is the cost of staying where you are?</label><textarea id="q3"></textarea></div>
+    <div class="q"><label><b>4</b>What would improve if your lowest area increased by 50%?</label><textarea id="q4"></textarea></div>
+    <div class="q"><label><b>5</b>What one habit would create the biggest positive impact?</label><textarea id="q5"></textarea></div>
+    <div class="q"><label><b>6</b>What action will you take in the next 72 hours?</label><textarea id="q6"></textarea></div>
+  </section>
+
+  <div class="actions">
+    <button class="btn primary" onclick="window.print()">Save / Print Scorecard</button>
+    <button class="btn" id="resetBtn">Clear All</button>
+  </div>
+</div>
+
+<footer class="wrap">Maximum score 330 · Score each statement 1 (low) to 10 (high)</footer>
+
+<script>
+const DATA = [
+  {name:"Purpose & Vision", weight:"10%", color:"var(--gold)", items:[
+    ["Purpose Clarity","I know why I am here and the value I am called to bring."],
+    ["Future Vision","I have a clear picture of where I want my life to be in 3-5 years."],
+    ["Daily Alignment","My daily activities support my long-term vision."],
+  ]},
+  {name:"Spiritual Foundation", weight:"10%", items:[
+    ["Faith Development","I consistently invest in spiritual growth."],
+    ["Peace & Confidence","I operate from faith rather than fear."],
+    ["Purpose Connection","I feel connected to God's direction for my life."],
+  ]},
+  {name:"Health & Energy", weight:"10%", items:[
+    ["Physical Health","My health supports the life I want to live."],
+    ["Energy Level","I consistently have the energy to pursue important goals."],
+    ["Sleep & Recovery","I recover well and maintain healthy habits."],
+  ]},
+  {name:"Relationships", weight:"10%", items:[
+    ["Family Relationships","My family relationships are healthy and growing."],
+    ["Friendships & Community","I have meaningful connections and support."],
+    ["Influence & Service","I positively impact others through my life."],
+  ]},
+  {name:"Financial Health", weight:"15%", items:[
+    ["Income Stability","My income consistently supports my goals."],
+    ["Debt Management","I am effectively managing debt."],
+    ["Wealth Building","I am actively building assets and investments."],
+    ["Financial Freedom Progress","I am moving toward financial independence."],
+  ]},
+  {name:"Career / Business", weight:"15%", items:[
+    ["Growth","I am advancing professionally or entrepreneurially."],
+    ["Skill Development","I am continually increasing my value."],
+    ["Impact","My work creates meaningful results."],
+    ["Opportunity Creation","I am building opportunities rather than waiting for them."],
+  ]},
+  {name:"Execution & Productivity", weight:"15%", items:[
+    ["Focus","I spend time on what matters most."],
+    ["Consistency","I regularly follow through on commitments."],
+    ["Time Management","I manage my time intentionally."],
+    ["Goal Achievement","I consistently complete important projects."],
+  ]},
+  {name:"Personal Growth", weight:"10%", items:[
+    ["Learning","I actively invest in personal development."],
+    ["Adaptability","I embrace change and new opportunities."],
+    ["Confidence","I believe I can achieve meaningful goals."],
+  ]},
+  {name:"Legacy & Contribution", weight:"5%", items:[
+    ["Contribution","I am making a difference in the lives of others."],
+    ["Leadership","I positively influence people around me."],
+    ["Legacy Building","I am creating something that outlives me."],
+  ]},
+];
+
+const STAGES = [
+  {min:275, name:"Transformation Thriving", desc:"You are operating from strength and momentum."},
+  {min:220, name:"Transformation Advancing", desc:"You are making progress but have several growth opportunities."},
+  {min:165, name:"Transformation Awakening", desc:"Potential exists, but significant improvements are needed."},
+  {min:110, name:"Transformation Repositioning", desc:"Several key areas require intentional focus."},
+  {min:0,   name:"Transformation Reset", desc:"Immediate attention is needed to create a healthier foundation."},
+];
+const STAGE_KEY = ["Reset","Repositioning","Awakening","Advancing","Thriving"];
+
+const state = DATA.map(c => c.items.map(() => 0));
+const romans = ["I","II","III","IV","V","VI","VII","VIII","IX"];
+
+const form = document.getElementById('form');
+DATA.forEach((cat, ci) => {
+  const max = cat.items.length * 10;
+  const el = document.createElement('section');
+  el.className = 'cat';
+  el.innerHTML = `
+    <div class="cat-head">
+      <div class="cat-title">
+        <span class="cat-num">${romans[ci]}</span>
+        <span class="cat-name">${cat.name}</span>
+        <span class="cat-weight">${cat.weight}</span>
+      </div>
+      <div class="cat-sub"><b id="sub-${ci}">0</b><small>of ${max}</small></div>
+    </div>
+    ${cat.items.map((it,ii)=>`
+      <div class="item">
+        <div class="item-label">${it[0]}</div>
+        <div class="item-desc">${it[1]}</div>
+        <div class="stepper">
+          <button aria-label="decrease" data-c="${ci}" data-i="${ii}" data-d="-1">−</button>
+          <input type="number" min="0" max="10" value="0" id="in-${ci}-${ii}" data-c="${ci}" data-i="${ii}">
+          <button aria-label="increase" data-c="${ci}" data-i="${ii}" data-d="1">+</button>
+        </div>
+      </div>`).join('')}
+    <div class="scale-hint">Score each 1–10 · subtotal of ${max}</div>
+  `;
+  form.appendChild(el);
+});
+
+function clamp(v){v=parseInt(v)||0;return Math.max(0,Math.min(10,v));}
+
+function setVal(ci,ii,v){
+  v=clamp(v);
+  state[ci][ii]=v;
+  document.getElementById(`in-${ci}-${ii}`).value=v;
+  render();
+}
+
+form.addEventListener('click', e=>{
+  const b=e.target.closest('button[data-d]');
+  if(!b)return;
+  const ci=+b.dataset.c, ii=+b.dataset.i;
+  setVal(ci,ii, state[ci][ii] + (+b.dataset.d));
+});
+form.addEventListener('input', e=>{
+  const inp=e.target.closest('input[type=number]');
+  if(!inp)return;
+  setVal(+inp.dataset.c, +inp.dataset.i, inp.value);
+});
+
+function render(){
+  let total=0;
+  const subs=[];
+  DATA.forEach((cat,ci)=>{
+    const s=state[ci].reduce((a,b)=>a+b,0);
+    subs.push(s);
+    total+=s;
+    document.getElementById(`sub-${ci}`).textContent=s;
+  });
+
+  // ticker + result
+  document.getElementById('liveScore').textContent=total;
+  document.getElementById('rScore').textContent=total;
+  const pct=(total/330)*100;
+  document.getElementById('liveBar').style.width=pct+'%';
+
+  const stage=STAGES.find(s=>total>=s.min);
+  const key=stage.name.replace('Transformation ','');  document.getElementById('liveStage').textContent= total===0 ? 'Begin' : key;
+  document.getElementById('rStageName').textContent=stage.name;
+  document.getElementById('rStageDesc').textContent=stage.desc;
+
+  document.querySelectorAll('.rung').forEach(r=>{
+    r.classList.toggle('on', total>0 && r.dataset.stage===key);
+  });
+
+  // breakdown bars
+  const bd=document.getElementById('breakdown');
+  bd.innerHTML=DATA.map((cat,ci)=>{
+    const max=cat.items.length*10;
+    const p=(subs[ci]/max)*100;
+    return `<div class="brow"><span class="nm">${cat.name}</span>
+      <span class="tr"><span class="fl" style="width:${p}%"></span></span>
+      <span class="vl">${subs[ci]}/${max}</span></div>`;
+  }).join('');
+
+  // six questions auto high/low (only count touched categories)
+  const touched=DATA.map((cat,ci)=>({
+    name:cat.name, pct:subs[ci]/(cat.items.length*10), raw:subs[ci]
+  }));
+  if(total>0){
+    const sorted=[...touched].sort((a,b)=>b.pct-a.pct);
+    const hi=sorted[0], lo=sorted[sorted.length-1];
+    document.getElementById('qHigh').textContent=`${hi.name} — your strongest area (${(hi.pct*100).toFixed(0)}%). Build from this momentum.`;
+    document.getElementById('qLow').textContent=`${lo.name} — your biggest opportunity (${(lo.pct*100).toFixed(0)}%). A 50% lift here moves your whole stage.`;
+  }else{
+    document.getElementById('qHigh').textContent='—';
+    document.getElementById('qLow').textContent='—';
+  }
+}
+
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  state.forEach((c,ci)=>c.forEach((_,ii)=>{state[ci][ii]=0;document.getElementById(`in-${ci}-${ii}`).value=0;}));
+  ['q3','q4','q5','q6'].forEach(id=>document.getElementById(id).value='');
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
