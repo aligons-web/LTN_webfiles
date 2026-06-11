@@ -180,13 +180,70 @@ textarea{min-height:74px}
 footer{text-align:center;padding:46px 20px 60px;color:var(--muted);font-size:.84rem}
 footer .v{font-family:'Fraunces',serif;font-style:italic;color:var(--indigo);font-size:1.05rem;margin-bottom:8px}
 
+/* ---------- Completion certificate ---------- */
+#certificate{display:none;margin:44px 0 10px}
+#certificate.show{display:block;animation:certrise .6s ease}
+@keyframes certrise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.cert-inner{
+  position:relative;text-align:center;
+  background:linear-gradient(165deg,var(--indigo) 0%,var(--indigo-deep) 100%);
+  color:var(--cream);border-radius:18px;padding:48px 34px 40px;overflow:hidden;
+  border:1px solid rgba(201,162,75,.4);
+  box-shadow:0 20px 60px rgba(19,22,58,.25);
+}
+.cert-inner::before{
+  content:"";position:absolute;inset:14px;border:1px solid rgba(201,162,75,.35);border-radius:12px;pointer-events:none;
+}
+.cert-inner::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(700px 260px at 50% -8%,rgba(201,162,75,.22),transparent 70%);pointer-events:none;
+}
+.cert-inner>*{position:relative;z-index:1}
+.cert-seal{
+  width:64px;height:64px;margin:0 auto 18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:700;letter-spacing:.06em;font-size:1.1rem;
+  color:var(--indigo-deep);background:linear-gradient(145deg,var(--gold-bright),var(--gold));
+  box-shadow:0 0 0 6px rgba(201,162,75,.18);
+}
+.cert-eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-bright);font-weight:600;margin-bottom:18px}
+.cert-congrats{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(1.8rem,5vw,2.5rem);margin-bottom:10px}
+.cert-lead{color:#cfd0ea;font-size:1.02rem;margin-bottom:26px}
+.cert-lead strong{color:#fff}
+.cert-name-label{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:#a9abd0;margin-bottom:6px}
+.cert-name{
+  width:min(420px,100%);text-align:center;background:transparent;border:none;
+  border-bottom:1.5px solid rgba(201,162,75,.5);color:var(--gold-bright);
+  font-family:'Fraunces',serif;font-size:1.5rem;font-weight:500;padding:4px 8px 8px;margin-bottom:28px;
+}
+.cert-name::placeholder{color:rgba(201,162,75,.4)}
+.cert-name:focus{outline:none;border-bottom-color:var(--gold-bright)}
+.cert-list{list-style:none;display:inline-flex;flex-direction:column;gap:8px;text-align:left;margin:0 auto 26px}
+.cert-list li{position:relative;padding-left:26px;color:#dcdcf0;font-size:.96rem}
+.cert-list li::before{content:"✦";position:absolute;left:0;color:var(--gold-bright);font-size:.85rem;top:2px}
+.cert-quote{
+  font-family:'Fraunces',serif;font-style:italic;font-size:1.08rem;line-height:1.5;
+  color:#fff;max-width:46ch;margin:0 auto 28px;padding:18px 22px;
+  border-top:1px solid rgba(201,162,75,.3);border-bottom:1px solid rgba(201,162,75,.3);
+}
+.cert-next{max-width:50ch;margin:0 auto 30px;color:#c4c5e4;font-size:.92rem}
+.cert-next-lbl{display:block;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-bright);font-weight:600;margin-bottom:8px}
+.cert-next strong{color:#fff}
+.cert-print{margin:0 auto}
+
 /* print */
 @media print{
-  #banner,.toolbar,.chev,.mark-done,header::after{display:none!important}
+  #banner,.toolbar,.chev,.mark-done,header::after,.cert-print{display:none!important}
   body{background:#fff}
   .day-body{display:block!important}
   .day{break-inside:avoid;box-shadow:none;border-color:#ccc}
   header{background:var(--indigo)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #certificate{break-before:page}
+  .cert-inner{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none}
+  .cert-name{color:var(--gold)!important}
+  body.print-cert header,body.print-cert .progress-head,body.print-cert .track,
+  body.print-cert .toolbar,body.print-cert #weeks,body.print-cert footer{display:none!important}
+  body.print-cert #certificate{break-before:auto}
 }
 </style>
 </head>
@@ -234,6 +291,33 @@ footer .v{font-family:'Fraunces',serif;font-style:italic;color:var(--indigo);fon
   </div>
 
   <div id="weeks"></div>
+
+  <section id="certificate" aria-hidden="true">
+    <div class="cert-inner">
+      <div class="cert-seal">LIFE</div>
+      <div class="cert-eyebrow">Living Intentionally Focused Everyday</div>
+      <h2 class="cert-congrats">Congratulations!</h2>
+      <p class="cert-lead">You have completed the<br><strong>21-Day LIFE Transformation Challenge.</strong></p>
+      <p class="cert-name-label">This certifies the journey of</p>
+      <input type="text" id="certName" class="cert-name" placeholder="Write your name" data-id="cert_name">
+      <ul class="cert-list">
+        <li>Discovered greater clarity</li>
+        <li>Identified barriers</li>
+        <li>Developed focus</li>
+        <li>Created a vision</li>
+        <li>Built momentum toward the future</li>
+      </ul>
+      <blockquote class="cert-quote">"Transformation does not happen in a moment. It happens through intentional decisions made consistently over time."</blockquote>
+      <div class="cert-next">
+        <span class="cert-next-lbl">Next step</span>
+        <p>Continue through the <strong>LIFE Transformation Network</strong> and the <strong>Transformation Builder</strong> platform — to deepen your purpose, analyze change, clarify focus, and build a practical blueprint for the future.</p>
+      </div>
+      <button class="btn primary cert-print" onclick="printCert()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+        Print certificate
+      </button>
+    </div>
+  </section>
 
   <footer>
     <div class="v">"The person I am becoming is…"</div>
@@ -362,10 +446,11 @@ const WEEKS = [
         {type:"text", id:"d20_action", label:"The one meaningful action I'm taking", prompt:"Register for a course · Launch a project · Schedule a meeting · Create a business page · Submit an application"}
       ]},
       {n:21, t:"Transformation Declaration", s:"Name what changed", fields:[
-        {type:"fill", id:"d21_discovered", lead:"What I discovered…"},
-        {type:"fill", id:"d21_released", lead:"What I released…"},
-        {type:"fill", id:"d21_committing", lead:"What I'm committing to…"},
-        {type:"declaration", id:"d21_decl", preset:"", label:"My transformation declaration"}
+        {type:"fill", id:"d21_discovered", lead:"What I discovered:"},
+        {type:"fill", id:"d21_change", lead:"What I must change:"},
+        {type:"fill", id:"d21_pursue", lead:"What I will pursue:"},
+        {type:"fill", id:"d21_goal90", lead:"My 90-day goal:"},
+        {type:"fill", id:"d21_nextstep", lead:"My first next step:"}
       ]}
     ]}
 ];
@@ -440,16 +525,17 @@ function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").repl
 
 /* -------- interactions -------- */
 function bind(){
-  document.querySelectorAll('textarea[data-id],input[type=text][data-id]').forEach(el=>{
+  const scope=document.getElementById('weeks');
+  scope.querySelectorAll('textarea[data-id],input[type=text][data-id]').forEach(el=>{
     el.addEventListener('input',()=>{ DATA.fields[el.dataset.id]=el.value; persist(); });
   });
-  document.querySelectorAll('input[data-rate]').forEach(el=>{
+  scope.querySelectorAll('input[data-rate]').forEach(el=>{
     el.addEventListener('input',()=>{
       document.getElementById('rv_'+el.dataset.id).textContent=el.value;
       DATA.fields[el.dataset.id]=el.value; persist();
     });
   });
-  document.querySelectorAll('input[data-done]').forEach(el=>{
+  scope.querySelectorAll('input[data-done]').forEach(el=>{
     el.addEventListener('change',()=>{
       DATA.done[el.dataset.done]=el.checked;
       el.closest('.day').classList.toggle('done',el.checked);
@@ -465,6 +551,25 @@ function updateProgress(){
   document.getElementById('fill').style.width=pct+'%';
   document.getElementById('pct').textContent=pct+'%';
   document.getElementById('doneCount').textContent=done;
+
+  const cert=document.getElementById('certificate');
+  const complete=done===21;
+  const wasShown=cert.classList.contains('show');
+  cert.classList.toggle('show',complete);
+  cert.setAttribute('aria-hidden',complete?'false':'true');
+  if(complete && !wasShown){ setTimeout(()=>{ try{cert.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){} },200); }
+}
+
+/* certificate name (static markup — bind once) */
+function initCert(){
+  const el=document.getElementById('certName');
+  el.value=DATA.fields.cert_name||"";
+  el.addEventListener('input',()=>{ DATA.fields.cert_name=el.value; persist(); });
+}
+function printCert(){
+  document.body.classList.add('print-cert');
+  window.print();
+  setTimeout(()=>document.body.classList.remove('print-cert'),300);
 }
 
 /* -------- backup / restore -------- */
@@ -483,7 +588,7 @@ function restore(e){
       const d=JSON.parse(r.result);
       if(!d.fields||!d.done) throw new Error("bad file");
       if(confirm("Restore this backup? It will replace your current entries on this device.")){
-        DATA=d; persist(); render();
+        DATA=d; persist(); render(); document.getElementById('certName').value=DATA.fields.cert_name||"";
       }
     }catch(err){ alert("That file couldn't be read as a valid backup."); }
     e.target.value="";
@@ -492,6 +597,7 @@ function restore(e){
 }
 
 render();
+initCert();
 </script>
 </body>
 </html>
