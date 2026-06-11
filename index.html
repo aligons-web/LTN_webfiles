@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LIFE Transformation Network</title>
-
 <style>
 body {
     margin: 0;
@@ -12,61 +11,59 @@ body {
     background: linear-gradient(135deg, #1b1038, #351c75);
     color: white;
 }
-
 header {
     text-align: center;
     padding: 60px 20px;
 }
-
 header h1 {
     font-size: 3rem;
     margin-bottom: 10px;
 }
-
 header p {
     font-size: 1.2rem;
     max-width: 800px;
     margin: auto;
     opacity: .9;
 }
-
 .container {
     max-width: 1200px;
     margin: auto;
     padding: 20px;
 }
-
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 25px;
 }
-
 .card {
     background: rgba(255,255,255,.08);
     border-radius: 15px;
     padding: 25px;
     transition: .3s;
     border: 1px solid rgba(255,255,255,.15);
+    display: flex;
+    flex-direction: column;
 }
-
 .card:hover {
     transform: translateY(-5px);
     background: rgba(255,255,255,.12);
 }
-
 .card h2 {
     margin-top: 0;
     color: #ffd700;
 }
-
+.card h2 .sub {
+    font-size: 1rem;
+    font-weight: normal;
+    opacity: .85;
+}
 .card p {
     line-height: 1.6;
 }
-
 .btn {
     display: inline-block;
-    margin-top: 15px;
+    align-self: flex-start;
+    margin-top: auto;
     padding: 12px 24px;
     background: #ffd700;
     color: #222;
@@ -74,11 +71,9 @@ header p {
     border-radius: 8px;
     font-weight: bold;
 }
-
 .btn:hover {
     background: white;
 }
-
 footer {
     text-align: center;
     padding: 40px;
@@ -86,9 +81,7 @@ footer {
 }
 </style>
 </head>
-
 <body>
-
 <header>
     <h1>LIFE Transformation Network</h1>
     <p>
@@ -97,64 +90,54 @@ footer {
         Explore the tools below to begin building your personalized transformation journey.
     </p>
 </header>
-
 <div class="container">
-
     <div class="grid">
-
         <div class="card">
             <h2>Life Transformation Scorecard</h2>
             <p>
                 Evaluate the major areas of your life and identify opportunities
                 for growth, alignment, and improvement.
             </p>
-            <a class="btn" href="transformation-scorecard.html">
+            <a class="btn" href="transformation-scorecard.html" target="_blank" rel="noopener">
                 Open Scorecard
             </a>
         </div>
-
         <div class="card">
-            <h2>21-Day Transformation Challenge</h2>
+            <h2>Transformation Challenge <span class="sub">(21-Day)</span></h2>
             <p>
                 Build momentum through daily action steps designed to help
                 you create lasting habits and measurable progress.
             </p>
-            <a class="btn" href="21-dayTransformation.html">
+            <a class="btn" href="21-dayTransformation.html" target="_blank" rel="noopener">
                 Start Challenge
             </a>
         </div>
-
         <div class="card">
             <h2>Purpose Assessment</h2>
             <p>
                 Discover clues to your purpose, passions, experiences,
                 strengths, and unique calling.
             </p>
-            <a class="btn" href="purpose.html">
+            <a class="btn" href="purpose.html" target="_blank" rel="noopener">
                 Explore Purpose
             </a>
         </div>
-
         <div class="card">
             <h2>Focus Assessment</h2>
             <p>
                 Identify distractions, competing priorities,
                 and opportunities to concentrate on what matters most.
             </p>
-            <a class="btn" href="focus.html">
+            <a class="btn" href="focus.html" target="_blank" rel="noopener">
                 Improve Focus
             </a>
         </div>
-
     </div>
-
 </div>
-
 <footer>
     <p>
         LIFE Transformation Network © 2026 | Preparing Today for a Brighter Future Through Intentional Transformation
     </p>
 </footer>
-
 </body>
 </html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clarify Focus — Transformation Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#1d2150;--indigo-deep:#13163a;--indigo-soft:#2d3270;
+  --gold:#c9a24b;--gold-bright:#e3bd63;
+  --cream:#f6f2e9;--cream-card:#fcfaf4;
+  --ink:#23262e;--muted:#6b6e7d;--line:#e3ddcd;
+  --green:#3f7d5c;--rose:#a8536a;
+  --shadow:0 1px 2px rgba(19,22,58,.05),0 8px 28px rgba(19,22,58,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+#banner{background:var(--indigo-deep);color:#e8e6f0;font-size:.82rem;padding:10px 20px;display:flex;gap:12px;align-items:center;justify-content:center;text-align:center;position:sticky;top:0;z-index:50;border-bottom:1px solid rgba(201,162,75,.3)}
+#banner b{color:var(--gold-bright);font-weight:600}
+#banner .dismiss{margin-left:8px;background:none;border:1px solid rgba(255,255,255,.25);color:#cfcde0;border-radius:6px;padding:2px 9px;cursor:pointer;font-size:.78rem}
+#banner .dismiss:hover{background:rgba(255,255,255,.1)}
+
+header{background:linear-gradient(160deg,var(--indigo) 0%,var(--indigo-deep) 100%);color:var(--cream);padding:54px 0 46px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;inset:0;background:radial-gradient(900px 320px at 78% -10%,rgba(201,162,75,.22),transparent 70%);pointer-events:none}
+.eyebrow{font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-bright);font-weight:600;margin-bottom:16px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.1rem,6vw,3.3rem);line-height:1.04;letter-spacing:-.01em;margin-bottom:14px}
+h1 em{font-style:italic;color:var(--gold-bright)}
+.sub{color:#c7c8e0;max-width:50ch;font-size:1.02rem}
+.module-q{margin-top:22px;display:flex;flex-wrap:wrap;gap:18px;border-top:1px solid rgba(201,162,75,.3);padding-top:16px}
+.module-q span{font-size:.9rem;color:#aeb0d4}
+.module-q b{color:var(--gold-bright);font-weight:600}
+
+.progress-head{display:flex;justify-content:space-between;align-items:flex-end;margin:34px 0 8px}
+.progress-head .pct{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--indigo);font-weight:600}
+.progress-head .lbl{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.track{height:8px;border-radius:99px;background:#e8e2d3;overflow:hidden}
+.track .fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-bright));transition:width .5s ease}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 8px}
+.btn{font-family:inherit;font-size:.84rem;font-weight:500;border-radius:9px;padding:9px 15px;cursor:pointer;border:1px solid var(--line);background:var(--cream-card);color:var(--ink);transition:.15s;display:inline-flex;gap:7px;align-items:center}
+.btn:hover{border-color:var(--gold);box-shadow:var(--shadow)}
+.btn.primary{background:var(--indigo);color:var(--cream);border-color:var(--indigo)}
+.btn.primary:hover{background:var(--indigo-soft)}
+.btn svg{width:15px;height:15px}
+.savednote{font-size:.78rem;color:var(--green);align-self:center;margin-left:4px;opacity:0;transition:.3s}
+.savednote.show{opacity:1}
+
+.intro{background:var(--cream-card);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:12px;padding:20px 22px;margin-top:30px;box-shadow:var(--shadow)}
+.intro p{font-size:.95rem;color:#4a4d59;margin-bottom:10px}
+.intro p:last-child{margin-bottom:0}
+.intro .pull{font-family:'Fraunces',serif;font-style:italic;color:var(--indigo);font-size:1.05rem}
+.triad{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.triad .t{flex:1;min-width:150px;background:#efe9da;border-radius:10px;padding:10px 14px}
+.triad .t b{display:block;font-family:'Fraunces',serif;color:var(--indigo);font-size:1.05rem}
+.triad .t span{font-size:.85rem;color:var(--muted)}
+
+.sec{background:var(--cream-card);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow)}
+.sec-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.sec-num{flex:none;width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem;background:var(--cream);border:1px solid var(--line);color:var(--indigo);position:relative;transition:.2s}
+.sec.done .sec-num{background:var(--gold);border-color:var(--gold);color:#fff}
+.sec-num .lbl{position:absolute;top:-7px;left:50%;transform:translateX(-50%);font-family:'Inter';font-size:.5rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.sec.done .sec-num .lbl{color:rgba(255,255,255,.7)}
+.sec-titles{flex:1;min-width:0}
+.sec-titles .t{font-weight:600;font-size:1.02rem;color:var(--ink)}
+.sec-titles .s{font-size:.82rem;color:var(--muted)}
+.chev{flex:none;color:var(--muted);transition:transform .25s}
+.sec.open .chev{transform:rotate(180deg)}
+.sec-body{display:none;padding:4px 18px 22px;border-top:1px solid var(--line)}
+.sec.open .sec-body{display:block}
+.lead-in{font-size:.93rem;color:#4a4d59;margin:14px 0 4px}
+.lead-in.q{font-style:italic;color:var(--indigo-soft)}
+
+.focus-letter{display:flex;align-items:baseline;gap:10px;margin:18px 0 2px;padding-top:14px;border-top:1px dashed var(--line)}
+.focus-letter:first-of-type{border-top:none;padding-top:0}
+.focus-letter .fl{font-family:'Fraunces',serif;font-weight:700;font-size:1.3rem;color:var(--gold);width:20px}
+.focus-letter .ft{font-weight:600;color:var(--indigo)}
+.focus-letter .fd{font-size:.85rem;color:var(--muted);font-style:italic}
+
+label.field{display:block;font-size:.82rem;font-weight:600;color:var(--ink);margin:14px 0 5px}
+textarea,input[type=text]{width:100%;font-family:inherit;font-size:.93rem;color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#fff;resize:vertical}
+textarea:focus,input[type=text]:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.15)}
+textarea{min-height:72px}
+.subgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.subgrid label.field{margin-top:6px}
+
+.rate-row{display:flex;align-items:center;gap:14px;margin:10px 0}
+.rate-row .rname{flex:none;width:160px;font-weight:600;font-size:.9rem}
+.rate-row input[type=range]{flex:1;accent-color:var(--gold)}
+.rate-row .rval{flex:none;width:42px;text-align:center;font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem;color:var(--indigo)}
+.rate-total{margin-top:14px;padding:12px 16px;background:#f0eada;border-radius:10px;display:flex;justify-content:space-between;align-items:center;font-weight:600;color:var(--indigo)}
+.rate-total .num{font-family:'Fraunces',serif;font-size:1.5rem}
+
+.fill-stmt{margin:12px 0}
+.fill-stmt .flead{font-weight:600;color:var(--indigo-soft);font-size:.92rem;margin-bottom:4px}
+
+.week-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:10px 0}
+.week-grid .wd label{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;display:block;margin-bottom:3px}
+.week-grid .wd input{padding:8px 10px;font-size:.88rem}
+
+.daily-formula{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.daily-formula .df{font-size:.82rem;font-weight:600;color:var(--indigo);background:#efe9da;border-radius:99px;padding:4px 12px}
+
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin:12px 0}
+.opt{display:flex;align-items:center;gap:8px;font-size:.88rem;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;cursor:pointer;transition:.15s}
+.opt:hover{border-color:var(--gold)}
+.opt input{width:16px;height:16px;accent-color:var(--gold)}
+.opt.sel{background:#f6efdd;border-color:var(--gold)}
+
+.blueprint{border:1px solid var(--gold);border-radius:12px;padding:6px 16px 16px;margin:8px 0;background:linear-gradient(180deg,#fdfaf1,#fcfaf4)}
+.blueprint .bp-cap{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:14px 0 8px}
+
+.mark-done{margin-top:18px;display:flex;align-items:center;gap:9px;font-size:.9rem;font-weight:500;cursor:pointer}
+.mark-done input{width:18px;height:18px;accent-color:var(--gold)}
+
+footer{text-align:center;padding:46px 20px 60px;color:var(--muted);font-size:.84rem}
+footer .v{font-family:'Fraunces',serif;font-style:italic;color:var(--indigo);font-size:1.05rem;margin-bottom:8px;max-width:52ch;margin-left:auto;margin-right:auto}
+
+#commit{display:none;margin:44px 0 10px}
+#commit.show{display:block;animation:rise .6s ease}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.commit-inner{position:relative;text-align:center;background:linear-gradient(165deg,var(--indigo),var(--indigo-deep));color:var(--cream);border-radius:18px;padding:46px 32px 40px;overflow:hidden;border:1px solid rgba(201,162,75,.4);box-shadow:0 20px 60px rgba(19,22,58,.25)}
+.commit-inner::before{content:"";position:absolute;inset:14px;border:1px solid rgba(201,162,75,.35);border-radius:12px;pointer-events:none}
+.commit-inner::after{content:"";position:absolute;inset:0;background:radial-gradient(700px 260px at 50% -8%,rgba(201,162,75,.22),transparent 70%);pointer-events:none}
+.commit-inner>*{position:relative;z-index:1}
+.commit-seal{width:64px;height:64px;margin:0 auto 18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;letter-spacing:.05em;font-size:1.05rem;color:var(--indigo-deep);background:linear-gradient(145deg,var(--gold-bright),var(--gold));box-shadow:0 0 0 6px rgba(201,162,75,.18)}
+.commit-eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-bright);font-weight:600;margin-bottom:16px}
+.commit-inner h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(1.6rem,4.5vw,2.2rem);margin-bottom:18px}
+.commit-text{font-family:'Fraunces',serif;font-style:italic;font-size:1.08rem;line-height:1.6;color:#fff;max-width:50ch;margin:0 auto 24px;padding:18px 0;border-top:1px solid rgba(201,162,75,.3);border-bottom:1px solid rgba(201,162,75,.3)}
+.phases{display:flex;flex-direction:column;gap:10px;max-width:430px;margin:0 auto 26px;text-align:left}
+.phase{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(201,162,75,.25);border-radius:11px;padding:11px 14px}
+.phase .pn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--gold);color:var(--indigo-deep);font-weight:700;font-family:'Fraunces',serif;display:flex;align-items:center;justify-content:center;font-size:.95rem}
+.phase .pt b{display:block;color:#fff;font-size:.95rem}
+.phase .pt span{font-size:.82rem;color:#bcbde0}
+.commit-next{max-width:50ch;margin:0 auto 28px;color:#c4c5e4;font-size:.92rem}
+.commit-next-lbl{display:block;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-bright);font-weight:600;margin-bottom:8px}
+
+@media print{
+  #banner,.toolbar,.chev,.mark-done,header::after,.commit-print{display:none!important}
+  body{background:#fff}
+  .sec-body{display:block!important}
+  .sec{break-inside:avoid;box-shadow:none;border-color:#ccc}
+  header,.commit-inner{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header{background:var(--indigo)!important}
+  #commit{break-before:page}
+}
+</style>
+</head>
+<body>
+
+<div id="banner">
+  <span>📍 <b>Saved on this device only.</b> Your entries live in this browser — don't clear browsing data, and use <b>Export PDF</b> or <b>Backup</b> to keep a permanent copy.</span>
+  <button class="dismiss" onclick="document.getElementById('banner').style.display='none'">Got it</button>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Transformation Builder · Focus &amp; Execution Module</div>
+    <h1>Clarify <em>Focus</em></h1>
+    <p class="sub">Focus is the bridge between intention and achievement. It's the skill of directing your attention, energy, and action toward what matters most — consistently.</p>
+    <div class="module-q">
+      <span><b>Purpose</b> reveals why.</span>
+      <span><b>Change</b> reveals what.</span>
+      <span><b>Focus</b> determines how.</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="progress-head">
+    <span class="pct" id="pct">0%</span>
+    <span class="lbl"><span id="doneCount">0</span> of 15 sections complete</span>
+  </div>
+  <div class="track"><div class="fill" id="fill"></div></div>
+
+  <div class="toolbar">
+    <button class="btn primary" onclick="window.print()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+      Export PDF
+    </button>
+    <button class="btn" onclick="backup()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      Backup
+    </button>
+    <button class="btn" onclick="document.getElementById('restoreFile').click()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      Restore
+    </button>
+    <input type="file" id="restoreFile" accept="application/json" style="display:none" onchange="restore(event)">
+    <span class="savednote" id="savednote">✓ Saved</span>
+  </div>
+
+  <div class="intro">
+    <p>The greatest challenge facing people today is not a lack of opportunity — it's a lack of focus. We live amid constant notifications, endless information, competing priorities, and distractions.</p>
+    <p class="pull">Without focus, energy becomes scattered, progress becomes slow, and purpose remains unrealized.</p>
+    <div class="triad">
+      <div class="t"><b>Why</b><span>Purpose provides direction</span></div>
+      <div class="t"><b>What</b><span>Change creates opportunity</span></div>
+      <div class="t"><b>How</b><span>Focus produces results</span></div>
+    </div>
+    <p>Work through the fifteen sections below to eliminate distractions, set priorities, and build a practical blueprint for focused action.</p>
+  </div>
+
+  <div id="sections"></div>
+
+  <section id="commit" aria-hidden="true">
+    <div class="commit-inner">
+      <div class="commit-seal">LIFE</div>
+      <div class="commit-eyebrow">Focus Commitment Declaration</div>
+      <h2>Three Phases Complete</h2>
+      <p class="commit-text">"I commit to directing my time, energy, and attention toward what matters most. I will align my actions with my purpose, remain committed to growth, eliminate distractions, and consistently pursue meaningful progress. My future will be shaped by the actions I choose today."</p>
+      <div class="phases">
+        <div class="phase"><div class="pn">1</div><div class="pt"><b>Deepen Your Purpose</b><span>Discover who you are and why you are here</span></div></div>
+        <div class="phase"><div class="pn">2</div><div class="pt"><b>Analyze Change</b><span>Identify what must change to move forward</span></div></div>
+        <div class="phase"><div class="pn">3</div><div class="pt"><b>Clarify Focus</b><span>Create a practical blueprint for intentional action</span></div></div>
+      </div>
+      <div class="commit-next">
+        <span class="commit-next-lbl">The journey continues</span>
+        <p>Transformation is not a destination — it's a lifelong commitment to becoming who you were created to be, while helping others do the same. <strong>Living Intentionally Focused Everyday.</strong></p>
+      </div>
+      <button class="btn primary commit-print" onclick="printCommit()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+        Print my blueprint
+      </button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="v">"Success is not determined by what you know. Success is determined by what you consistently do."</div>
+    <div>Transformation Builder · Living Intentionally Focused Everyday</div>
+  </footer>
+</div>
+
+<script>
+const SECTIONS=[
+  {n:1,t:"Understanding Focus",s:"Direct your attention",intro:"Focus is the ability to direct your attention, energy, resources, and actions toward what matters most. It is not about doing more — it's about doing what matters most, consistently.",fields:[
+    {type:"text",id:"s1_attention",q:true,label:"What currently receives most of your attention?"},
+    {type:"text",id:"s1_time",q:true,label:"What currently receives most of your time?"},
+    {type:"text",id:"s1_energy",q:true,label:"What currently receives most of your energy?"},
+    {type:"text",id:"s1_align",q:true,label:"Do these align with your goals?"}
+  ]},
+  {n:2,t:"The FOCUS Framework",s:"Five disciplines of focus",focus:true,fields:[
+    {type:"text",id:"s2_purpose",label:"Your current purpose statement",letter:"F",lt:"Find Your Purpose",ld:"Purpose creates direction. Without it, activity becomes busyness."},
+    {type:"subgrid",letter:"O",lt:"Organize Priorities",ld:"High performers focus on high-impact activities.",subs:[
+      {id:"s2_career",label:"Career"},{id:"s2_family",label:"Family"},{id:"s2_health",label:"Health"},
+      {id:"s2_financial",label:"Financial"},{id:"s2_growth",label:"Personal Growth"},{id:"s2_faith",label:"Faith"}
+    ]},
+    {type:"text",id:"s2_goal",label:"What specific goal will you pursue over the next 90 days?",letter:"C",lt:"Create a Plan",ld:"A vision without a plan remains a dream."},
+    {type:"subgrid",letter:"U",lt:"Utilize Resources",ld:"Success rarely occurs alone.",subs:[
+      {id:"s2_people",label:"People"},{id:"s2_knowledge",label:"Knowledge"},{id:"s2_tech",label:"Technology"},
+      {id:"s2_communities",label:"Communities"},{id:"s2_money",label:"Financial Resources"}
+    ]},
+    {type:"text",id:"s2_commit",label:"What challenges could disrupt your focus, and how will you respond?",letter:"S",lt:"Stay Committed",ld:"Motivation comes and goes. Commitment remains."}
+  ]},
+  {n:3,t:"The Six Questions",s:"For moments of uncertainty",intro:"Use these six questions whenever you feel uncertain about your direction.",fields:[
+    {type:"fill",id:"s3_q1",flead:"1. Where am I now?"},
+    {type:"fill",id:"s3_q2",flead:"2. Where do I want to go?"},
+    {type:"fill",id:"s3_q3",flead:"3. Why is it important?"},
+    {type:"fill",id:"s3_q4",flead:"4. What obstacles exist?"},
+    {type:"fill",id:"s3_q5",flead:"5. What resources do I need?"},
+    {type:"fill",id:"s3_q6",flead:"6. What action will I take today?"}
+  ]},
+  {n:4,t:"Defining Your 90-Day Vision",s:"Short-term execution",intro:"Long-term success is built through short-term execution. Imagine 90 days from today — what would meaningful progress look like?",fields:[
+    {type:"text",id:"s4_career",label:"Career"},
+    {type:"text",id:"s4_health",label:"Health"},
+    {type:"text",id:"s4_relationships",label:"Relationships"},
+    {type:"text",id:"s4_finances",label:"Finances"},
+    {type:"text",id:"s4_growth",label:"Personal Growth"},
+    {type:"text",id:"s4_faith",label:"Faith"}
+  ]},
+  {n:5,t:"Goal Alignment",s:"Every goal supports purpose",intro:"Every goal should support your purpose. For each goal you're considering, test it against these three questions. If the answer is no, reconsider the goal.",fields:[
+    {type:"fill",id:"s5_goal",flead:"The goal I'm evaluating…"},
+    {type:"text",id:"s5_purpose",q:true,label:"Does this align with my purpose?"},
+    {type:"text",id:"s5_values",q:true,label:"Does this support my values?"},
+    {type:"text",id:"s5_future",q:true,label:"Does this move me closer to my desired future?"}
+  ]},
+  {n:6,t:"The Priority Filter",s:"Before you commit to anything",intro:"Before committing to any activity, run it through four questions. Evaluate one current project below.",fields:[
+    {type:"fill",id:"s6_project",flead:"The project I'm evaluating…"},
+    {type:"text",id:"s6_important",q:true,label:"Is it important? Does it matter?"},
+    {type:"text",id:"s6_aligned",q:true,label:"Is it aligned? Does it support my purpose?"},
+    {type:"text",id:"s6_necessary",q:true,label:"Is it necessary? Does it need to happen now?"},
+    {type:"text",id:"s6_impactful",q:true,label:"Is it impactful? Will it create meaningful results?"}
+  ]},
+  {n:7,t:"Eliminating Distractions",s:"Even productive-looking ones",intro:"Distractions often appear productive. Select the ones that affect you most, then name your top three.",options:["Excessive social media","Constant email checking","Overconsumption of content","Endless planning without action","Perfectionism","Multitasking","Fear-based procrastination"],fields:[
+    {type:"options",id:"s7_distractions",multi:true},
+    {type:"text",id:"s7_top3",label:"My top three distractions"}
+  ]},
+  {n:8,t:"Time Allocation Strategy",s:"Your calendar reveals priorities",intro:"Your calendar reveals your priorities. Identify your most important goal, the weekly hours it requires, and when you'll schedule them.",week:true,fields:[
+    {type:"text",id:"s8_goal",label:"Most important goal"},
+    {type:"text",id:"s8_hours",label:"Hours required weekly"}
+  ]},
+  {n:9,t:"The Power of Daily Wins",s:"Small victories compound",intro:"Transformation occurs through consistent action. Small victories compound over time.",daily:true,fields:[
+    {type:"text",id:"s9_action",q:true,label:"What is one daily action that would significantly improve your future?"}
+  ]},
+  {n:10,t:"Milestone Mapping",s:"Break the goal down",intro:"Large goals become achievable through milestones.",fields:[
+    {type:"text",id:"s10_goal",label:"Primary goal"},
+    {type:"fill",id:"s10_m1",flead:"Milestone 1"},
+    {type:"fill",id:"s10_m2",flead:"Milestone 2"},
+    {type:"fill",id:"s10_m3",flead:"Milestone 3"},
+    {type:"fill",id:"s10_m4",flead:"Milestone 4"},
+    {type:"fill",id:"s10_m5",flead:"Milestone 5"}
+  ]},
+  {n:11,t:"Accountability & Momentum",s:"Accountability accelerates",intro:"Accountability accelerates progress. Identify who can support your journey.",fields:[
+    {type:"text",id:"s11_mentor",label:"Mentor"},
+    {type:"text",id:"s11_coach",label:"Coach"},
+    {type:"text",id:"s11_friend",label:"Friend"},
+    {type:"text",id:"s11_community",label:"Community"},
+    {type:"options",id:"s11_review",multi:false,inlineLabel:"How often will you review progress?"}
+  ],reviewOptions:["Daily","Weekly","Monthly"]},
+  {n:12,t:"Focus Scorecard",s:"Rate yourself 1–10",intro:"Rate yourself in each area. Your total reveals where focus is strong and where it needs work.",scorecard:true,fields:[
+    {type:"rate",id:"s12_clarity",name:"Clarity of Purpose"},
+    {type:"rate",id:"s12_alignment",name:"Goal Alignment"},
+    {type:"rate",id:"s12_time",name:"Time Management"},
+    {type:"rate",id:"s12_consistency",name:"Consistency"},
+    {type:"rate",id:"s12_discipline",name:"Discipline"},
+    {type:"rate",id:"s12_commitment",name:"Commitment"},
+    {type:"rate",id:"s12_accountability",name:"Accountability"},
+    {type:"text",id:"s12_improve",q:true,label:"Which area needs the most improvement?"}
+  ]},
+  {n:13,t:"Your Personal Blueprint",s:"Consolidate the essentials",intro:"Bring the core of everything together into one blueprint you can return to.",blueprint:true,fields:[
+    {type:"text",id:"s13_purpose",label:"My purpose"},
+    {type:"text",id:"s13_goal",label:"My 90-day goal"},
+    {type:"text",id:"s13_priorities",label:"My top three priorities"},
+    {type:"text",id:"s13_daily",label:"Daily actions"},
+    {type:"text",id:"s13_review",label:"Weekly review day"}
+  ]},
+  {n:14,t:"Future Self Exercise",s:"Advice across three years",intro:"Imagine meeting yourself three years from now — a version of you who has achieved important goals, developed discipline, created meaningful impact, grown personally and spiritually, and overcome many obstacles.",fields:[
+    {type:"fill",id:"s14_advice",flead:"The advice my future self would give me today is…"}
+  ]},
+  {n:15,t:"Blueprint Summary & Commitment",s:"The whole journey, in your words",intro:"Answer these six questions to close the loop across all three modules — purpose, change, and focus.",summary:true,fields:[
+    {type:"fill",id:"s15_purpose",flead:"What is my purpose?"},
+    {type:"fill",id:"s15_change",flead:"What must change?"},
+    {type:"fill",id:"s15_focus",flead:"What will I focus on?"},
+    {type:"fill",id:"s15_goal",flead:"What goal will I pursue?"},
+    {type:"fill",id:"s15_today",flead:"What action will I take today?"},
+    {type:"fill",id:"s15_future",flead:"What future am I creating?"}
+  ]}
+];
+
+const STORE_KEY="focus_v1";
+let DATA=load();
+function load(){try{const d=JSON.parse(localStorage.getItem(STORE_KEY));if(d){d.fields=d.fields||{};d.done=d.done||{};d.opts=d.opts||{};return d;}}catch(e){}return{fields:{},done:{},opts:{}}}
+function persist(){
+  localStorage.setItem(STORE_KEY,JSON.stringify(DATA));
+  const n=document.getElementById('savednote');n.classList.add('show');
+  clearTimeout(window._st);window._st=setTimeout(()=>n.classList.remove('show'),1100);
+}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+function render(){
+  document.getElementById('sections').innerHTML=SECTIONS.map(secCard).join("");
+  bind();updateProgress();updateScorecard();
+}
+function secCard(sec){
+  const done=!!DATA.done[sec.n];
+  const wrapOpen=sec.blueprint?'<div class="blueprint">':'';
+  const wrapClose=sec.blueprint?'</div>':'';
+  return `<div class="sec ${done?'done':''}" data-sec="${sec.n}">
+    <div class="sec-head" onclick="toggleSec(${sec.n})">
+      <div class="sec-num"><span class="lbl">Sec</span>${sec.n}</div>
+      <div class="sec-titles"><div class="t">${sec.t}</div><div class="s">${sec.s}</div></div>
+      <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+    <div class="sec-body">
+      ${sec.intro?`<p class="lead-in">${sec.intro}</p>`:""}
+      ${sec.daily?dailyHTML():""}
+      ${wrapOpen}
+      ${sec.fields.map(f=>fieldHTML(f,sec)).join("")}
+      ${wrapClose}
+      ${sec.week?weekHTML():""}
+      ${sec.scorecard?`<div class="rate-total"><span>Focus total</span><span class="num" id="focus_total">—</span></div>`:""}
+      <label class="mark-done"><input type="checkbox" data-done="${sec.n}" ${done?'checked':''}> Mark Section ${sec.n} complete</label>
+    </div>
+  </div>`;
+}
+function fieldHTML(f,sec){
+  const v=DATA.fields[f.id]??"";
+  const head=f.letter?`<div class="focus-letter"><span class="fl">${f.letter}</span><span class="ft">${f.lt}</span><span class="fd">— ${f.ld}</span></div>`:"";
+  if(f.type==="subgrid"){
+    return head+`<div class="subgrid">${f.subs.map(s=>`<div><label class="field">${s.label}</label><input type="text" data-id="${s.id}" value="${esc(DATA.fields[s.id]??"")}" placeholder="…"></div>`).join("")}</div>`;
+  }
+  if(f.type==="rate"){
+    const val=(DATA.fields[f.id]===undefined||DATA.fields[f.id]==="")?5:DATA.fields[f.id];
+    const rt=sec.scorecard?'data-score="1"':'';
+    return `<div class="rate-row"><span class="rname">${f.name}</span><input type="range" min="1" max="10" value="${val}" data-id="${f.id}" data-rate="1" ${rt}><span class="rval" id="rv_${f.id}">${val}</span></div>`;
+  }
+  if(f.type==="fill")return head+`<div class="fill-stmt"><div class="flead">${f.flead}</div><textarea data-id="${f.id}" placeholder="Write your response…">${esc(v)}</textarea></div>`;
+  if(f.type==="options")return optionsHTML(f,sec);
+  return head+`${f.q?`<div class="lead-in q">${f.label}</div>`:`<label class="field">${f.label}</label>`}<textarea data-id="${f.id}" placeholder="Write here…">${esc(v)}</textarea>`;
+}
+function optionsHTML(f,sec){
+  const list=f.id==="s11_review"?sec.reviewOptions:sec.options;
+  const chosen=DATA.opts[f.id]||[];
+  const lbl=f.inlineLabel?`<label class="field">${f.inlineLabel}</label>`:"";
+  return `${lbl}<div class="opt-grid">${list.map(o=>{
+    const sel=chosen.includes(o);
+    return `<label class="opt ${sel?'sel':''}"><input type="checkbox" data-opt="${f.id}" data-multi="${f.multi?1:0}" value="${esc(o)}" ${sel?'checked':''}>${o}</label>`;
+  }).join("")}</div>`;
+}
+function weekHTML(){
+  const days=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  return `<label class="field">Schedule those hours across the week</label><div class="week-grid">${days.map(d=>{
+    const id="s8_"+d.toLowerCase();
+    return `<div class="wd"><label>${d}</label><input type="text" data-id="${id}" value="${esc(DATA.fields[id]??"")}" placeholder="—"></div>`;
+  }).join("")}</div>`;
+}
+function dailyHTML(){
+  return `<div class="daily-formula"><span class="df">Learn something</span><span class="df">Improve something</span><span class="df">Complete something</span><span class="df">Reflect on something</span></div>`;
+}
+
+function bind(){
+  const scope=document.getElementById('sections');
+  scope.querySelectorAll('textarea[data-id],input[type=text][data-id]').forEach(el=>{
+    el.addEventListener('input',()=>{DATA.fields[el.dataset.id]=el.value;persist();});
+  });
+  scope.querySelectorAll('input[data-rate]').forEach(el=>{
+    el.addEventListener('input',()=>{
+      document.getElementById('rv_'+el.dataset.id).textContent=el.value;
+      DATA.fields[el.dataset.id]=el.value;persist();
+      if(el.dataset.score)updateScorecard();
+    });
+  });
+  scope.querySelectorAll('input[data-opt]').forEach(el=>{
+    el.addEventListener('change',()=>{
+      const id=el.dataset.opt,multi=el.dataset.multi==="1",val=el.value;
+      let arr=DATA.opts[id]||[];
+      if(multi){arr=el.checked?[...new Set([...arr,val])]:arr.filter(x=>x!==val);}
+      else{
+        arr=el.checked?[val]:[];
+        if(el.checked)scope.querySelectorAll(`input[data-opt="${id}"]`).forEach(o=>{if(o!==el){o.checked=false;o.closest('.opt').classList.remove('sel');}});
+      }
+      DATA.opts[id]=arr;el.closest('.opt').classList.toggle('sel',el.checked);persist();
+    });
+  });
+  scope.querySelectorAll('input[data-done]').forEach(el=>{
+    el.addEventListener('change',()=>{
+      DATA.done[el.dataset.done]=el.checked;
+      el.closest('.sec').classList.toggle('done',el.checked);
+      persist();updateProgress();
+    });
+  });
+}
+function toggleSec(n){document.querySelector(`.sec[data-sec="${n}"]`).classList.toggle('open');}
+
+function updateScorecard(){
+  const el=document.getElementById('focus_total');if(!el)return;
+  const ids=["s12_clarity","s12_alignment","s12_time","s12_consistency","s12_discipline","s12_commitment","s12_accountability"];
+  let any=false,sum=0;
+  ids.forEach(id=>{const v=DATA.fields[id];if(v!==undefined&&v!==""){any=true;sum+=Number(v);}else{sum+=5;}});
+  el.textContent=any?`${sum} / 70`:"—";
+}
+
+function updateProgress(){
+  const done=Object.values(DATA.done).filter(Boolean).length;
+  const pct=Math.round(done/15*100);
+  document.getElementById('fill').style.width=pct+'%';
+  document.getElementById('pct').textContent=pct+'%';
+  document.getElementById('doneCount').textContent=done;
+  const c=document.getElementById('commit');
+  const complete=done===15,was=c.classList.contains('show');
+  c.classList.toggle('show',complete);c.setAttribute('aria-hidden',complete?'false':'true');
+  if(complete&&!was)setTimeout(()=>{try{c.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}},200);
+}
+
+function backup(){
+  const blob=new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`Clarify-Focus-Backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();URL.revokeObjectURL(a.href);
+}
+function restore(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(!d.fields||!d.done)throw new Error("bad");
+      d.opts=d.opts||{};
+      if(confirm("Restore this backup? It will replace your current entries on this device.")){DATA=d;persist();render();}
+    }catch(err){alert("That file couldn't be read as a valid backup.");}
+    e.target.value="";
+  };
+  r.readAsText(file);
+}
+function printCommit(){document.body.classList.add('print-cert');window.print();setTimeout(()=>document.body.classList.remove('print-cert'),300);}
+
+render();
+</script>
+</body>
+</html>

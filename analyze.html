@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analyze Change — Transformation Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#1d2150;--indigo-deep:#13163a;--indigo-soft:#2d3270;
+  --gold:#c9a24b;--gold-bright:#e3bd63;
+  --cream:#f6f2e9;--cream-card:#fcfaf4;
+  --ink:#23262e;--muted:#6b6e7d;--line:#e3ddcd;
+  --green:#3f7d5c;--rose:#a8536a;
+  --shadow:0 1px 2px rgba(19,22,58,.05),0 8px 28px rgba(19,22,58,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+#banner{background:var(--indigo-deep);color:#e8e6f0;font-size:.82rem;padding:10px 20px;display:flex;gap:12px;align-items:center;justify-content:center;text-align:center;position:sticky;top:0;z-index:50;border-bottom:1px solid rgba(201,162,75,.3)}
+#banner b{color:var(--gold-bright);font-weight:600}
+#banner .dismiss{margin-left:8px;background:none;border:1px solid rgba(255,255,255,.25);color:#cfcde0;border-radius:6px;padding:2px 9px;cursor:pointer;font-size:.78rem}
+#banner .dismiss:hover{background:rgba(255,255,255,.1)}
+
+header{background:linear-gradient(160deg,var(--indigo) 0%,var(--indigo-deep) 100%);color:var(--cream);padding:54px 0 46px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;inset:0;background:radial-gradient(900px 320px at 78% -10%,rgba(201,162,75,.22),transparent 70%);pointer-events:none}
+.eyebrow{font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-bright);font-weight:600;margin-bottom:16px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.1rem,6vw,3.3rem);line-height:1.04;letter-spacing:-.01em;margin-bottom:14px}
+h1 em{font-style:italic;color:var(--gold-bright)}
+.sub{color:#c7c8e0;max-width:50ch;font-size:1.02rem}
+.module-q{margin-top:22px;display:inline-block;font-family:'Fraunces',serif;font-style:italic;font-size:1.05rem;color:#fff;border-top:1px solid rgba(201,162,75,.3);padding-top:16px;max-width:48ch}
+
+.progress-head{display:flex;justify-content:space-between;align-items:flex-end;margin:34px 0 8px}
+.progress-head .pct{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--indigo);font-weight:600}
+.progress-head .lbl{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.track{height:8px;border-radius:99px;background:#e8e2d3;overflow:hidden}
+.track .fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-bright));transition:width .5s ease}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 8px}
+.btn{font-family:inherit;font-size:.84rem;font-weight:500;border-radius:9px;padding:9px 15px;cursor:pointer;border:1px solid var(--line);background:var(--cream-card);color:var(--ink);transition:.15s;display:inline-flex;gap:7px;align-items:center}
+.btn:hover{border-color:var(--gold);box-shadow:var(--shadow)}
+.btn.primary{background:var(--indigo);color:var(--cream);border-color:var(--indigo)}
+.btn.primary:hover{background:var(--indigo-soft)}
+.btn svg{width:15px;height:15px}
+.savednote{font-size:.78rem;color:var(--green);align-self:center;margin-left:4px;opacity:0;transition:.3s}
+.savednote.show{opacity:1}
+
+.intro{background:var(--cream-card);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:12px;padding:20px 22px;margin-top:30px;box-shadow:var(--shadow)}
+.intro p{font-size:.95rem;color:#4a4d59;margin-bottom:10px}
+.intro p:last-child{margin-bottom:0}
+.intro .pull{font-family:'Fraunces',serif;font-style:italic;color:var(--indigo);font-size:1.05rem}
+
+.sec{background:var(--cream-card);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow)}
+.sec-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.sec-num{flex:none;width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem;background:var(--cream);border:1px solid var(--line);color:var(--indigo);position:relative;transition:.2s}
+.sec.done .sec-num{background:var(--gold);border-color:var(--gold);color:#fff}
+.sec-num .lbl{position:absolute;top:-7px;left:50%;transform:translateX(-50%);font-family:'Inter';font-size:.5rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.sec.done .sec-num .lbl{color:rgba(255,255,255,.7)}
+.sec-titles{flex:1;min-width:0}
+.sec-titles .t{font-weight:600;font-size:1.02rem;color:var(--ink)}
+.sec-titles .s{font-size:.82rem;color:var(--muted)}
+.chev{flex:none;color:var(--muted);transition:transform .25s}
+.sec.open .chev{transform:rotate(180deg)}
+.sec-body{display:none;padding:4px 18px 22px;border-top:1px solid var(--line)}
+.sec.open .sec-body{display:block}
+.lead-in{font-size:.93rem;color:#4a4d59;margin:14px 0 4px}
+.lead-in.q{font-style:italic;color:var(--indigo-soft)}
+
+label.field{display:block;font-size:.82rem;font-weight:600;color:var(--ink);margin:14px 0 5px}
+textarea,input[type=text]{width:100%;font-family:inherit;font-size:.93rem;color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#fff;resize:vertical}
+textarea:focus,input[type=text]:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.15)}
+textarea{min-height:72px}
+
+.rate-row{display:flex;align-items:center;gap:14px;margin:10px 0}
+.rate-row .rname{flex:none;width:150px;font-weight:600;font-size:.9rem}
+.rate-row input[type=range]{flex:1;accent-color:var(--gold)}
+.rate-row .rval{flex:none;width:42px;text-align:center;font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem;color:var(--indigo)}
+.rate-total{margin-top:14px;padding:12px 16px;background:#f0eada;border-radius:10px;display:flex;justify-content:space-between;align-items:center;font-weight:600;color:var(--indigo)}
+.rate-total .num{font-family:'Fraunces',serif;font-size:1.5rem}
+
+.fill-stmt{margin:12px 0}
+.fill-stmt .flead{font-weight:600;color:var(--indigo-soft);font-size:.92rem;margin-bottom:4px}
+
+.checklist{margin:12px 0}
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px}
+.opt{display:flex;align-items:center;gap:8px;font-size:.88rem;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;cursor:pointer;transition:.15s}
+.opt:hover{border-color:var(--gold)}
+.opt input{width:16px;height:16px;accent-color:var(--gold)}
+.opt.sel{background:#f6efdd;border-color:var(--gold)}
+
+.belief-block{border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0;background:#fff}
+.belief-block .bn{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px}
+
+.mark-done{margin-top:18px;display:flex;align-items:center;gap:9px;font-size:.9rem;font-weight:500;cursor:pointer}
+.mark-done input{width:18px;height:18px;accent-color:var(--gold)}
+
+/* 7-day tracker */
+.tracker{margin:14px 0}
+.tracker .setup{display:grid;gap:10px;margin-bottom:14px}
+.day7{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;margin-bottom:8px}
+.day7 .dn{flex:none;width:54px;font-weight:700;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--indigo)}
+.day7 .dcheck{flex:none}
+.day7 .dcheck input{width:20px;height:20px;accent-color:var(--gold)}
+.day7 input[type=text]{flex:1;border:none;border-bottom:1px solid var(--line);border-radius:0;padding:6px 4px;background:transparent}
+.day7 input[type=text]:focus{box-shadow:none;border-bottom-color:var(--gold)}
+.day7.done{background:#f6efdd;border-color:var(--gold)}
+
+footer{text-align:center;padding:46px 20px 60px;color:var(--muted);font-size:.84rem}
+footer .v{font-family:'Fraunces',serif;font-style:italic;color:var(--indigo);font-size:1.05rem;margin-bottom:8px;max-width:52ch;margin-left:auto;margin-right:auto}
+
+#commit{display:none;margin:44px 0 10px}
+#commit.show{display:block;animation:rise .6s ease}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.commit-inner{position:relative;text-align:center;background:linear-gradient(165deg,var(--indigo),var(--indigo-deep));color:var(--cream);border-radius:18px;padding:46px 32px 40px;overflow:hidden;border:1px solid rgba(201,162,75,.4);box-shadow:0 20px 60px rgba(19,22,58,.25)}
+.commit-inner::before{content:"";position:absolute;inset:14px;border:1px solid rgba(201,162,75,.35);border-radius:12px;pointer-events:none}
+.commit-inner::after{content:"";position:absolute;inset:0;background:radial-gradient(700px 260px at 50% -8%,rgba(201,162,75,.22),transparent 70%);pointer-events:none}
+.commit-inner>*{position:relative;z-index:1}
+.commit-seal{width:60px;height:60px;margin:0 auto 18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:1.5rem;color:var(--indigo-deep);background:linear-gradient(145deg,var(--gold-bright),var(--gold));box-shadow:0 0 0 6px rgba(201,162,75,.18)}
+.commit-eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-bright);font-weight:600;margin-bottom:16px}
+.commit-inner h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(1.6rem,4.5vw,2.2rem);margin-bottom:18px}
+.commit-text{font-family:'Fraunces',serif;font-style:italic;font-size:1.1rem;line-height:1.6;color:#fff;max-width:50ch;margin:0 auto 24px;padding:18px 0;border-top:1px solid rgba(201,162,75,.3);border-bottom:1px solid rgba(201,162,75,.3)}
+.commit-next{max-width:50ch;margin:0 auto 28px;color:#c4c5e4;font-size:.92rem}
+.commit-next-lbl{display:block;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-bright);font-weight:600;margin-bottom:8px}
+
+@media print{
+  #banner,.toolbar,.chev,.mark-done,header::after,.commit-print{display:none!important}
+  body{background:#fff}
+  .sec-body{display:block!important}
+  .sec{break-inside:avoid;box-shadow:none;border-color:#ccc}
+  header,.commit-inner{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header{background:var(--indigo)!important}
+  #commit{break-before:page}
+}
+</style>
+</head>
+<body>
+
+<div id="banner">
+  <span>📍 <b>Saved on this device only.</b> Your entries live in this browser — don't clear browsing data, and use <b>Export PDF</b> or <b>Backup</b> to keep a permanent copy.</span>
+  <button class="dismiss" onclick="document.getElementById('banner').style.display='none'">Got it</button>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Transformation Builder · Change Analysis Module</div>
+    <h1>Analyze <em>Change</em></h1>
+    <p class="sub">Purpose reveals where you should go. Change analysis reveals what is preventing you from getting there — the obstacles, beliefs, habits, and environments between your current reality and your desired future.</p>
+    <div class="module-q">"You cannot improve what you refuse to examine."</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="progress-head">
+    <span class="pct" id="pct">0%</span>
+    <span class="lbl"><span id="doneCount">0</span> of 15 sections complete</span>
+  </div>
+  <div class="track"><div class="fill" id="fill"></div></div>
+
+  <div class="toolbar">
+    <button class="btn primary" onclick="window.print()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+      Export PDF
+    </button>
+    <button class="btn" onclick="backup()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      Backup
+    </button>
+    <button class="btn" onclick="document.getElementById('restoreFile').click()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      Restore
+    </button>
+    <input type="file" id="restoreFile" accept="application/json" style="display:none" onchange="restore(event)">
+    <span class="savednote" id="savednote">✓ Saved</span>
+  </div>
+
+  <div class="intro">
+    <p>Most people know where they want to go but struggle to understand why they aren't getting there. Transformation rarely fails from a lack of information — it fails from unaddressed obstacles, limiting beliefs, ineffective habits, unhealthy environments, and inconsistent action.</p>
+    <p class="pull">Change begins with awareness.</p>
+    <p>Work through the fifteen sections below to identify what stands between your current reality and your desired future — then build a plan to close the gap.</p>
+  </div>
+
+  <div id="sections"></div>
+
+  <section id="commit" aria-hidden="true">
+    <div class="commit-inner">
+      <div class="commit-seal">✦</div>
+      <div class="commit-eyebrow">Personal Transformation Declaration</div>
+      <h2>Awareness Into Action</h2>
+      <p class="commit-text">"I acknowledge that meaningful transformation requires intentional change. I accept responsibility for my growth, recognize the barriers that have limited my progress, and commit to taking consistent action toward becoming the person I am capable of becoming."</p>
+      <p style="color:#cfd0ea;max-width:48ch;margin:0 auto 4px">Transformation is not achieved through information alone. It occurs when awareness leads to action, action becomes consistency, and consistency produces growth.</p>
+      <div class="commit-next">
+        <span class="commit-next-lbl">Next step</span>
+        <p>Carry your change plan into the <strong>Clarify Focus</strong> module on the <strong>Transformation Builder</strong> platform — and turn your priorities into a practical blueprint.</p>
+      </div>
+      <button class="btn primary commit-print" onclick="printCommit()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+        Print my declaration
+      </button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="v">"The person you become is determined by the changes you are willing to make today."</div>
+    <div>Transformation Builder · Living Intentionally Focused Everyday</div>
+  </footer>
+</div>
+
+<script>
+const SECTIONS=[
+  {n:1,t:"Current Reality Assessment",s:"Rate where you stand today",intro:"Before moving forward, understand your starting point. Rate each area from 1–10.",fields:[
+    {type:"rate",id:"s1_faith",name:"Faith"},
+    {type:"rate",id:"s1_health",name:"Health"},
+    {type:"rate",id:"s1_relationships",name:"Relationships"},
+    {type:"rate",id:"s1_career",name:"Career"},
+    {type:"rate",id:"s1_finances",name:"Finances"},
+    {type:"rate",id:"s1_growth",name:"Personal Growth"},
+    {type:"rate",id:"s1_leadership",name:"Leadership"},
+    {type:"rate",id:"s1_emotional",name:"Emotional Well-being"},
+    {type:"text",id:"s1_strong",q:true,label:"Where are you strongest, and where are you weakest?"},
+    {type:"text",id:"s1_attention",q:true,label:"What area needs immediate attention?"},
+    {type:"text",id:"s1_impact",q:true,label:"What area would create the greatest positive impact if improved?"}
+  ]},
+  {n:2,t:"The Gap Analysis",s:"Current state vs desired state",intro:"Transformation occurs between two points — where you are, and where you want to be.",fields:[
+    {type:"text",id:"s2_current",label:"Current reality"},
+    {type:"text",id:"s2_desired",label:"Desired future"},
+    {type:"text",id:"s2_gap",q:true,label:"What specific gap exists between these two realities? What is currently missing?"}
+  ]},
+  {n:3,t:"Identify Internal Barriers",s:"Obstacles that originate within",intro:"Many obstacles originate internally. Select the ones that affect you most.",options:["Fear of failure","Fear of rejection","Fear of success","Self-doubt","Procrastination","Lack of confidence","Perfectionism","Negative thinking","Lack of discipline","Low self-worth"],fields:[
+    {type:"options",id:"s3_barriers",multi:true},
+    {type:"text",id:"s3_impact",q:true,label:"How have these barriers impacted your progress?"}
+  ]},
+  {n:4,t:"Identify External Barriers",s:"Challenges from outside",intro:"Some challenges originate outside of you. Select those that currently exist.",options:["Financial limitations","Lack of resources","Limited knowledge","Lack of support","Time constraints","Family obligations","Workplace challenges","Market conditions","Geographic limitations"],fields:[
+    {type:"options",id:"s4_barriers",multi:true},
+    {type:"text",id:"s4_influence",q:true,label:"Which barriers can be influenced, and which require adaptation?"}
+  ]},
+  {n:5,t:"Limiting Beliefs",s:"Challenge what controls you",intro:"Many people are controlled by beliefs they have never challenged. Work through three.",beliefs:3,fields:[]},
+  {n:6,t:"Evaluate Your Habits",s:"Your future hides in your habits",intro:"Your future is often hidden inside your daily habits.",fields:[
+    {type:"text",id:"s6_positive",label:"Positive habits — what moves you closer to your goals?"},
+    {type:"text",id:"s6_negative",label:"Negative habits — what moves you away from your goals?"},
+    {type:"fill",id:"s6_eliminate",flead:"One habit I will eliminate…"},
+    {type:"fill",id:"s6_strengthen",flead:"One habit I will strengthen…"}
+  ]},
+  {n:7,t:"Time Analysis",s:"How you spend 24 hours",intro:"Everyone receives the same 24 hours. Track a typical day across these areas.",fields:[
+    {type:"text",id:"s7_breakdown",label:"Roughly how much time goes to: work, family, learning, entertainment, social media, personal growth, health, rest?"},
+    {type:"text",id:"s7_invested",q:true,label:"Where is time being invested well?"},
+    {type:"text",id:"s7_wasted",q:true,label:"Where is time being wasted?"}
+  ]},
+  {n:8,t:"Environment Assessment",s:"Support or sabotage",intro:"Your environment either supports or sabotages your growth.",fields:[
+    {type:"text",id:"s8_people",label:"People — who encourages growth, and who drains energy?"},
+    {type:"text",id:"s8_physical",label:"Physical environment — does your workspace support productivity?"},
+    {type:"text",id:"s8_info",label:"Information environment — what content do you regularly consume?"},
+    {type:"text",id:"s8_changes",q:true,label:"What environmental changes would accelerate progress?"}
+  ]},
+  {n:9,t:"Relationship Influence",s:"Who shapes your trajectory",intro:"Relationships shape beliefs, habits, expectations, and behaviors.",fields:[
+    {type:"text",id:"s9_inspire",q:true,label:"Who inspires you, and who challenges you?"},
+    {type:"text",id:"s9_support",q:true,label:"Who supports your growth, and who limits your potential?"},
+    {type:"text",id:"s9_align",q:true,label:"Do your closest relationships align with your future goals?"}
+  ]},
+  {n:10,t:"Emotional Triggers",s:"Emotions drive behavior",intro:"Transformation often stalls because emotions drive behavior.",options:["Stress","Anxiety","Frustration","Fear","Loneliness","Disappointment"],fields:[
+    {type:"options",id:"s10_triggers",multi:true},
+    {type:"text",id:"s10_respond",q:true,label:"How do you currently respond to these?"},
+    {type:"text",id:"s10_healthier",q:true,label:"What healthier responses could replace them?"}
+  ]},
+  {n:11,t:"The Cost of Staying the Same",s:"The price of inaction",intro:"Every decision has consequences. Honestly evaluate the cost of staying where you are.",fields:[
+    {type:"fill",id:"s11_1yr",flead:"If nothing changes — one year from now…"},
+    {type:"fill",id:"s11_3yr",flead:"If nothing changes — three years from now…"},
+    {type:"fill",id:"s11_5yr",flead:"If nothing changes — five years from now…"},
+    {type:"text",id:"s11_lost",q:true,label:"What opportunities could be lost? What dreams could remain unrealized?"}
+  ]},
+  {n:12,t:"Change Readiness Assessment",s:"How ready are you?",intro:"Rate each statement from 1–10. Your total reveals your readiness to change.",readiness:true,fields:[
+    {type:"rate",id:"s12_willing",name:"I am willing to change"},
+    {type:"rate",id:"s12_committed",name:"I am committed to growth"},
+    {type:"rate",id:"s12_sacrifice",name:"I am willing to sacrifice comfort"},
+    {type:"rate",id:"s12_learn",name:"I am willing to learn"},
+    {type:"rate",id:"s12_consistent",name:"I am willing to act consistently"},
+    {type:"rate",id:"s12_responsible",name:"I am ready to take responsibility"},
+    {type:"text",id:"s12_commitment",q:true,label:"What areas require greater commitment?"}
+  ]},
+  {n:13,t:"Change Priorities",s:"Choose your highest leverage",intro:"Not everything needs to change at once. Choose one priority area.",options:["Faith","Health","Relationships","Career","Finances","Personal Growth","Leadership"],fields:[
+    {type:"options",id:"s13_priority",multi:false},
+    {type:"text",id:"s13_why",q:true,label:"Why is this area most important?"},
+    {type:"text",id:"s13_outcomes",q:true,label:"What positive outcomes would result from improvement?"}
+  ]},
+  {n:14,t:"Develop Your Change Plan",s:"Turn insight into a plan",intro:"Translate everything above into a concrete plan.",fields:[
+    {type:"fill",id:"s14_what",flead:"What must change?"},
+    {type:"fill",id:"s14_why",flead:"Why must it change?"},
+    {type:"fill",id:"s14_replace",flead:"What will replace it?"},
+    {type:"fill",id:"s14_action",flead:"What daily action will support change?"},
+    {type:"fill",id:"s14_measure",flead:"How will progress be measured?"}
+  ]},
+  {n:15,t:"Declaration & 7-Day Challenge",s:"Insights, commitment, action",intro:"Crystallize your key insights, then commit to a 7-day action challenge.",summary:true,tracker:true,fields:[
+    {type:"fill",id:"s15_obstacle",flead:"The greatest obstacle I identified is…"},
+    {type:"fill",id:"s15_change",flead:"The most important change I must make is…"},
+    {type:"fill",id:"s15_habit",flead:"The habit I will begin developing is…"},
+    {type:"fill",id:"s15_belief",flead:"The belief I will replace is…"},
+    {type:"fill",id:"s15_next",flead:"My next action step is…"}
+  ]}
+];
+
+const STORE_KEY="analyze_v1";
+let DATA=load();
+function load(){try{const d=JSON.parse(localStorage.getItem(STORE_KEY));if(d){d.fields=d.fields||{};d.done=d.done||{};d.opts=d.opts||{};d.beliefs=d.beliefs||{};d.tracker=d.tracker||{};return d;}}catch(e){}return{fields:{},done:{},opts:{},beliefs:{},tracker:{}}}
+function persist(){
+  localStorage.setItem(STORE_KEY,JSON.stringify(DATA));
+  const n=document.getElementById('savednote');n.classList.add('show');
+  clearTimeout(window._st);window._st=setTimeout(()=>n.classList.remove('show'),1100);
+}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+function render(){
+  document.getElementById('sections').innerHTML=SECTIONS.map(secCard).join("");
+  bind();updateProgress();updateRateTotals();
+}
+function secCard(sec){
+  const done=!!DATA.done[sec.n];
+  return `<div class="sec ${done?'done':''}" data-sec="${sec.n}">
+    <div class="sec-head" onclick="toggleSec(${sec.n})">
+      <div class="sec-num"><span class="lbl">Sec</span>${sec.n}</div>
+      <div class="sec-titles"><div class="t">${sec.t}</div><div class="s">${sec.s}</div></div>
+      <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+    <div class="sec-body">
+      ${sec.intro?`<p class="lead-in">${sec.intro}</p>`:""}
+      ${sec.beliefs?beliefsHTML(sec):""}
+      ${sec.fields.map(f=>fieldHTML(f,sec)).join("")}
+      ${sec.readiness?`<div class="rate-total"><span>Readiness total</span><span class="num" id="readiness_total">—</span></div>`:""}
+      ${sec.tracker?trackerHTML():""}
+      <label class="mark-done"><input type="checkbox" data-done="${sec.n}" ${done?'checked':''}> Mark Section ${sec.n} complete</label>
+    </div>
+  </div>`;
+}
+function fieldHTML(f,sec){
+  const v=DATA.fields[f.id]??"";
+  if(f.type==="rate"){
+    const val=(DATA.fields[f.id]===undefined||DATA.fields[f.id]==="")?5:DATA.fields[f.id];
+    const rt=sec.readiness?'data-readiness="1"':(sec.n===1?'data-life="1"':'');
+    return `<div class="rate-row"><span class="rname">${f.name}</span><input type="range" min="1" max="10" value="${val}" data-id="${f.id}" data-rate="1" ${rt}><span class="rval" id="rv_${f.id}">${val}</span></div>`;
+  }
+  if(f.type==="fill")return `<div class="fill-stmt"><div class="flead">${f.flead}</div><textarea data-id="${f.id}" placeholder="Write your response…">${esc(v)}</textarea></div>`;
+  if(f.type==="options")return optionsHTML(f,sec);
+  return `${f.q?`<div class="lead-in q">${f.label}</div>`:`<label class="field">${f.label}</label>`}<textarea data-id="${f.id}" placeholder="Write here…">${esc(v)}</textarea>`;
+}
+function optionsHTML(f,sec){
+  const chosen=DATA.opts[f.id]||[];
+  return `<div class="checklist"><div class="opt-grid">${sec.options.map(o=>{
+    const sel=chosen.includes(o);
+    return `<label class="opt ${sel?'sel':''}"><input type="checkbox" data-opt="${f.id}" data-multi="${f.multi?1:0}" value="${esc(o)}" ${sel?'checked':''}>${o}</label>`;
+  }).join("")}</div></div>`;
+}
+function beliefsHTML(sec){
+  let out="";
+  for(let i=1;i<=sec.beliefs;i++){
+    const b=DATA.beliefs[i]||{};
+    out+=`<div class="belief-block"><div class="bn">Belief ${i}</div>
+      <label class="field" style="margin-top:6px">Current belief</label><textarea data-belief="${i}" data-bk="current" placeholder="e.g. I am not qualified…">${esc(b.current||"")}</textarea>
+      <label class="field">Evidence against it</label><textarea data-belief="${i}" data-bk="evidence" placeholder="What facts contradict this belief?">${esc(b.evidence||"")}</textarea>
+      <label class="field">Empowering replacement</label><textarea data-belief="${i}" data-bk="replace" placeholder="The belief I choose instead…">${esc(b.replace||"")}</textarea>
+    </div>`;
+  }
+  return out;
+}
+function trackerHTML(){
+  const t=DATA.tracker;
+  const habit=esc(t.habit||""),distraction=esc(t.distraction||"");
+  let days="";
+  for(let i=1;i<=7;i++){
+    const dd=t["d"+i]||{};
+    days+=`<div class="day7 ${dd.done?'done':''}" data-d7="${i}">
+      <span class="dn">Day ${i}</span>
+      <span class="dcheck"><input type="checkbox" data-d7done="${i}" ${dd.done?'checked':''} title="Action taken"></span>
+      <input type="text" data-d7lesson="${i}" placeholder="One lesson learned today…" value="${esc(dd.lesson||"")}">
+    </div>`;
+  }
+  return `<div class="tracker">
+    <p class="lead-in" style="font-weight:600;color:var(--indigo)">7-Day Transformation Challenge</p>
+    <div class="setup">
+      <div><label class="field">Habit I'm tracking this week</label><input type="text" data-tset="habit" placeholder="e.g. 20 minutes of reading" value="${habit}"></div>
+      <div><label class="field">Distraction I'm eliminating</label><input type="text" data-tset="distraction" placeholder="e.g. phone before noon" value="${distraction}"></div>
+    </div>
+    <p class="lead-in" style="font-size:.86rem">Check the box each day you take one action toward your goal, and journal one lesson.</p>
+    ${days}
+  </div>`;
+}
+
+function bind(){
+  const scope=document.getElementById('sections');
+  scope.querySelectorAll('textarea[data-id],input[type=text][data-id]').forEach(el=>{
+    el.addEventListener('input',()=>{DATA.fields[el.dataset.id]=el.value;persist();});
+  });
+  scope.querySelectorAll('input[data-rate]').forEach(el=>{
+    el.addEventListener('input',()=>{
+      document.getElementById('rv_'+el.dataset.id).textContent=el.value;
+      DATA.fields[el.dataset.id]=el.value;persist();
+      if(el.dataset.readiness)updateRateTotals();
+    });
+  });
+  scope.querySelectorAll('input[data-opt]').forEach(el=>{
+    el.addEventListener('change',()=>{
+      const id=el.dataset.opt,multi=el.dataset.multi==="1",val=el.value;
+      let arr=DATA.opts[id]||[];
+      if(multi){ arr=el.checked?[...new Set([...arr,val])]:arr.filter(x=>x!==val); }
+      else{
+        arr=el.checked?[val]:[];
+        if(el.checked)scope.querySelectorAll(`input[data-opt="${id}"]`).forEach(o=>{if(o!==el){o.checked=false;o.closest('.opt').classList.remove('sel');}});
+      }
+      DATA.opts[id]=arr;el.closest('.opt').classList.toggle('sel',el.checked);persist();
+    });
+  });
+  scope.querySelectorAll('textarea[data-belief]').forEach(el=>{
+    el.addEventListener('input',()=>{
+      const i=el.dataset.belief,k=el.dataset.bk;
+      DATA.beliefs[i]=DATA.beliefs[i]||{};DATA.beliefs[i][k]=el.value;persist();
+    });
+  });
+  scope.querySelectorAll('input[data-tset]').forEach(el=>{
+    el.addEventListener('input',()=>{DATA.tracker[el.dataset.tset]=el.value;persist();});
+  });
+  scope.querySelectorAll('input[data-d7lesson]').forEach(el=>{
+    el.addEventListener('input',()=>{const i=el.dataset.d7lesson;DATA.tracker["d"+i]=DATA.tracker["d"+i]||{};DATA.tracker["d"+i].lesson=el.value;persist();});
+  });
+  scope.querySelectorAll('input[data-d7done]').forEach(el=>{
+    el.addEventListener('change',()=>{const i=el.dataset.d7done;DATA.tracker["d"+i]=DATA.tracker["d"+i]||{};DATA.tracker["d"+i].done=el.checked;el.closest('.day7').classList.toggle('done',el.checked);persist();});
+  });
+  scope.querySelectorAll('input[data-done]').forEach(el=>{
+    el.addEventListener('change',()=>{
+      DATA.done[el.dataset.done]=el.checked;
+      el.closest('.sec').classList.toggle('done',el.checked);
+      persist();updateProgress();
+    });
+  });
+}
+function toggleSec(n){document.querySelector(`.sec[data-sec="${n}"]`).classList.toggle('open');}
+
+function updateRateTotals(){
+  const el=document.getElementById('readiness_total');if(!el)return;
+  const ids=["s12_willing","s12_committed","s12_sacrifice","s12_learn","s12_consistent","s12_responsible"];
+  let any=false,sum=0;
+  ids.forEach(id=>{const v=DATA.fields[id];if(v!==undefined&&v!==""){any=true;sum+=Number(v);}else{sum+=5;}});
+  el.textContent=any?`${sum} / 60`:"—";
+}
+
+function updateProgress(){
+  const done=Object.values(DATA.done).filter(Boolean).length;
+  const pct=Math.round(done/15*100);
+  document.getElementById('fill').style.width=pct+'%';
+  document.getElementById('pct').textContent=pct+'%';
+  document.getElementById('doneCount').textContent=done;
+  const c=document.getElementById('commit');
+  const complete=done===15,was=c.classList.contains('show');
+  c.classList.toggle('show',complete);c.setAttribute('aria-hidden',complete?'false':'true');
+  if(complete&&!was)setTimeout(()=>{try{c.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}},200);
+}
+
+function backup(){
+  const blob=new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`Analyze-Change-Backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();URL.revokeObjectURL(a.href);
+}
+function restore(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(!d.fields||!d.done)throw new Error("bad");
+      d.opts=d.opts||{};d.beliefs=d.beliefs||{};d.tracker=d.tracker||{};
+      if(confirm("Restore this backup? It will replace your current entries on this device.")){DATA=d;persist();render();}
+    }catch(err){alert("That file couldn't be read as a valid backup.");}
+    e.target.value="";
+  };
+  r.readAsText(file);
+}
+function printCommit(){document.body.classList.add('print-cert');window.print();setTimeout(()=>document.body.classList.remove('print-cert'),300);}
+
+render();
+</script>
+</body>
+</html>
