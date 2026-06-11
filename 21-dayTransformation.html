@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>21-Day LIFE Transformation Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#1d2150;
+  --indigo-deep:#13163a;
+  --indigo-soft:#2d3270;
+  --gold:#c9a24b;
+  --gold-bright:#e3bd63;
+  --cream:#f6f2e9;
+  --cream-card:#fcfaf4;
+  --ink:#23262e;
+  --muted:#6b6e7d;
+  --line:#e3ddcd;
+  --green:#3f7d5c;
+  --rose:#a8536a;
+  --shadow:0 1px 2px rgba(19,22,58,.05),0 8px 28px rgba(19,22,58,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+/* ---------- Warning banner ---------- */
+#banner{
+  background:var(--indigo-deep);
+  color:#e8e6f0;
+  font-size:.82rem;
+  padding:10px 20px;
+  display:flex;gap:12px;align-items:center;justify-content:center;
+  text-align:center;
+  position:sticky;top:0;z-index:50;
+  border-bottom:1px solid rgba(201,162,75,.3);
+}
+#banner b{color:var(--gold-bright);font-weight:600}
+#banner .dismiss{
+  margin-left:8px;background:none;border:1px solid rgba(255,255,255,.25);
+  color:#cfcde0;border-radius:6px;padding:2px 9px;cursor:pointer;font-size:.78rem;
+}
+#banner .dismiss:hover{background:rgba(255,255,255,.1)}
+
+/* ---------- Header ---------- */
+header{
+  background:linear-gradient(160deg,var(--indigo) 0%,var(--indigo-deep) 100%);
+  color:var(--cream);
+  padding:54px 0 46px;
+  position:relative;overflow:hidden;
+}
+header::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(900px 320px at 78% -10%,rgba(201,162,75,.22),transparent 70%);
+  pointer-events:none;
+}
+.eyebrow{
+  font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold-bright);font-weight:600;margin-bottom:16px;
+}
+h1{
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:clamp(2.1rem,6vw,3.3rem);line-height:1.04;
+  letter-spacing:-.01em;margin-bottom:14px;
+}
+h1 em{font-style:italic;color:var(--gold-bright)}
+.sub{color:#c7c8e0;max-width:48ch;font-size:1.02rem}
+.framework{
+  margin-top:22px;display:inline-flex;align-items:baseline;gap:10px;
+  font-size:.86rem;color:#aeb0d4;
+  border-top:1px solid rgba(201,162,75,.3);padding-top:16px;
+}
+.framework b{color:var(--gold-bright);font-weight:600;letter-spacing:.04em}
+
+/* ---------- Progress spine ---------- */
+.progress-head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin:34px 0 8px;
+}
+.progress-head .pct{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--indigo);font-weight:600}
+.progress-head .lbl{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.track{height:8px;border-radius:99px;background:#e8e2d3;overflow:hidden}
+.track .fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-bright));transition:width .5s ease}
+
+/* ---------- Toolbar ---------- */
+.toolbar{
+  display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 8px;
+}
+.btn{
+  font-family:inherit;font-size:.84rem;font-weight:500;
+  border-radius:9px;padding:9px 15px;cursor:pointer;border:1px solid var(--line);
+  background:var(--cream-card);color:var(--ink);transition:.15s;display:inline-flex;gap:7px;align-items:center;
+}
+.btn:hover{border-color:var(--gold);box-shadow:var(--shadow)}
+.btn.primary{background:var(--indigo);color:var(--cream);border-color:var(--indigo)}
+.btn.primary:hover{background:var(--indigo-soft)}
+.btn svg{width:15px;height:15px}
+.savednote{font-size:.78rem;color:var(--green);align-self:center;margin-left:4px;opacity:0;transition:.3s}
+.savednote.show{opacity:1}
+
+/* ---------- Week sections ---------- */
+.week{margin-top:40px}
+.week-tab{
+  display:flex;align-items:baseline;gap:14px;margin-bottom:6px;
+}
+.week-tab .wk{
+  font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;
+  color:#fff;background:var(--indigo);padding:4px 10px;border-radius:6px;
+}
+.week-tab h2{
+  font-family:'Fraunces',serif;font-weight:600;font-size:1.6rem;color:var(--indigo);letter-spacing:-.01em;
+}
+.week-theme{color:var(--muted);font-size:.92rem;margin-bottom:18px;font-style:italic}
+.week.w2 .wk{background:var(--rose)}
+.week.w2 h2{color:var(--rose)}
+.week.w3 .wk{background:var(--green)}
+.week.w3 h2{color:var(--green)}
+
+/* ---------- Day cards ---------- */
+.day{
+  background:var(--cream-card);border:1px solid var(--line);border-radius:14px;
+  margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow);
+}
+.day-head{
+  display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none;
+}
+.day-num{
+  flex:none;width:44px;height:44px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem;
+  background:var(--cream);border:1px solid var(--line);color:var(--indigo);
+  position:relative;transition:.2s;
+}
+.day.done .day-num{background:var(--gold);border-color:var(--gold);color:#fff}
+.day-num .day-lbl{position:absolute;top:-7px;left:50%;transform:translateX(-50%);font-family:'Inter';font-size:.5rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.day.done .day-num .day-lbl{color:rgba(255,255,255,.7)}
+.day-titles{flex:1;min-width:0}
+.day-titles .t{font-weight:600;font-size:1.02rem;color:var(--ink)}
+.day-titles .s{font-size:.82rem;color:var(--muted)}
+.chev{flex:none;color:var(--muted);transition:transform .25s}
+.day.open .chev{transform:rotate(180deg)}
+.day-body{display:none;padding:4px 18px 22px;border-top:1px solid var(--line)}
+.day.open .day-body{display:block}
+.prompt{font-size:.93rem;color:#4a4d59;margin:14px 0 8px}
+.prompt.q{font-style:italic;color:var(--indigo-soft)}
+
+/* ---------- Inputs ---------- */
+label.field{display:block;font-size:.82rem;font-weight:600;color:var(--ink);margin:14px 0 5px}
+textarea,input[type=text]{
+  width:100%;font-family:inherit;font-size:.93rem;color:var(--ink);
+  border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#fff;resize:vertical;
+}
+textarea:focus,input[type=text]:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.15)}
+textarea{min-height:74px}
+
+/* rating rows */
+.rate-row{display:flex;align-items:center;gap:14px;margin:10px 0}
+.rate-row .rname{flex:none;width:120px;font-weight:600;font-size:.9rem}
+.rate-row input[type=range]{flex:1;accent-color:var(--gold)}
+.rate-row .rval{flex:none;width:42px;text-align:center;font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem;color:var(--indigo)}
+
+.fill-stmt{margin:12px 0}
+.fill-stmt .lead{font-weight:600;color:var(--indigo-soft);font-size:.92rem;margin-bottom:4px}
+
+.mark-done{
+  margin-top:18px;display:flex;align-items:center;gap:9px;font-size:.9rem;font-weight:500;cursor:pointer;
+}
+.mark-done input{width:18px;height:18px;accent-color:var(--gold)}
+
+footer{text-align:center;padding:46px 20px 60px;color:var(--muted);font-size:.84rem}
+footer .v{font-family:'Fraunces',serif;font-style:italic;color:var(--indigo);font-size:1.05rem;margin-bottom:8px}
+
+/* print */
+@media print{
+  #banner,.toolbar,.chev,.mark-done,header::after{display:none!important}
+  body{background:#fff}
+  .day-body{display:block!important}
+  .day{break-inside:avoid;box-shadow:none;border-color:#ccc}
+  header{background:var(--indigo)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<div id="banner">
+  <span>📍 <b>Saved on this device only.</b> Your entries live in this browser — don't clear browsing data, and use <b>Export PDF</b> or <b>Backup</b> to keep a permanent copy.</span>
+  <button class="dismiss" onclick="document.getElementById('banner').style.display='none'">Got it</button>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Living Intentionally Focused Everyday</div>
+    <h1>The 21-Day <em>LIFE</em><br>Transformation Challenge</h1>
+    <p class="sub">Move from stuck, distracted, and overwhelmed to clarity, confidence, and momentum — through one intentional action a day.</p>
+    <div class="framework">
+      <b>L · I · F · E</b>
+      <span>Discover Purpose &nbsp;•&nbsp; Analyze Change &nbsp;•&nbsp; Clarify Focus</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="progress-head">
+    <span class="pct" id="pct">0%</span>
+    <span class="lbl"><span id="doneCount">0</span> of 21 days complete</span>
+  </div>
+  <div class="track"><div class="fill" id="fill"></div></div>
+
+  <div class="toolbar">
+    <button class="btn primary" onclick="window.print()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+      Export PDF
+    </button>
+    <button class="btn" onclick="backup()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      Backup
+    </button>
+    <button class="btn" onclick="document.getElementById('restoreFile').click()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      Restore
+    </button>
+    <input type="file" id="restoreFile" accept="application/json" style="display:none" onchange="restore(event)">
+    <span class="savednote" id="savednote">✓ Saved</span>
+  </div>
+
+  <div id="weeks"></div>
+
+  <footer>
+    <div class="v">"The person I am becoming is…"</div>
+    <div>21 days. One intentional step at a time.</div>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   CONTENT MODEL  — every input has a stable id used as storage key
+   types: rate | text | fill (multiple lead-in statements) | declaration
+============================================================ */
+const WEEKS = [
+  { wk:"Week 1", cls:"w1", title:"Discover Purpose", theme:"Understand who you are — reflection, identity, strengths, experiences, and purpose clues.",
+    days:[
+      {n:1, t:"Life Audit", s:"Rate where you stand today", fields:[
+        {type:"rate", id:"d1_faith", name:"Faith"},
+        {type:"rate", id:"d1_health", name:"Health"},
+        {type:"rate", id:"d1_relationships", name:"Relationships"},
+        {type:"rate", id:"d1_career", name:"Career"},
+        {type:"rate", id:"d1_finances", name:"Finances"},
+        {type:"rate", id:"d1_growth", name:"Personal Growth"},
+        {type:"text", id:"d1_reflect", q:true, prompt:"Where is the greatest need for transformation?", label:"Reflection"}
+      ]},
+      {n:2, t:"Uncommon Beginnings", s:"Your defining story", fields:[
+        {type:"text", id:"d2_exp", label:"5 defining life experiences", prompt:"List the moments that shaped you."},
+        {type:"text", id:"d2_chal", label:"3 major challenges"},
+        {type:"text", id:"d2_vic", label:"3 major victories"},
+        {type:"text", id:"d2_taught", q:true, label:"What have these experiences taught you?"}
+      ]},
+      {n:3, t:"Gifts & Strengths", s:"What you bring", fields:[
+        {type:"text", id:"d3_talents", label:"5 natural talents"},
+        {type:"text", id:"d3_skills", label:"5 learned skills"},
+        {type:"text", id:"d3_compliments", label:"3 things people consistently compliment you for"}
+      ]},
+      {n:4, t:"Passion Discovery", s:"What lights you up", fields:[
+        {type:"text", id:"d4_energize", label:"What activities energize you?"},
+        {type:"text", id:"d4_excite", label:"What excites you?"},
+        {type:"text", id:"d4_time", label:"What causes you to lose track of time?"}
+      ]},
+      {n:5, t:"Your Influence", s:"The value you create", fields:[
+        {type:"text", id:"d5_helped", label:"Who have you helped? What problems have you solved?"},
+        {type:"text", id:"d5_advice", q:true, label:"Where do people naturally seek your advice?"}
+      ]},
+      {n:6, t:"Purpose Clues", s:"Finish each statement", fields:[
+        {type:"fill", id:"d6_care", lead:"I care deeply about…"},
+        {type:"fill", id:"d6_need", lead:"I believe people need…"},
+        {type:"fill", id:"d6_wish", lead:"I wish someone would…"}
+      ]},
+      {n:7, t:"Purpose Reflection", s:"Cast the vision", fields:[
+        {type:"fill", id:"d7_becoming", lead:"The person I am becoming is…"},
+        {type:"text", id:"d7_vision", label:"A one-paragraph vision for your future"}
+      ]}
+    ]},
+  { wk:"Week 2", cls:"w2", title:"Analyze Change", theme:"Remove what is holding you back — obstacles, fears, time, environment, and limiting beliefs.",
+    days:[
+      {n:8, t:"Identify Obstacles", s:"Name what's in the way", fields:[
+        {type:"text", id:"d8_internal", label:"Internal barriers"},
+        {type:"text", id:"d8_external", label:"External barriers"},
+        {type:"text", id:"d8_excuses", label:"Excuses"},
+        {type:"text", id:"d8_biggest", q:true, label:"Which one is the biggest?"}
+      ]},
+      {n:9, t:"Fear Analysis", s:"Face it directly", fields:[
+        {type:"text", id:"d9_fear", label:"What fear has slowed your progress?", prompt:"Failure? Rejection? Success? Uncertainty?"},
+        {type:"text", id:"d9_response", label:"Write a response that challenges that fear"}
+      ]},
+      {n:10, t:"Time Audit", s:"Where the hours go", fields:[
+        {type:"text", id:"d10_productive", label:"Productive activities"},
+        {type:"text", id:"d10_wasters", label:"Time wasters"}
+      ]},
+      {n:11, t:"Environment Check", s:"What surrounds you", fields:[
+        {type:"text", id:"d11_help", label:"People, habits, media, spaces — which help you grow?"},
+        {type:"text", id:"d11_hold", label:"Which hold you back?"}
+      ]},
+      {n:12, t:"Replace Limiting Beliefs", s:"Rewrite the script", fields:[
+        {type:"fill", id:"d12_old", lead:"Current belief: I can't because…"},
+        {type:"fill", id:"d12_new", lead:"New belief: I can because…"},
+        {type:"text", id:"d12_three", label:"Create three replacements"}
+      ]},
+      {n:13, t:"The Cost of Staying Stuck", s:"Count the price", fields:[
+        {type:"fill", id:"d13_1yr", lead:"If nothing changes in 1 year…"},
+        {type:"fill", id:"d13_3yr", lead:"If nothing changes in 3 years…"},
+        {type:"fill", id:"d13_5yr", lead:"If nothing changes in 5 years…"}
+      ]},
+      {n:14, t:"Breakthrough Declaration", s:"Say it aloud", fields:[
+        {type:"declaration", id:"d14_decl", preset:"I refuse to remain where I am. I am committed to growth, action, and transformation.", label:"Your breakthrough declaration", prompt:"Make it yours, then read it aloud."}
+      ]}
+    ]},
+  { wk:"Week 3", cls:"w3", title:"Clarify Focus", theme:"Create momentum — vision, frameworks, a blueprint, accountability, and action.",
+    days:[
+      {n:15, t:"Future Vision", s:"Three years from now", fields:[
+        {type:"text", id:"d15_career", label:"Career"},
+        {type:"text", id:"d15_family", label:"Family"},
+        {type:"text", id:"d15_health", label:"Health"},
+        {type:"text", id:"d15_faith", label:"Faith"},
+        {type:"text", id:"d15_finances", label:"Finances"},
+        {type:"text", id:"d15_impact", label:"Impact"}
+      ]},
+      {n:16, t:"The Six Questions", s:"Locate yourself", fields:[
+        {type:"fill", id:"d16_q1", lead:"1. Where am I now?"},
+        {type:"fill", id:"d16_q2", lead:"2. Where do I want to go?"},
+        {type:"fill", id:"d16_q3", lead:"3. Why is it important?"},
+        {type:"fill", id:"d16_q4", lead:"4. What obstacles exist?"},
+        {type:"fill", id:"d16_q5", lead:"5. What resources do I need?"},
+        {type:"fill", id:"d16_q6", lead:"6. What action will I take today?"}
+      ]},
+      {n:17, t:"FOCUS Framework", s:"Apply it to one goal", fields:[
+        {type:"fill", id:"d17_f", lead:"F — Find your purpose"},
+        {type:"fill", id:"d17_o", lead:"O — Organize priorities"},
+        {type:"fill", id:"d17_c", lead:"C — Create a plan"},
+        {type:"fill", id:"d17_u", lead:"U — Utilize resources"},
+        {type:"fill", id:"d17_s", lead:"S — Stay committed"}
+      ]},
+      {n:18, t:"Success Blueprint", s:"Build the structure", fields:[
+        {type:"text", id:"d18_goal", label:"One major goal"},
+        {type:"text", id:"d18_milestones", label:"Three milestones"},
+        {type:"text", id:"d18_steps", label:"Five action steps"}
+      ]},
+      {n:19, t:"Accountability Day", s:"Don't go alone", fields:[
+        {type:"text", id:"d19_partner", label:"Accountability partner"},
+        {type:"text", id:"d19_coach", label:"Coach"},
+        {type:"text", id:"d19_community", label:"Community"},
+        {type:"text", id:"d19_shared", q:true, label:"Who did you share your goal with?"}
+      ]},
+      {n:20, t:"Action Day", s:"Do the thing you've postponed", fields:[
+        {type:"text", id:"d20_action", label:"The one meaningful action I'm taking", prompt:"Register for a course · Launch a project · Schedule a meeting · Create a business page · Submit an application"}
+      ]},
+      {n:21, t:"Transformation Declaration", s:"Name what changed", fields:[
+        {type:"fill", id:"d21_discovered", lead:"What I discovered…"},
+        {type:"fill", id:"d21_released", lead:"What I released…"},
+        {type:"fill", id:"d21_committing", lead:"What I'm committing to…"},
+        {type:"declaration", id:"d21_decl", preset:"", label:"My transformation declaration"}
+      ]}
+    ]}
+];
+
+const STORE_KEY = "life21_v1";
+let DATA = load();
+
+function load(){ try{return JSON.parse(localStorage.getItem(STORE_KEY))||{fields:{},done:{}}}catch(e){return{fields:{},done:{}}} }
+function persist(){
+  localStorage.setItem(STORE_KEY, JSON.stringify(DATA));
+  const n=document.getElementById('savednote'); n.classList.add('show');
+  clearTimeout(window._st); window._st=setTimeout(()=>n.classList.remove('show'),1100);
+}
+
+/* -------- render -------- */
+function render(){
+  const root=document.getElementById('weeks');
+  root.innerHTML = WEEKS.map(w=>`
+    <section class="week ${w.cls}">
+      <div class="week-tab"><span class="wk">${w.wk}</span><h2>${w.title}</h2></div>
+      <p class="week-theme">${w.theme}</p>
+      ${w.days.map(d=>dayCard(d)).join("")}
+    </section>`).join("");
+  bind();
+  updateProgress();
+}
+
+function dayCard(d){
+  const done = !!DATA.done[d.n];
+  return `<div class="day ${done?'done':''}" data-day="${d.n}">
+    <div class="day-head" onclick="toggleDay(${d.n})">
+      <div class="day-num"><span class="day-lbl">Day</span>${d.n}</div>
+      <div class="day-titles"><div class="t">${d.t}</div><div class="s">${d.s}</div></div>
+      <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+    <div class="day-body">
+      ${d.fields.map(f=>fieldHTML(f)).join("")}
+      <label class="mark-done"><input type="checkbox" data-done="${d.n}" ${done?'checked':''}> Mark Day ${d.n} complete</label>
+    </div>
+  </div>`;
+}
+
+function fieldHTML(f){
+  const v = DATA.fields[f.id] ?? "";
+  if(f.type==="rate"){
+    const val = v===""?5:v;
+    return `<div class="rate-row">
+      <span class="rname">${f.name}</span>
+      <input type="range" min="1" max="10" value="${val}" data-id="${f.id}" data-rate="1">
+      <span class="rval" id="rv_${f.id}">${val}</span>
+    </div>`;
+  }
+  if(f.type==="fill"){
+    return `<div class="fill-stmt">
+      <div class="lead">${f.lead}</div>
+      <textarea data-id="${f.id}" placeholder="Write your response…">${esc(v)}</textarea>
+    </div>`;
+  }
+  if(f.type==="declaration"){
+    const text = v!=="" ? v : (f.preset||"");
+    return `${f.prompt?`<div class="prompt q">${f.prompt}</div>`:""}
+      <label class="field">${f.label}</label>
+      <textarea data-id="${f.id}" style="min-height:90px;font-family:'Fraunces',serif;font-size:1.05rem" placeholder="Write your declaration…">${esc(text)}</textarea>`;
+  }
+  // text
+  return `${f.prompt?`<div class="prompt ${f.q?'q':''}">${f.prompt}</div>`:""}
+    ${f.label?`<label class="field">${f.label}</label>`:""}
+    <textarea data-id="${f.id}" placeholder="Write here…">${esc(v)}</textarea>`;
+}
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+/* -------- interactions -------- */
+function bind(){
+  document.querySelectorAll('textarea[data-id],input[type=text][data-id]').forEach(el=>{
+    el.addEventListener('input',()=>{ DATA.fields[el.dataset.id]=el.value; persist(); });
+  });
+  document.querySelectorAll('input[data-rate]').forEach(el=>{
+    el.addEventListener('input',()=>{
+      document.getElementById('rv_'+el.dataset.id).textContent=el.value;
+      DATA.fields[el.dataset.id]=el.value; persist();
+    });
+  });
+  document.querySelectorAll('input[data-done]').forEach(el=>{
+    el.addEventListener('change',()=>{
+      DATA.done[el.dataset.done]=el.checked;
+      el.closest('.day').classList.toggle('done',el.checked);
+      persist(); updateProgress();
+    });
+  });
+}
+function toggleDay(n){ document.querySelector(`.day[data-day="${n}"]`).classList.toggle('open'); }
+
+function updateProgress(){
+  const done=Object.values(DATA.done).filter(Boolean).length;
+  const pct=Math.round(done/21*100);
+  document.getElementById('fill').style.width=pct+'%';
+  document.getElementById('pct').textContent=pct+'%';
+  document.getElementById('doneCount').textContent=done;
+}
+
+/* -------- backup / restore -------- */
+function backup(){
+  const blob=new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`LIFE-Challenge-Backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function restore(e){
+  const file=e.target.files[0]; if(!file)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(!d.fields||!d.done) throw new Error("bad file");
+      if(confirm("Restore this backup? It will replace your current entries on this device.")){
+        DATA=d; persist(); render();
+      }
+    }catch(err){ alert("That file couldn't be read as a valid backup."); }
+    e.target.value="";
+  };
+  r.readAsText(file);
+}
+
+render();
+</script>
+</body>
+</html>
