@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future Vision Worksheet — Designing the Next Chapter</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #20180f;
+  --parchment: #f4ede0;
+  --cream: #ece2cf;
+  --card: #fbf6ec;
+  --gold: #b8862b;
+  --gold-soft: #b8862b22;
+  --rust: #9c4221;
+  --forest: #2f5641;
+  --sky: #2c5d78;
+  --line: #d8caaf;
+  --muted: #6b5d47;
+  --good: #2f7d52;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--parchment);
+  color: var(--ink);
+  line-height: 1.65;
+  font-size: 16px;
+  padding-bottom: 6rem;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: url("data:image/svg+xml,%3Csvg width='180' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.7' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+.wrap { max-width: 820px; margin: 0 auto; padding: 0 1.25rem; position: relative; z-index: 1; }
+
+/* HERO */
+header {
+  text-align: center;
+  padding: 3.5rem 1.25rem 2.5rem;
+  position: relative; z-index: 1;
+}
+.eyebrow {
+  font-size: .72rem; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--gold); font-weight: 700; margin-bottom: 1.1rem;
+}
+header h1 {
+  font-family: 'Fraunces', serif; font-weight: 900;
+  font-size: clamp(2.4rem, 6vw, 3.6rem); line-height: 1.02;
+  letter-spacing: -.02em; margin-bottom: .4rem;
+}
+header h1 em { font-style: italic; color: var(--rust); font-weight: 400; }
+.sub { font-family: 'Fraunces', serif; font-style: italic; font-size: 1.15rem; color: var(--muted); }
+.creed {
+  margin: 1.6rem auto 0; max-width: 560px; font-size: .95rem; color: var(--muted);
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  padding: .9rem 0; font-style: italic;
+}
+
+/* PROGRESS BAR */
+.progress-rail {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--parchment); border-bottom: 1px solid var(--line);
+  padding: .6rem 0;
+}
+.progress-inner { max-width: 820px; margin: 0 auto; padding: 0 1.25rem; display: flex; align-items: center; gap: .8rem; }
+.progress-track { flex: 1; height: 7px; background: var(--cream); border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), var(--rust)); border-radius: 99px; transition: width .4s ease; }
+.progress-label { font-size: .78rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+
+/* SECTIONS */
+section {
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  padding: 1.9rem 1.7rem; margin: 1.4rem 0;
+  box-shadow: 0 1px 0 #fff inset, 0 8px 24px -18px #20180f55;
+}
+.part-tag {
+  display: inline-block; font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
+  font-weight: 700; color: var(--gold); margin-bottom: .5rem;
+}
+section h2 {
+  font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.65rem;
+  letter-spacing: -.01em; line-height: 1.1; margin-bottom: .35rem;
+}
+section .lead { color: var(--muted); margin-bottom: 1.3rem; font-size: .96rem; }
+h3 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.12rem; margin: 1.4rem 0 .5rem; color: var(--forest); }
+label.q { display: block; font-weight: 600; font-size: .95rem; margin: 1.1rem 0 .4rem; }
+label.q:first-of-type { margin-top: 0; }
+
+textarea, input[type=text], input[type=date] {
+  width: 100%; font-family: inherit; font-size: .95rem; color: var(--ink);
+  background: var(--parchment); border: 1px solid var(--line); border-radius: 9px;
+  padding: .7rem .8rem; resize: vertical;
+}
+textarea { min-height: 64px; line-height: 1.5; }
+textarea:focus, input:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: var(--gold); }
+
+/* RATING ROWS */
+.rate-row {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 1rem;
+  padding: .7rem 0; border-bottom: 1px dashed var(--line);
+}
+.rate-row:last-child { border-bottom: none; }
+.rate-name { font-weight: 600; font-size: .95rem; }
+.rate-control { display: flex; align-items: center; gap: .8rem; }
+.rate-control input[type=range] { width: 150px; accent-color: var(--rust); }
+.rate-val {
+  font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.25rem;
+  min-width: 2.2ch; text-align: center; color: var(--rust);
+}
+.rate-val.empty { color: var(--line); }
+@media (max-width: 540px) {
+  .rate-row { grid-template-columns: 1fr; gap: .35rem; }
+  .rate-control input[type=range] { width: 100%; flex: 1; }
+}
+
+/* CHECKLIST */
+.scale-hint { font-size: .8rem; color: var(--muted); margin-bottom: .9rem; }
+.chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: .3rem 0 .7rem; }
+.chip {
+  font-size: .85rem; font-weight: 500; padding: .42rem .85rem; border-radius: 99px;
+  border: 1px solid var(--line); background: var(--parchment); cursor: pointer;
+  user-select: none; transition: all .15s ease;
+}
+.chip:hover { border-color: var(--gold); }
+.chip.on { background: var(--rust); border-color: var(--rust); color: #fff; }
+
+/* PRIORITY / GOAL BLOCKS */
+.block {
+  background: var(--parchment); border: 1px solid var(--line); border-left: 4px solid var(--gold);
+  border-radius: 10px; padding: 1.1rem 1.1rem .9rem; margin: .9rem 0;
+}
+.block .num {
+  font-family: 'Fraunces', serif; font-weight: 900; font-size: 1.05rem; color: var(--rust);
+  margin-bottom: .3rem;
+}
+.subline { font-size: .82rem; font-weight: 600; color: var(--muted); margin: .7rem 0 .25rem; }
+
+/* DECLARATION */
+#declaration { border: 1px solid var(--gold); background: linear-gradient(180deg, #fdf8ee, #f8efdc); }
+.decl-prompt { font-family: 'Fraunces', serif; font-style: italic; font-size: 1.15rem; color: var(--forest); margin: 1.2rem 0 .3rem; }
+.next-step-box { border-left: 4px solid var(--rust); }
+
+/* FINAL REFLECTION */
+.reflection-quote {
+  font-family: 'Fraunces', serif; font-style: italic; font-size: 1.2rem; line-height: 1.5;
+  color: var(--ink); text-align: center; margin: .4rem auto 1.2rem; max-width: 540px;
+}
+
+/* TOOLBAR */
+.toolbar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+  background: #fbf6ecf2; backdrop-filter: blur(8px); border-top: 1px solid var(--line);
+  padding: .7rem 1rem; display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap;
+}
+.btn {
+  font-family: inherit; font-weight: 600; font-size: .88rem; cursor: pointer;
+  padding: .6rem 1.2rem; border-radius: 99px; border: 1px solid var(--ink);
+  background: var(--ink); color: var(--parchment); transition: transform .1s ease, opacity .15s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.gold { background: var(--gold); border-color: var(--gold); color: #1a1306; }
+.saved-note { font-size: .78rem; color: var(--good); align-self: center; opacity: 0; transition: opacity .3s; }
+.saved-note.show { opacity: 1; }
+
+@media print {
+  .toolbar, .progress-rail { display: none; }
+  body { background: #fff; padding: 0; }
+  section { box-shadow: none; break-inside: avoid; border-color: #ccc; }
+  textarea { border: none; background: #f7f7f7; min-height: auto; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">LIFE Transformation Network</div>
+  <h1>Future Vision <em>Worksheet</em></h1>
+  <div class="sub">Designing the next chapter of your life</div>
+  <p class="creed">"Preparing today for a brighter future through an intentional transformation."</p>
+</header>
+
+<div class="progress-rail">
+  <div class="progress-inner">
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+    <div class="progress-label" id="progLabel">0% complete</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- INSTRUCTIONS -->
+  <section>
+    <div class="part-tag">Before you begin</div>
+    <h2>Instructions</h2>
+    <p class="lead">This worksheet helps you move from where you are today to where you desire to be.</p>
+    <p style="color:var(--muted)">Don't rush. Reflect honestly and thoughtfully. The goal is not perfection — the goal is <strong>clarity</strong>. Your answers save automatically in this browser. Use <em>Backup</em> to keep a copy or <em>Save&nbsp;as&nbsp;PDF</em> to print.</p>
+  </section>
+
+  <!-- PART 1 -->
+  <section id="p1">
+    <div class="part-tag">Part 1</div>
+    <h2>Current Reality Assessment</h2>
+    <p class="lead">Before you can move forward, understand where you are today.</p>
+    <p class="scale-hint">Drag each slider from <strong>1 — Very Dissatisfied</strong> to <strong>10 — Highly Satisfied</strong>.</p>
+    <div id="rateList"></div>
+
+    <h3>Reflection Questions</h3>
+    <label class="q">What area currently gives you the greatest sense of fulfillment?</label>
+    <textarea data-k="p1_fulfill"></textarea>
+    <label class="q">What area needs the most improvement?</label>
+    <textarea data-k="p1_improve"></textarea>
+    <label class="q">If nothing changes over the next 12 months, what concerns you most?</label>
+    <textarea data-k="p1_concern"></textarea>
+  </section>
+
+  <!-- PART 2 -->
+  <section id="p2">
+    <div class="part-tag">Part 2</div>
+    <h2>Future Vision</h2>
+    <p class="lead">Imagine your life exactly one year from today. You've made meaningful progress, stayed committed to growth, and become more intentional. Describe your ideal future.</p>
+
+    <h3>Faith &amp; Spiritual Growth</h3>
+    <label class="q">How would you like your spiritual life to look one year from now?</label>
+    <textarea data-k="p2_faith"></textarea>
+
+    <h3>Health &amp; Wellness</h3>
+    <label class="q">What improvements would you like to see in your physical health and energy?</label>
+    <textarea data-k="p2_health"></textarea>
+
+    <h3>Relationships</h3>
+    <label class="q">What would healthy and fulfilling relationships look like?</label>
+    <textarea data-k="p2_rel"></textarea>
+
+    <h3>Career &amp; Calling</h3>
+    <label class="q">Describe where you would like to be professionally.</label>
+    <textarea data-k="p2_career"></textarea>
+
+    <h3>Financial Future</h3>
+    <label class="q">What financial goals would you like to achieve?</label>
+    <textarea data-k="p2_finance"></textarea>
+
+    <h3>Purpose &amp; Impact</h3>
+    <label class="q">What difference do you want your life to make?</label>
+    <textarea data-k="p2_purpose"></textarea>
+  </section>
+
+  <!-- PART 3 -->
+  <section id="p3">
+    <div class="part-tag">Part 3</div>
+    <h2>Future Self Exercise</h2>
+    <p class="lead">Imagine meeting yourself one year from today. Answer from the perspective of your future self.</p>
+    <label class="q">What are you most proud of accomplishing?</label>
+    <textarea data-k="p3_proud"></textarea>
+    <label class="q">What habits helped create your success?</label>
+    <textarea data-k="p3_habits"></textarea>
+    <label class="q">What distractions did you eliminate?</label>
+    <textarea data-k="p3_distractions"></textarea>
+    <label class="q">What advice would your future self give you today?</label>
+    <textarea data-k="p3_advice"></textarea>
+  </section>
+
+  <!-- PART 4 -->
+  <section id="p4">
+    <div class="part-tag">Part 4</div>
+    <h2>Obstacles &amp; Barriers</h2>
+    <p class="lead">Every vision encounters resistance. Identify the barriers that could prevent your progress. Tap any that apply, then add your own below.</p>
+
+    <h3>Internal Barriers</h3>
+    <div class="chips" id="internalChips"></div>
+    <label class="q">My internal barriers:</label>
+    <textarea data-k="p4_internal"></textarea>
+
+    <h3>External Barriers</h3>
+    <div class="chips" id="externalChips"></div>
+    <label class="q">My external barriers:</label>
+    <textarea data-k="p4_external"></textarea>
+  </section>
+
+  <!-- PART 5 -->
+  <section id="p5">
+    <div class="part-tag">Part 5</div>
+    <h2>Your Top Three Priorities</h2>
+    <p class="lead">Of everything you identified, what are the three most important areas to focus on during the next 90 days?</p>
+    <div id="priorityBlocks"></div>
+  </section>
+
+  <!-- PART 6 -->
+  <section id="p6">
+    <div class="part-tag">Part 6</div>
+    <h2>90-Day Action Plan</h2>
+    <p class="lead">Turn each priority into a concrete goal with a first step and a date.</p>
+    <div id="goalBlocks"></div>
+  </section>
+
+  <!-- PART 7 -->
+  <section id="declaration">
+    <div class="part-tag">Part 7</div>
+    <h2>Vision Declaration</h2>
+    <p class="lead">Complete the statements below.</p>
+    <p class="decl-prompt">One year from now, I will be…</p>
+    <textarea data-k="p7_oneyear"></textarea>
+    <p class="decl-prompt">I am committed to becoming a person who…</p>
+    <textarea data-k="p7_committed"></textarea>
+    <p class="decl-prompt">Starting today, I will intentionally…</p>
+    <textarea data-k="p7_starting"></textarea>
+  </section>
+
+  <!-- FINAL REFLECTION -->
+  <section>
+    <div class="part-tag">Final Reflection</div>
+    <p class="reflection-quote">Transformation begins when clarity meets intentional action. The future you desire is created by the decisions, habits, and actions you choose today.</p>
+    <div class="block next-step-box">
+      <div class="num">My Next Step</div>
+      <label class="q">The one action I will take within the next 24 hours is:</label>
+      <textarea data-k="next_step"></textarea>
+    </div>
+  </section>
+
+</div>
+
+<div class="toolbar">
+  <button class="btn gold" onclick="saveNow(true)">Save</button>
+  <button class="btn" onclick="window.print()">Save as PDF</button>
+  <button class="btn ghost" onclick="backup()">Backup</button>
+  <button class="btn ghost" onclick="document.getElementById('restoreFile').click()">Restore</button>
+  <button class="btn ghost" onclick="clearAll()">Clear all</button>
+  <span class="saved-note" id="savedNote">Saved ✓</span>
+  <input type="file" id="restoreFile" accept="application/json" style="display:none" onchange="restore(event)">
+</div>
+
+<script>
+const KEY = 'futureVision';
+
+const AREAS = [
+  'Faith / Spiritual Growth','Physical Health','Emotional Well-being','Relationships',
+  'Career / Profession','Financial Stability','Personal Growth','Purpose & Fulfillment',
+  'Leadership Influence','Overall Life Satisfaction'
+];
+const INTERNAL = ['Fear','Procrastination','Lack of confidence','Inconsistent effort','Poor habits'];
+const EXTERNAL = ['Time constraints','Financial limitations','Lack of support','Job demands'];
+
+let state = load();
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY)) || {}; }
+  catch { return {}; }
+}
+function persist() { localStorage.setItem(KEY, JSON.stringify(state)); }
+
+/* ---- Build rating rows ---- */
+const rateList = document.getElementById('rateList');
+AREAS.forEach((name, i) => {
+  const k = 'rate_' + i;
+  const row = document.createElement('div');
+  row.className = 'rate-row';
+  const has = state[k] != null;
+  row.innerHTML = `
+    <div class="rate-name">${name}</div>
+    <div class="rate-control">
+      <input type="range" min="1" max="10" step="1" value="${has ? state[k] : 5}" data-rk="${k}">
+      <span class="rate-val ${has ? '' : 'empty'}" id="v_${k}">${has ? state[k] : '–'}</span>
+    </div>`;
+  rateList.appendChild(row);
+});
+document.querySelectorAll('input[type=range]').forEach(r => {
+  r.addEventListener('input', () => {
+    const k = r.dataset.rk;
+    state[k] = +r.value;
+    const v = document.getElementById('v_' + k);
+    v.textContent = r.value; v.classList.remove('empty');
+    persist(); updateProgress();
+  });
+});
+
+/* ---- Chips ---- */
+function buildChips(containerId, items, stateKey) {
+  const c = document.getElementById(containerId);
+  state[stateKey] = state[stateKey] || [];
+  items.forEach(label => {
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (state[stateKey].includes(label) ? ' on' : '');
+    chip.textContent = label;
+    chip.onclick = () => {
+      const arr = state[stateKey];
+      const idx = arr.indexOf(label);
+      if (idx >= 0) { arr.splice(idx, 1); chip.classList.remove('on'); }
+      else { arr.push(label); chip.classList.add('on'); }
+      persist(); updateProgress();
+    };
+    c.appendChild(chip);
+  });
+}
+buildChips('internalChips', INTERNAL, 'chips_internal');
+buildChips('externalChips', EXTERNAL, 'chips_external');
+
+/* ---- Priority blocks ---- */
+const pb = document.getElementById('priorityBlocks');
+for (let i = 1; i <= 3; i++) {
+  const d = document.createElement('div');
+  d.className = 'block';
+  d.innerHTML = `
+    <div class="num">Priority #${i}</div>
+    <textarea data-k="prio${i}" placeholder="The area I'll focus on…"></textarea>
+    <div class="subline">Why is this important?</div>
+    <textarea data-k="prio${i}_why"></textarea>`;
+  pb.appendChild(d);
+}
+
+/* ---- Goal blocks ---- */
+const gb = document.getElementById('goalBlocks');
+for (let i = 1; i <= 3; i++) {
+  const d = document.createElement('div');
+  d.className = 'block';
+  d.innerHTML = `
+    <div class="num">Goal #${i}</div>
+    <div class="subline">Desired outcome</div>
+    <textarea data-k="goal${i}_outcome"></textarea>
+    <div class="subline">First action step</div>
+    <textarea data-k="goal${i}_step"></textarea>
+    <div class="subline">Completion date</div>
+    <input type="date" data-k="goal${i}_date">`;
+  gb.appendChild(d);
+}
+
+/* ---- Wire all text/date fields ---- */
+function wireFields() {
+  document.querySelectorAll('[data-k]').forEach(el => {
+    const k = el.dataset.k;
+    if (state[k] != null) el.value = state[k];
+    el.addEventListener('input', () => {
+      state[k] = el.value;
+      persist(); updateProgress();
+    });
+  });
+}
+wireFields();
+
+/* ---- Progress ---- */
+function countTotal() {
+  // ratings(10) + textareas + date inputs + at least-one-chip groups(2)
+  const fields = document.querySelectorAll('textarea[data-k], input[type=date][data-k]').length;
+  return AREAS.length + fields + 2;
+}
+function countDone() {
+  let done = 0;
+  AREAS.forEach((_, i) => { if (state['rate_' + i] != null) done++; });
+  document.querySelectorAll('textarea[data-k], input[type=date][data-k]').forEach(el => {
+    if (el.value && el.value.trim()) done++;
+  });
+  if ((state.chips_internal || []).length) done++;
+  if ((state.chips_external || []).length) done++;
+  return done;
+}
+function updateProgress() {
+  const pct = Math.round((countDone() / countTotal()) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progLabel').textContent = pct + '% complete';
+}
+updateProgress();
+
+/* ---- Save / backup / restore / clear ---- */
+let noteTimer;
+function flashSaved() {
+  const n = document.getElementById('savedNote');
+  n.classList.add('show');
+  clearTimeout(noteTimer);
+  noteTimer = setTimeout(() => n.classList.remove('show'), 1500);
+}
+function saveNow() { persist(); flashSaved(); }
+
+function backup() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'future-vision-backup.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function restore(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try { state = JSON.parse(reader.result); persist(); location.reload(); }
+    catch { alert('That file could not be read as a valid backup.'); }
+  };
+  reader.readAsText(file);
+}
+function clearAll() {
+  if (!confirm('Clear all answers on this device? Back up first if you want to keep them.')) return;
+  state = {}; localStorage.removeItem(KEY); location.reload();
+}
+</script>
+</body>
+</html>
