@@ -180,12 +180,6 @@ textarea::placeholder { color: #b6a98f; }
 
 <div class="toolbar">
   <button class="btn gold" onclick="window.print()">Print to PDF</button>
-  <button class="btn" onclick="saveNow()">Save</button>
-  <button class="btn ghost" onclick="backup()">Backup</button>
-  <button class="btn ghost" onclick="document.getElementById('restoreFile').click()">Restore</button>
-  <button class="btn ghost" onclick="clearAll()">Clear all</button>
-  <span class="saved-note" id="savedNote">Saved ✓</span>
-  <input type="file" id="restoreFile" accept="application/json" style="display:none" onchange="restore(event)">
 </div>
 
 <script>
@@ -305,33 +299,6 @@ function updateProgress() {
   document.getElementById('progLabel').textContent = `${done} of ${totalReflections} reflections`;
 }
 updateProgress();
-
-// Toolbar actions
-let noteTimer;
-function flashSaved() {
-  const n = document.getElementById('savedNote');
-  n.classList.add('show');
-  clearTimeout(noteTimer);
-  noteTimer = setTimeout(() => n.classList.remove('show'), 1500);
-}
-function saveNow() { persist(); flashSaved(); }
-function backup() {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'redemptive-worksheet-backup.json';
-  a.click(); URL.revokeObjectURL(a.href);
-}
-function restore(e) {
-  const file = e.target.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => { try { state = JSON.parse(reader.result); persist(); location.reload(); } catch { alert('That file could not be read as a valid backup.'); } };
-  reader.readAsText(file);
-}
-function clearAll() {
-  if (!confirm('Clear all reflections on this device? Back up first if you want to keep them.')) return;
-  state = {}; localStorage.removeItem(KEY); location.reload();
-}
 </script>
 </body>
 </html>
