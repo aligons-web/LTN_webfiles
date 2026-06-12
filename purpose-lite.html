@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Purpose Lite | LIFE Transformation Network</title>
+<style>
+:root{--purple:#24124d;--purple2:#3b1f7a;--gold:#ffd700;--white:#fff;--soft:rgba(255,255,255,.1)}*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,var(--purple),var(--purple2));color:var(--white)}header{text-align:center;padding:46px 20px 25px}h1{font-size:2.5rem;margin:0 0 10px;color:var(--gold)}p{line-height:1.6}.wrap{max-width:950px;margin:auto;padding:20px}.panel{background:var(--soft);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:26px;margin-bottom:24px}.question{margin:20px 0}label{display:block;font-weight:bold;margin-bottom:8px}textarea{width:100%;min-height:90px;border:0;border-radius:12px;padding:14px;font-size:1rem}button,.btn{display:inline-block;background:var(--gold);color:#222;border:0;border-radius:10px;padding:13px 22px;font-weight:bold;text-decoration:none;cursor:pointer;margin-top:12px}.result{display:none;background:rgba(0,0,0,.25);border:1px solid rgba(255,215,0,.35);border-radius:16px;padding:22px;margin-top:20px}.links{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}footer{text-align:center;opacity:.75;padding:35px 15px}@media(max-width:640px){h1{font-size:2rem}.wrap{padding:12px}}
+
+/* ---------- PDF / PRINT ---------- */
+.pdf-btn{background:#fff;color:#24124d;border:2px solid var(--gold);margin-left:10px}
+.pdf-btn:hover{background:var(--gold)}
+@media print{
+  @page{margin:14mm}
+  body{background:#fff !important;color:#1a1a1a !important;font-size:12pt}
+  header{padding:0 0 12px}
+  h1{color:#3b1f7a !important;font-size:22pt}
+  h2,h3{color:#3b1f7a !important}
+  .wrap{max-width:100%;padding:0}
+  .panel,.item,.change-card,.question{background:#fff !important;border:1px solid #ccc !important;break-inside:avoid}
+  .result[style*="block"]{background:#fff !important;border:1px solid #999 !important;color:#1a1a1a !important}
+  .result:not([style*="block"]){display:none !important}
+  .score{background:#3b1f7a !important;color:#fff !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  textarea,select,input{border:1px solid #bbb !important;color:#1a1a1a !important;background:#fff !important}
+  button,.btn,.links,.pdf-btn{display:none !important}
+  footer{opacity:1;color:#555;border-top:1px solid #ddd;margin-top:18px}
+  a{color:#3b1f7a !important;text-decoration:none}
+}
+
+</style></head>
+<body><header><h1>Purpose Assessment Lite</h1><p>Step 3: Why do I want to go there? Reflect on clues connected to purpose and calling.</p></header><main class="wrap"><section class="panel"><p>This quick-start purpose assessment helps you notice patterns. The full Purpose journey can go deeper inside the Transformation Builder experience.</p><div id="questions"></div><button onclick="buildPurpose()">Generate Purpose Clues</button><button type="button" class="pdf-btn" onclick="window.print()">Download PDF</button><div id="result" class="result"></div></section><div class="links"><a class="btn" href="analyze-lite.html">Next: Analyze Change Lite</a><a class="btn" href="future-vision-lite.html">Back: Future Vision Lite</a></div></main><footer>LIFE Transformation Network © 2026</footer>
+<script>
+const qs=['What activity or topic consistently pulls your attention?','What problem do you often feel burdened to help solve?','What strength do others often recognize in you?','What life experience has shaped your desire to help others?','Who do you feel called to impact or serve?'];
+const box=document.getElementById('questions');qs.forEach((q,i)=>box.innerHTML+=`<div class="question"><label>${i+1}. ${q}</label><textarea id="q${i}" placeholder="Write your response..."></textarea></div>`);
+function buildPurpose(){let a=qs.map((_,i)=>document.getElementById('q'+i).value.trim());let r=document.getElementById('result');r.style.display='block';r.innerHTML=`<h2>Your Purpose Clues</h2><p><strong>Interest clue:</strong> ${a[0]||'Not yet identified.'}</p><p><strong>Burden clue:</strong> ${a[1]||'Not yet identified.'}</p><p><strong>Strength clue:</strong> ${a[2]||'Not yet identified.'}</p><p><strong>Impact clue:</strong> ${a[4]||'Not yet identified.'}</p><p>Purpose often emerges where your experiences, strengths, burdens, and service meet.</p>`;}
+</script></body></html>
