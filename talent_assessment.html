@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talent Discovery Questionnaire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2D5F5D;
+            --secondary: #D4A574;
+            --accent: #E76F51;
+            --dark: #1A1A1A;
+            --light: #F8F5F0;
+            --gray: #6B7280;
+        }
+
+        body {
+            font-family: 'Crimson Pro', serif;
+            background: linear-gradient(135deg, var(--light) 0%, #E8DFD5 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            font-weight: 300;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 10px;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.6s ease-out forwards;
+        }
+
+        .question-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 30px;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: var(--light);
+            border: 2px solid transparent;
+            padding: 18px 24px;
+            border-radius: 12px;
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            color: var(--dark);
+        }
+
+        .option-btn:hover {
+            background: white;
+            border-color: var(--secondary);
+            transform: translateX(8px);
+        }
+
+        .option-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .btn {
+            font-family: 'Space Mono', monospace;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #234948;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(45, 95, 93, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            display: none;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .results-header h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .dominant-talent {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 60px rgba(45, 95, 93, 0.3);
+        }
+
+        .dominant-talent h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .dominant-talent .talent-name {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .dominant-talent .talent-score {
+            font-family: 'Space Mono', monospace;
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .chart-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .bar-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            width: 60px;
+            text-align: right;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .bar-wrapper {
+            flex: 1;
+            background: var(--light);
+            border-radius: 10px;
+            height: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+        }
+
+        .bar-value {
+            font-family: 'Space Mono', monospace;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .descriptions {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .description-item {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .description-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .description-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .description-text {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        .restart-btn {
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .question-card {
+                padding: 30px 20px;
+            }
+
+            .question-text {
+                font-size: 1.2rem;
+            }
+
+            .dominant-talent .talent-name {
+                font-size: 2rem;
+            }
+
+            .dominant-talent .talent-score {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Talent Discovery</h1>
+            <p class="subtitle">Uncover your natural strengths and abilities</p>
+        </header>
+
+        <div id="questionnaire">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Question 1 of 50</div>
+
+            <div class="question-card" id="questionCard">
+                <div class="question-number" id="questionNumber">Question 1</div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="options"></div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>← Previous</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+            </div>
+        </div>
+
+        <div class="results-container" id="results">
+            <div class="results-header">
+                <h2>Your Talent Profile</h2>
+            </div>
+
+            <div class="dominant-talent" id="dominantTalent"></div>
+
+            <div class="chart-container">
+                <div class="chart-title">Complete Talent Breakdown</div>
+                <div class="bar-chart" id="barChart"></div>
+            </div>
+
+            <div class="descriptions">
+                <div class="description-item">
+                    <div class="description-title">A - Analytical & Problem-Solving</div>
+                    <div class="description-text">You excel at logical thinking, data analysis, and systematic problem-solving. You're drawn to research, strategy, and situations requiring careful evaluation. Consider careers in data science, engineering, consulting, or financial analysis.</div>
+                </div>
+                <div class="description-item">
+                    <div class="description-title">B - Creative & Innovative</div>
+                    <div class="description-text">You thrive on creativity, imagination, and artistic expression. You naturally generate novel ideas and see possibilities others miss. Consider careers in design, arts, marketing, content creation, or entrepreneurship.</div>
+                </div>
+                <div class="description-item">
+                    <div class="description-title">C - Interpersonal & Leadership</div>
+                    <div class="description-text">You excel at understanding people, building relationships, and bringing out the best in others. Your emotional intelligence and empathy are key strengths. Consider careers in leadership, counseling, teaching, HR, or coaching.</div>
+                </div>
+                <div class="description-item">
+                    <div class="description-title">D - Adaptive & Systems</div>
+                    <div class="description-text">You're highly adaptable, think in systems, and quickly grasp new technologies. You see the big picture and navigate complexity well. Consider careers in technology, change management, operations, or strategic planning.</div>
+                </div>
+                <div class="description-item">
+                    <div class="description-title">E - Learning & Growth</div>
+                    <div class="description-text">You're driven by continuous improvement and knowledge acquisition. Your curiosity and self-awareness fuel constant development. Consider careers in education, training, research, or any field where expertise is valued.</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary restart-btn" onclick="restartQuiz()">Start Over</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: "When faced with a complex problem, I typically:",
+                options: {
+                    A: "Break it down into smaller, logical components",
+                    B: "Imagine creative solutions that others might not see",
+                    C: "Seek input from others and build consensus",
+                    D: "Look for patterns and how it fits into the bigger picture",
+                    E: "Research best practices and adapt proven methods"
+                }
+            },
+            {
+                q: "In group settings, I'm most likely to:",
+                options: {
+                    A: "Facilitate the discussion and keep things organized",
+                    B: "Generate new ideas and possibilities",
+                    C: "Read the room and address emotional dynamics",
+                    D: "Connect different viewpoints into a cohesive vision",
+                    E: "Share knowledge and help others learn"
+                }
+            },
+            {
+                q: "What energizes me most?",
+                options: {
+                    A: "Solving puzzles and analytical challenges",
+                    B: "Creating something new and original",
+                    C: "Helping others succeed and grow",
+                    D: "Working with technology and digital tools",
+                    E: "Learning new skills and expanding my knowledge"
+                }
+            },
+            {
+                q: "My workspace typically reflects:",
+                options: {
+                    A: "Order and efficiency with clear systems",
+                    B: "Creative inspiration with visual stimulation",
+                    C: "Personal touches and photos of loved ones",
+                    D: "Tech gadgets and digital devices",
+                    E: "Books, resources, and learning materials"
+                }
+            },
+            {
+                q: "When starting a new project, I first:",
+                options: {
+                    A: "Analyze requirements and create a detailed plan",
+                    B: "Brainstorm innovative approaches",
+                    C: "Consider who needs to be involved and how to collaborate",
+                    D: "Map out how it connects to other initiatives",
+                    E: "Research what's worked before and adapt it"
+                }
+            },
+            {
+                q: "People often come to me for:",
+                options: {
+                    A: "Logical advice and problem-solving help",
+                    B: "Creative ideas and fresh perspectives",
+                    C: "Emotional support and understanding",
+                    D: "Understanding complex systems or technology",
+                    E: "Teaching them something new"
+                }
+            },
+            {
+                q: "I feel most accomplished when:",
+                options: {
+                    A: "I've solved a difficult analytical problem",
+                    B: "I've created something unique and meaningful",
+                    C: "I've helped someone overcome a challenge",
+                    D: "I've successfully implemented new technology",
+                    E: "I've mastered a new skill or concept"
+                }
+            },
+            {
+                q: "My approach to change is:",
+                options: {
+                    A: "Evaluate pros and cons systematically",
+                    B: "Get excited about new possibilities",
+                    C: "Consider how it affects people and relationships",
+                    D: "Quickly adapt and find opportunities",
+                    E: "Learn what I need to know to succeed"
+                }
+            },
+            {
+                q: "In conversations, I tend to:",
+                options: {
+                    A: "Ask probing questions to understand deeply",
+                    B: "Offer unique perspectives and metaphors",
+                    C: "Listen actively and validate others' feelings",
+                    D: "See connections between different topics",
+                    E: "Share interesting facts and information"
+                }
+            },
+            {
+                q: "My ideal vacation involves:",
+                options: {
+                    A: "Solving an escape room or strategic games",
+                    B: "Visiting art museums or attending performances",
+                    C: "Spending quality time with loved ones",
+                    D: "Exploring new technology or digital experiences",
+                    E: "Learning about local history and culture"
+                }
+            },
+            {
+                q: "When reading about current events, I'm most interested in:",
+                options: {
+                    A: "Data, statistics, and factual analysis",
+                    B: "Human interest stories and creative solutions",
+                    C: "Social impact and how people are affected",
+                    D: "Technological innovations and future trends",
+                    E: "Historical context and what we can learn"
+                }
+            },
+            {
+                q: "My natural communication style is:",
+                options: {
+                    A: "Precise and logical",
+                    B: "Metaphorical and expressive",
+                    C: "Warm and relatable",
+                    D: "Visual and concept-oriented",
+                    E: "Informative and educational"
+                }
+            },
+            {
+                q: "Under pressure, I:",
+                options: {
+                    A: "Stay calm and think through options logically",
+                    B: "Find creative workarounds to obstacles",
+                    C: "Rally people together and maintain morale",
+                    D: "Quickly pivot and adjust my approach",
+                    E: "Draw on past experiences and knowledge"
+                }
+            },
+            {
+                q: "I'm most proud of my ability to:",
+                options: {
+                    A: "Analyze complex information accurately",
+                    B: "Generate original ideas",
+                    C: "Build strong relationships",
+                    D: "Adapt to new situations seamlessly",
+                    E: "Continuously improve myself"
+                }
+            },
+            {
+                q: "My hobbies typically involve:",
+                options: {
+                    A: "Strategy games, puzzles, or chess",
+                    B: "Art, music, writing, or design",
+                    C: "Team sports or community activities",
+                    D: "Gaming, coding, or tech projects",
+                    E: "Reading, courses, or documentaries"
+                }
+            },
+            {
+                q: "When making decisions, I prioritize:",
+                options: {
+                    A: "Logic and evidence",
+                    B: "Innovation and potential",
+                    C: "Impact on people and relationships",
+                    D: "Long-term strategic value",
+                    E: "Proven track record and reliability"
+                }
+            },
+            {
+                q: "My friends would describe me as:",
+                options: {
+                    A: "Analytical and thoughtful",
+                    B: "Creative and imaginative",
+                    C: "Empathetic and supportive",
+                    D: "Forward-thinking and adaptable",
+                    E: "Knowledgeable and curious"
+                }
+            },
+            {
+                q: "I learn best by:",
+                options: {
+                    A: "Analyzing theories and frameworks",
+                    B: "Experimenting and exploring freely",
+                    C: "Discussing with others and sharing perspectives",
+                    D: "Seeing the big picture first, then details",
+                    E: "Following structured courses or programs"
+                }
+            },
+            {
+                q: "My greatest strength in teams is:",
+                options: {
+                    A: "Identifying logical flaws and improving plans",
+                    B: "Generating breakthrough ideas",
+                    C: "Keeping team morale high and resolving conflicts",
+                    D: "Seeing how our work fits into larger goals",
+                    E: "Sharing expertise and mentoring others"
+                }
+            },
+            {
+                q: "When I encounter failure, I:",
+                options: {
+                    A: "Analyze what went wrong to avoid it next time",
+                    B: "Reframe it as a learning experience and try a new approach",
+                    C: "Seek support from others and process my emotions",
+                    D: "Quickly bounce back and move forward",
+                    E: "Study the failure to extract valuable lessons"
+                }
+            },
+            {
+                q: "I'm drawn to careers that involve:",
+                options: {
+                    A: "Research, analysis, or critical evaluation",
+                    B: "Design, innovation, or artistic expression",
+                    C: "Coaching, counseling, or team leadership",
+                    D: "Technology, systems, or strategic planning",
+                    E: "Teaching, training, or knowledge sharing"
+                }
+            },
+            {
+                q: "My bookshelf contains mostly:",
+                options: {
+                    A: "Non-fiction, science, or analytical works",
+                    B: "Fiction, poetry, or art books",
+                    C: "Psychology, relationships, or self-help",
+                    D: "Business strategy or technology trends",
+                    E: "Educational texts or skill-building guides"
+                }
+            },
+            {
+                q: "In meetings, I typically:",
+                options: {
+                    A: "Point out logical inconsistencies",
+                    B: "Suggest creative alternatives",
+                    C: "Ensure everyone's voice is heard",
+                    D: "Connect ideas to broader strategy",
+                    E: "Provide relevant background information"
+                }
+            },
+            {
+                q: "My phone apps are mostly:",
+                options: {
+                    A: "Productivity and organization tools",
+                    B: "Creative apps (photo editing, music, drawing)",
+                    C: "Social media and messaging",
+                    D: "Latest tech innovations and utilities",
+                    E: "Educational and news apps"
+                }
+            },
+            {
+                q: "I handle stress by:",
+                options: {
+                    A: "Creating action plans and organizing my thoughts",
+                    B: "Engaging in creative outlets",
+                    C: "Talking with friends or loved ones",
+                    D: "Staying flexible and adjusting expectations",
+                    E: "Reminding myself what I've learned from past challenges"
+                }
+            },
+            {
+                q: "When collaborating, I value:",
+                options: {
+                    A: "Clear roles and logical processes",
+                    B: "Freedom to explore unconventional ideas",
+                    C: "Trust and open communication",
+                    D: "Alignment with larger objectives",
+                    E: "Opportunities to learn from teammates"
+                }
+            },
+            {
+                q: "My natural leadership style is:",
+                options: {
+                    A: "Lead by example with competence",
+                    B: "Inspire through vision and creativity",
+                    C: "Lead with empathy and emotional connection",
+                    D: "Guide strategically toward long-term goals",
+                    E: "Lead by teaching and developing others"
+                }
+            },
+            {
+                q: "I'm most frustrated when:",
+                options: {
+                    A: "People make decisions without proper analysis",
+                    B: "There's no room for creativity or new ideas",
+                    C: "Interpersonal conflicts are ignored",
+                    D: "We lose sight of the big picture",
+                    E: "People resist learning or improving"
+                }
+            },
+            {
+                q: "My contribution to society is best expressed through:",
+                options: {
+                    A: "Solving important problems with logic and reason",
+                    B: "Creating beauty, art, or innovative solutions",
+                    C: "Building community and supporting others",
+                    D: "Advancing systems and technology",
+                    E: "Educating and empowering others"
+                }
+            },
+            {
+                q: "When starting my day, I prefer to:",
+                options: {
+                    A: "Review my task list and prioritize logically",
+                    B: "See where inspiration takes me",
+                    C: "Check in with people who matter to me",
+                    D: "Scan for new developments and opportunities",
+                    E: "Learn something new, even if briefly"
+                }
+            },
+            {
+                q: "My ideal work environment has:",
+                options: {
+                    A: "Minimal distractions and clear structure",
+                    B: "Flexible space that encourages creativity",
+                    C: "Collaborative areas for team interaction",
+                    D: "Cutting-edge tools and technology",
+                    E: "Access to resources and learning opportunities"
+                }
+            },
+            {
+                q: "I'm naturally good at:",
+                options: {
+                    A: "Spotting errors and inconsistencies",
+                    B: "Thinking outside the box",
+                    C: "Understanding what others are feeling",
+                    D: "Seeing patterns and connections",
+                    E: "Explaining complex topics simply"
+                }
+            },
+            {
+                q: "When giving advice, I tend to:",
+                options: {
+                    A: "Offer logical analysis of options",
+                    B: "Suggest creative alternatives",
+                    C: "Provide emotional support and encouragement",
+                    D: "Consider long-term implications",
+                    E: "Share what I've learned from similar situations"
+                }
+            },
+            {
+                q: "My social media feed reflects:",
+                options: {
+                    A: "News, data, and analytical content",
+                    B: "Art, design, and creative inspiration",
+                    C: "Personal updates and human stories",
+                    D: "Tech trends and innovation",
+                    E: "Educational content and tutorials"
+                }
+            },
+            {
+                q: "I measure success by:",
+                options: {
+                    A: "Accuracy and quality of my work",
+                    B: "Originality and impact of my creations",
+                    C: "Depth of my relationships and positive influence",
+                    D: "Achievement of strategic goals",
+                    E: "How much I've grown and learned"
+                }
+            },
+            {
+                q: "When shopping, I'm drawn to:",
+                options: {
+                    A: "Functional items that solve problems efficiently",
+                    B: "Unique, aesthetically pleasing products",
+                    C: "Gifts for others or experiences to share",
+                    D: "Latest gadgets and innovative products",
+                    E: "Books, courses, or tools for self-improvement"
+                }
+            },
+            {
+                q: "In conflicts, I typically:",
+                options: {
+                    A: "Present facts and logical arguments",
+                    B: "Find creative compromises",
+                    C: "Focus on preserving relationships",
+                    D: "Step back to see the bigger context",
+                    E: "Learn from the disagreement for future situations"
+                }
+            },
+            {
+                q: "My dream project would involve:",
+                options: {
+                    A: "Solving a complex analytical challenge",
+                    B: "Creating something artistically meaningful",
+                    C: "Leading a team to achieve something together",
+                    D: "Developing an innovative system or technology",
+                    E: "Teaching or mentoring others to mastery"
+                }
+            },
+            {
+                q: "I stay motivated by:",
+                options: {
+                    A: "The satisfaction of solving difficult problems",
+                    B: "The joy of creative expression",
+                    C: "Making a positive difference in people's lives",
+                    D: "Achieving ambitious goals",
+                    E: "Continuous personal growth"
+                }
+            },
+            {
+                q: "My desktop/home screen is:",
+                options: {
+                    A: "Organized with a logical filing system",
+                    B: "Visually appealing with creative wallpaper",
+                    C: "Filled with photos of family and friends",
+                    D: "Streamlined with essential apps only",
+                    E: "Organized by learning and productivity tools"
+                }
+            },
+            {
+                q: "When introduced to new software, I:",
+                options: {
+                    A: "Read the manual to understand it properly",
+                    B: "Experiment freely to discover features",
+                    C: "Ask others how they use it",
+                    D: "Quickly figure out the essentials and adapt",
+                    E: "Take time to master it thoroughly"
+                }
+            },
+            {
+                q: "My portfolio or past work shows:",
+                options: {
+                    A: "Careful analysis and attention to detail",
+                    B: "Creative flair and originality",
+                    C: "Collaborative projects and team achievements",
+                    D: "Diverse experiences and quick learning",
+                    E: "Progressive skill development"
+                }
+            },
+            {
+                q: "I recharge my energy by:",
+                options: {
+                    A: "Engaging in mentally stimulating activities alone",
+                    B: "Pursuing creative hobbies",
+                    C: "Spending time with people I care about",
+                    D: "Exploring new places or experiences",
+                    E: "Reading or learning about new topics"
+                }
+            },
+            {
+                q: "When someone explains something to me, I prefer:",
+                options: {
+                    A: "Detailed logical breakdowns",
+                    B: "Vivid examples and metaphors",
+                    C: "Personal stories and relatable examples",
+                    D: "High-level concepts first, details later",
+                    E: "Step-by-step instruction I can follow"
+                }
+            },
+            {
+                q: "My volunteering or community involvement focuses on:",
+                options: {
+                    A: "Using my analytical skills to solve problems",
+                    B: "Creative or cultural initiatives",
+                    C: "Direct service helping people",
+                    D: "Building sustainable systems",
+                    E: "Mentoring or educational programs"
+                }
+            },
+            {
+                q: "I handle uncertainty by:",
+                options: {
+                    A: "Gathering more information to reduce ambiguity",
+                    B: "Embracing it as an opportunity for innovation",
+                    C: "Seeking support and perspective from others",
+                    D: "Staying flexible and ready to pivot",
+                    E: "Applying lessons from past uncertain situations"
+                }
+            },
+            {
+                q: "My notes and documentation style is:",
+                options: {
+                    A: "Structured, detailed, and precise",
+                    B: "Visual with sketches and diagrams",
+                    C: "Focused on action items and people responsibilities",
+                    D: "High-level with key connections highlighted",
+                    E: "Comprehensive for future reference"
+                }
+            },
+            {
+                q: "In a crisis, people count on me to:",
+                options: {
+                    A: "Think clearly and assess the situation rationally",
+                    B: "Find innovative solutions under pressure",
+                    C: "Keep everyone calm and unified",
+                    D: "Adapt quickly and make rapid decisions",
+                    E: "Apply knowledge and experience to resolve it"
+                }
+            },
+            {
+                q: "My personal growth focuses on:",
+                options: {
+                    A: "Sharpening my analytical capabilities",
+                    B: "Expanding my creative expression",
+                    C: "Deepening my emotional intelligence",
+                    D: "Staying current with trends and changes",
+                    E: "Mastering new knowledge and skills"
+                }
+            },
+            {
+                q: "Looking back on my achievements, I'm most proud of times when I:",
+                options: {
+                    A: "Solved problems others couldn't crack",
+                    B: "Created something beautiful or innovative",
+                    C: "Made a meaningful impact on someone's life",
+                    D: "Successfully navigated major changes",
+                    E: "Transformed myself through learning"
+                }
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+
+        const categoryNames = {
+            A: "Analytical & Problem-Solving",
+            B: "Creative & Innovative",
+            C: "Interpersonal & Leadership",
+            D: "Adaptive & Systems",
+            E: "Learning & Growth"
+        };
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1}`;
+            document.getElementById('questionText').textContent = question.q;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            Object.entries(question.options).forEach(([key, value]) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = value;
+                btn.onclick = () => selectOption(key);
+                
+                if (answers[currentQuestion] === key) {
+                    btn.classList.add('selected');
+                }
+                
+                optionsContainer.appendChild(btn);
+            });
+
+            updateProgress();
+            updateNavButtons();
+        }
+
+        function selectOption(choice) {
+            answers[currentQuestion] = choice;
+            
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').disabled = !answers.hasOwnProperty(currentQuestion);
+            
+            if (currentQuestion === questions.length - 1 && answers.hasOwnProperty(currentQuestion)) {
+                document.getElementById('nextBtn').textContent = 'View Results →';
+            } else {
+                document.getElementById('nextBtn').textContent = 'Next →';
+            }
+        }
+
+        function calculateResults() {
+            const scores = { A: 0, B: 0, C: 0, D: 0, E: 0 };
+            
+            Object.values(answers).forEach(answer => {
+                scores[answer]++;
+            });
+            
+            return scores;
+        }
+
+        function showResults() {
+            const scores = calculateResults();
+            const maxScore = Math.max(...Object.values(scores));
+            const dominantCategory = Object.keys(scores).find(key => scores[key] === maxScore);
+            
+            document.getElementById('questionnaire').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            // Display dominant talent
+            const dominantTalentDiv = document.getElementById('dominantTalent');
+            dominantTalentDiv.innerHTML = `
+                <h3>Your Dominant Talent</h3>
+                <div class="talent-name">${categoryNames[dominantCategory]}</div>
+                <div class="talent-score">${maxScore}/50</div>
+            `;
+            
+            // Create bar chart
+            const chartContainer = document.getElementById('barChart');
+            chartContainer.innerHTML = '';
+            
+            const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            
+            sortedScores.forEach(([category, score]) => {
+                const barItem = document.createElement('div');
+                barItem.className = 'bar-item';
+                
+                const percentage = (score / 50) * 100;
+                
+                barItem.innerHTML = `
+                    <div class="bar-label">${category}</div>
+                    <div class="bar-wrapper">
+                        <div class="bar-fill" style="width: 0%">
+                            <span class="bar-value">${score}</span>
+                        </div>
+                    </div>
+                `;
+                
+                chartContainer.appendChild(barItem);
+                
+                // Animate bars
+                setTimeout(() => {
+                    barItem.querySelector('.bar-fill').style.width = percentage + '%';
+                }, 300);
+            });
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            answers = {};
+            document.getElementById('questionnaire').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            displayQuestion();
+        }
+
+        // Initialize
+        displayQuestion();
+    </script>
+</body>
+</html>

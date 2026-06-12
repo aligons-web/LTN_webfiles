@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spiritual Gifts Assessment</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --ink:#1c1a17;
+    --parchment:#f6f1e7;
+    --parchment-2:#efe7d6;
+    --gold:#b8893a;
+    --gold-deep:#8f6420;
+    --olive:#5c6b4a;
+    --rose:#9c4a3c;
+    --line:#d8cdb6;
+    --shadow: 0 1px 0 rgba(255,255,255,.6), 0 18px 40px -22px rgba(60,40,10,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 80% -10%, #fcf8ef 0%, transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, #efe6d2 0%, transparent 55%),
+      var(--parchment);
+    line-height:1.55;
+    padding:clamp(18px,4vw,56px) clamp(14px,4vw,40px) 120px;
+  }
+  .wrap{max-width:760px;margin:0 auto}
+
+  /* ---------- Header ---------- */
+  header{text-align:center;margin-bottom:34px}
+  .eyebrow{
+    font:600 12px/1 'Inter',sans-serif;
+    letter-spacing:.32em;text-transform:uppercase;
+    color:var(--gold-deep);margin-bottom:18px;
+  }
+  .eyebrow::before,.eyebrow::after{content:"✦";margin:0 .7em;color:var(--gold);font-size:10px}
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:clamp(34px,7vw,58px);line-height:1.02;
+    letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--gold-deep)}
+  .sub{
+    margin:16px auto 0;max-width:520px;color:#6a6356;font-size:15px;
+  }
+
+  /* ---------- Progress ---------- */
+  .progress-shell{
+    position:sticky;top:0;z-index:20;
+    margin:26px -8px 30px;padding:12px 8px 10px;
+    background:linear-gradient(var(--parchment) 70%, transparent);
+  }
+  .bar{height:8px;border-radius:99px;background:var(--parchment-2);
+    border:1px solid var(--line);overflow:hidden}
+  .bar > span{display:block;height:100%;width:0;
+    background:linear-gradient(90deg,var(--gold),var(--gold-deep));
+    transition:width .35s ease}
+  .bar-label{display:flex;justify-content:space-between;
+    font:600 11px/1 'Inter';letter-spacing:.12em;text-transform:uppercase;
+    color:#857b66;margin-top:9px}
+
+  /* ---------- Question card ---------- */
+  .q{
+    background:linear-gradient(180deg,#fffdf8,#f9f4ea);
+    border:1px solid var(--line);border-radius:16px;
+    padding:22px 22px 18px;margin-bottom:16px;
+    box-shadow:var(--shadow);
+    scroll-margin-top:90px;
+  }
+  .q-top{display:flex;gap:14px;align-items:baseline;margin-bottom:16px}
+  .q-num{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+    font-size:14px;color:var(--gold-deep);
+    flex:0 0 auto;min-width:34px;
+    padding-top:1px;letter-spacing:.02em;
+  }
+  .q-text{font-size:16.5px;font-weight:500;color:#28241d}
+  .opts{display:grid;gap:8px}
+  .opt{
+    display:flex;align-items:center;gap:12px;cursor:pointer;
+    padding:11px 14px;border-radius:11px;
+    border:1px solid var(--line);background:#fbf7ee;
+    font-size:14px;color:#544d40;
+    transition:border-color .15s, background .15s, transform .05s;
+    user-select:none;
+  }
+  .opt:hover{border-color:var(--gold);background:#fefbf3}
+  .opt:active{transform:scale(.997)}
+  .dot{
+    flex:0 0 auto;width:18px;height:18px;border-radius:50%;
+    border:2px solid #c7ba9d;display:grid;place-items:center;
+    transition:border-color .15s;
+  }
+  .dot::after{content:"";width:8px;height:8px;border-radius:50%;
+    background:var(--gold-deep);transform:scale(0);transition:transform .15s}
+  .opt input{position:absolute;opacity:0;pointer-events:none}
+  .opt.sel{border-color:var(--gold-deep);background:#fbf3e2}
+  .opt.sel .dot{border-color:var(--gold-deep)}
+  .opt.sel .dot::after{transform:scale(1)}
+  .opt-key{margin-left:auto;font:600 11px/1 'Inter';letter-spacing:.1em;
+    color:#a89c81;text-transform:uppercase}
+
+  /* ---------- Submit ---------- */
+  .submit-row{margin-top:28px;text-align:center}
+  .note{font-size:13px;color:#8a8170;margin-bottom:14px;min-height:18px}
+  .note.warn{color:var(--rose);font-weight:600}
+  button.go{
+    font:600 15px/1 'Inter';letter-spacing:.03em;
+    color:#fff;background:linear-gradient(180deg,#c0913f,#8f6420);
+    border:none;border-radius:12px;padding:16px 38px;cursor:pointer;
+    box-shadow:0 14px 26px -12px rgba(120,80,15,.7);
+    transition:transform .08s, box-shadow .2s;
+  }
+  button.go:hover{box-shadow:0 18px 30px -12px rgba(120,80,15,.8)}
+  button.go:active{transform:translateY(1px)}
+  button.go:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+
+  /* ---------- Results ---------- */
+  .results{display:none}
+  .results.show{display:block;animation:rise .5s ease}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .crown{text-align:center;margin:10px 0 30px}
+  .crown .eyebrow{margin-bottom:14px}
+  .crown h2{font-family:'Fraunces',serif;font-weight:600;
+    font-size:clamp(26px,5vw,40px);line-height:1.08}
+  .crown p{color:#6a6356;font-size:14.5px;margin-top:10px}
+
+  .radar-card{
+    border:1px solid var(--line);border-radius:18px;
+    background:linear-gradient(180deg,#fffdf8,#f8f2e6);
+    box-shadow:var(--shadow);
+    padding:18px 14px 8px;margin:0 0 34px;text-align:center;
+  }
+  .radar-head{margin-bottom:6px}
+  #radar{width:100%;max-width:560px;height:auto;display:inline-block}
+
+  .top3{display:grid;gap:14px;margin:0 0 34px}
+  @media(min-width:620px){.top3{grid-template-columns:repeat(3,1fr)}}
+  .gift-card{
+    border:1px solid var(--line);border-radius:16px;padding:20px 18px;
+    background:linear-gradient(180deg,#fffdf8,#f7f1e5);
+    box-shadow:var(--shadow);position:relative;overflow:hidden;
+  }
+  .gift-card .rank{font-family:'Fraunces',serif;font-style:italic;
+    font-size:13px;color:var(--gold-deep);letter-spacing:.04em}
+  .gift-card h3{font-family:'Fraunces',serif;font-weight:600;
+    font-size:21px;margin:6px 0 8px;line-height:1.1}
+  .gift-card .desc{font-size:13px;color:#6a6356;margin-bottom:14px}
+  .gift-card .score{font:600 12px/1 'Inter';color:#8a8170;
+    letter-spacing:.08em;text-transform:uppercase}
+  .gift-card.gold-1{border-color:var(--gold);
+    background:linear-gradient(180deg,#fff7e8,#f6ead0)}
+  .gift-card.gold-1::before{content:"★";position:absolute;top:14px;right:16px;
+    color:var(--gold);font-size:18px}
+
+  .all-scores{border-top:1px solid var(--line);padding-top:26px}
+  .all-scores h4{font-family:'Fraunces',serif;font-weight:600;font-size:18px;
+    margin-bottom:18px;text-align:center}
+  .row{display:grid;grid-template-columns:160px 1fr 40px;gap:12px;
+    align-items:center;margin-bottom:10px}
+  .row .name{font-size:13.5px;font-weight:500;color:#3a352c}
+  .row .track{height:10px;border-radius:99px;background:var(--parchment-2);
+    border:1px solid var(--line);overflow:hidden}
+  .row .fill{height:100%;border-radius:99px;
+    background:linear-gradient(90deg,#c7a45a,#8f6420);width:0;
+    transition:width .9s cubic-bezier(.2,.7,.2,1)}
+  .row .val{font:600 12px/1 'Inter';color:#857b66;text-align:right}
+  @media(max-width:520px){.row{grid-template-columns:120px 1fr 34px}.row .name{font-size:12px}}
+
+  .actions{text-align:center;margin-top:34px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  button.ghost{font:600 14px/1 'Inter';color:var(--gold-deep);
+    background:transparent;border:1px solid var(--gold);border-radius:11px;
+    padding:13px 26px;cursor:pointer;transition:background .15s}
+  button.ghost:hover{background:#fbf3e2}
+
+  footer{text-align:center;margin-top:44px;font-size:12px;color:#a99e85;
+    font-style:italic;font-family:'Fraunces',serif}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Transformation Builder</div>
+    <h1>Discover Your<br><em>Spiritual Gifts</em></h1>
+    <p class="sub">Sixty-eight reflections, seventeen gifts. Answer honestly about who you
+      already are — not who you wish to be. There are no wrong answers, only true ones.</p>
+  </header>
+
+  <div id="assessment">
+    <div class="progress-shell">
+      <div class="bar"><span id="barFill"></span></div>
+      <div class="bar-label"><span id="answered">0 answered</span><span id="total">of 68</span></div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="submit-row">
+      <div class="note" id="note"></div>
+      <button class="go" id="reveal" disabled>Reveal my gifts</button>
+    </div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="crown">
+      <div class="eyebrow">Your Profile</div>
+      <h2>How God has wired you</h2>
+      <p>Your three strongest gifts rose to the top. Lean into them — and read the full
+        picture below to see how the others support your calling.</p>
+    </div>
+
+    <div class="radar-card" id="radarCard">
+      <div class="radar-head">
+        <span class="eyebrow" style="margin:0">Spiritual Gifts Radar Profile</span>
+      </div>
+      <canvas id="radar" width="1100" height="1100"></canvas>
+    </div>
+
+    <div class="top3" id="top3"></div>
+    <div class="all-scores">
+      <h4>All seventeen gifts, ranked</h4>
+      <div id="allRows"></div>
+    </div>
+    <div class="actions">
+      <button class="ghost" id="retake">Take it again</button>
+      <button class="go" id="pdfBtn">Download PDF</button>
+    </div>
+  </div>
+
+  <footer>Scored across leadership · mercy · wisdom · faith · healing · discernment · tongues · apostle · prophet · prophecy · evangelism · pastoring · teaching · serving · encouragement · giving</footer>
+</div>
+
+<script>
+const GIFTS = {
+  leadership:   {name:"Leadership",            desc:"Casting vision and moving people toward a God-given goal."},
+  mercy:        {name:"Mercy",                 desc:"Feeling and acting on deep compassion for the hurting."},
+  wisdom:       {name:"Wisdom & Knowledge",    desc:"Applying truth and insight to real situations."},
+  faith:        {name:"Faith",                 desc:"Trusting God boldly for what others call impossible."},
+  healing:      {name:"Healing & Miracles",    desc:"Believing for God's restoring, supernatural power."},
+  discernment:  {name:"Discernment",           desc:"Sensing what is true, false, or spiritually off."},
+  tongues:      {name:"Tongues & Interpretation",desc:"Praying and interpreting in a spiritual language."},
+  apostle:      {name:"Apostle",               desc:"Pioneering, planting, and building new works."},
+  prophet:      {name:"Prophet",               desc:"Carrying and stewarding God's heart and direction."},
+  prophecy:     {name:"Prophecy",              desc:"Speaking timely, edifying words from God to others."},
+  evangelist:   {name:"Evangelist",            desc:"Sharing the good news and drawing people to faith."},
+  pastor:       {name:"Pastor / Shepherd",     desc:"Caring for, guarding, and nurturing people over time."},
+  teacher:      {name:"Teacher",               desc:"Studying and explaining truth so others grow."},
+  serving:      {name:"Serving",               desc:"Meeting practical needs joyfully and behind the scenes."},
+  encourager:   {name:"Encourager",            desc:"Strengthening, comforting, and spurring people on."},
+  giver:        {name:"Giving",                desc:"Joyfully and generously resourcing God's work."},
+  // 17th gift: administration is often paired, but you listed 17 named gifts — adding the one you split:
+  administration:{name:"Administration",       desc:"Organizing people, plans, and resources to completion."}
+};
+// You listed: leadership, mercy, wisdom/knowledge, faith, healing/miracles, discernment,
+// tongues/interpretation, apostle, prophet, prophecy, evangelist, pastor, teacher, serving,
+// encourager, giver = 16 distinct. To reach 17 gifts with 4 questions each (=68), the assessment
+// includes Administration, a classic 17th gift. Remove it in the GIFTS object + QUESTIONS if undesired.
+
+const KEYS = Object.keys(GIFTS); // 17 gifts
+
+// 4 statements per gift = 68. Each statement is rated on a 1–5 agreement scale.
+const STATEMENTS = {
+  leadership:[
+    "People naturally look to me to set direction when a group has none.",
+    "I can picture where a team should go and rally others toward it.",
+    "I'd rather be responsible for an outcome than just contribute to it.",
+    "I'm energized by organizing people around a shared goal."],
+  mercy:[
+    "I'm drawn toward people who are suffering rather than away from them.",
+    "I feel others' pain deeply and can't ignore it.",
+    "Showing compassion to the overlooked comes naturally to me.",
+    "I sense when someone is hurting even when they hide it."],
+  wisdom:[
+    "People come to me for advice on tough, tangled decisions.",
+    "I can often see the right next step when others are stuck.",
+    "I connect biblical truth to everyday situations with ease.",
+    "I tend to grasp the heart of a complex problem quickly."],
+  faith:[
+    "I trust God for things that seem impossible to others.",
+    "My confidence holds steady when circumstances look hopeless.",
+    "I pray expectantly, believing God will act.",
+    "I encourage others to step out and trust God boldly."],
+  healing:[
+    "I genuinely expect God to heal and restore people.",
+    "I'm moved to pray for the sick and believe for the miraculous.",
+    "I've seen God answer when I prayed for someone's restoration.",
+    "I sense faith rising in me when I pray over physical or emotional pain."],
+  discernment:[
+    "I can sense when something 'feels off' spiritually.",
+    "I quickly notice when a teaching or motive isn't true.",
+    "I can tell the difference between authentic and counterfeit.",
+    "I often perceive what's really going on beneath the surface."],
+  tongues:[
+    "I pray in a spiritual language and find it deeply meaningful.",
+    "I'm drawn to prayer that goes beyond ordinary words.",
+    "I sense the Spirit interpreting prayers I don't fully understand.",
+    "I value praying in the Spirit as part of my walk with God."],
+  apostle:[
+    "I love starting new things rather than maintaining existing ones.",
+    "I'm energized by pioneering work in unreached places or spaces.",
+    "I naturally build structures and teams from the ground up.",
+    "I feel called to extend God's work into new territory."],
+  prophet:[
+    "I carry a strong sense of God's heart on matters of justice and truth.",
+    "I feel compelled to call people back to what's right.",
+    "I sense God's direction for a community, not just individuals.",
+    "I'm burdened to steward and protect God's message."],
+  prophecy:[
+    "I often sense a specific, timely word God wants someone to hear.",
+    "People tell me my words 'came at just the right moment.'",
+    "I'm moved to speak encouragement or correction I believe is from God.",
+    "I sense impressions for others that turn out to be accurate."],
+  evangelist:[
+    "I find it easy and joyful to talk about my faith with strangers.",
+    "I look for openings to share the good news.",
+    "I light up when someone moves closer to faith.",
+    "Inviting people to follow Jesus feels natural to me."],
+  pastor:[
+    "I feel responsible for the long-term care of the people around me.",
+    "I'm drawn to guard, guide, and nurture people over time.",
+    "I notice when someone is drifting and want to walk with them.",
+    "I find deep joy in helping people grow spiritually, step by step."],
+  teacher:[
+    "I love studying truth and making it clear for others.",
+    "I get satisfaction from explaining things so people finally 'get it.'",
+    "I dig into details to make sure what I share is accurate.",
+    "People say my explanations help them understand and grow."],
+  serving:[
+    "I'd rather meet a practical need than be up front.",
+    "I notice tasks that need doing and quietly handle them.",
+    "I feel fulfilled working behind the scenes.",
+    "Helping in hands-on, tangible ways energizes me."],
+  encourager:[
+    "I instinctively build people up when they're discouraged.",
+    "People feel stronger and more hopeful after talking with me.",
+    "I look for ways to affirm and spur others on.",
+    "Comforting and motivating people comes naturally to me."],
+  giver:[
+    "I feel joy giving generously to God's work.",
+    "I look for opportunities to resource people and causes.",
+    "I'm moved to give sacrificially, often quietly.",
+    "Managing resources well so I can give more matters to me."],
+  administration:[
+    "I love turning a vision into an organized, workable plan.",
+    "I naturally coordinate people, tasks, and timelines.",
+    "I see the steps needed to get something done and arrange them.",
+    "Bringing order to chaos is satisfying to me."]
+};
+
+const SCALE = [
+  {key:"A", label:"Not at all like me",   val:1},
+  {key:"B", label:"Rarely like me",       val:2},
+  {key:"C", label:"Sometimes like me",    val:3},
+  {key:"D", label:"Often like me",        val:4},
+  {key:"E", label:"Strongly like me",     val:5}
+];
+
+// Build a flat, interleaved question list so gifts aren't clustered together.
+let QUESTIONS = [];
+for(let i=0;i<4;i++){
+  KEYS.forEach(k=>{
+    QUESTIONS.push({gift:k, text:STATEMENTS[k][i]});
+  });
+}
+// light shuffle with fixed seed for stable ordering each load
+(function(){
+  let seed=68;
+  const rnd=()=> (seed=(seed*9301+49297)%233280)/233280;
+  for(let i=QUESTIONS.length-1;i>0;i--){
+    const j=Math.floor(rnd()*(i+1));
+    [QUESTIONS[i],QUESTIONS[j]]=[QUESTIONS[j],QUESTIONS[i]];
+  }
+})();
+
+const TOTAL = QUESTIONS.length; // 68
+const answers = new Array(TOTAL).fill(null);
+
+const qWrap = document.getElementById('questions');
+QUESTIONS.forEach((q,qi)=>{
+  const card=document.createElement('div');
+  card.className='q';
+  card.id='q'+qi;
+  card.innerHTML=`
+    <div class="q-top">
+      <div class="q-num">${String(qi+1).padStart(2,'0')}</div>
+      <div class="q-text">${q.text}</div>
+    </div>
+    <div class="opts">
+      ${SCALE.map(s=>`
+        <label class="opt" data-q="${qi}" data-val="${s.val}">
+          <span class="dot"></span>
+          <span>${s.label}</span>
+          <span class="opt-key">${s.key}</span>
+        </label>`).join('')}
+    </div>`;
+  qWrap.appendChild(card);
+});
+
+const barFill=document.getElementById('barFill');
+const answeredEl=document.getElementById('answered');
+const reveal=document.getElementById('reveal');
+const note=document.getElementById('note');
+
+qWrap.addEventListener('click',e=>{
+  const opt=e.target.closest('.opt');
+  if(!opt) return;
+  const qi=+opt.dataset.q, val=+opt.dataset.val;
+  opt.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+  opt.classList.add('sel');
+  answers[qi]=val;
+  updateProgress();
+});
+
+function updateProgress(){
+  const done=answers.filter(a=>a!==null).length;
+  const pct=Math.round(done/TOTAL*100);
+  barFill.style.width=pct+'%';
+  answeredEl.textContent=done+' answered';
+  reveal.disabled = done<TOTAL;
+  if(done<TOTAL){ note.textContent=''; note.className='note'; }
+  else { note.textContent='All set — reveal your results below.'; note.className='note'; }
+}
+
+reveal.addEventListener('click',()=>{
+  const firstMissing=answers.indexOf(null);
+  if(firstMissing!==-1){
+    note.textContent=`Please answer question ${firstMissing+1} first.`;
+    note.className='note warn';
+    document.getElementById('q'+firstMissing).scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  computeAndShow();
+});
+
+function computeAndShow(){
+  const totals={};
+  KEYS.forEach(k=>totals[k]=0);
+  QUESTIONS.forEach((q,qi)=>{ totals[q.gift]+=answers[qi]; });
+  // each gift: 4 questions × max 5 = 20 max, 4 min
+  const ranked=KEYS.map(k=>({k, score:totals[k]}))
+                   .sort((a,b)=> b.score-a.score || a.k.localeCompare(b.k));
+
+  // Top 3 cards
+  const top3=document.getElementById('top3');
+  top3.innerHTML='';
+  ranked.slice(0,3).forEach((r,i)=>{
+    const g=GIFTS[r.k];
+    const card=document.createElement('div');
+    card.className='gift-card'+(i===0?' gold-1':'');
+    card.innerHTML=`
+      <div class="rank">${['Your strongest gift','Second','Third'][i]}</div>
+      <h3>${g.name}</h3>
+      <div class="desc">${g.desc}</div>
+      <div class="score">${r.score} / 20</div>`;
+    top3.appendChild(card);
+  });
+
+  // All rows
+  const allRows=document.getElementById('allRows');
+  allRows.innerHTML='';
+  ranked.forEach(r=>{
+    const g=GIFTS[r.k];
+    const pct=Math.round((r.score-4)/16*100); // normalize 4..20 → 0..100
+    const row=document.createElement('div');
+    row.className='row';
+    row.innerHTML=`
+      <div class="name">${g.name}</div>
+      <div class="track"><div class="fill" data-pct="${Math.max(2,pct)}"></div></div>
+      <div class="val">${r.score}</div>`;
+    allRows.appendChild(row);
+  });
+
+  document.getElementById('assessment').style.display='none';
+  const res=document.getElementById('results');
+  res.classList.add('show');
+  lastRanked=ranked;
+  drawRadar(totals);
+  res.scrollIntoView({behavior:'smooth'});
+  requestAnimationFrame(()=>{
+    setTimeout(()=>{document.querySelectorAll('.fill').forEach(f=>f.style.width=f.dataset.pct+'%');},60);
+  });
+}
+
+// Spoke order around the circle (clockwise from top), one per distinct gift.
+const SPOKE_ORDER = ["leadership","giver","encourager","teacher","serving","prophecy",
+  "pastor","evangelist","prophet","administration","apostle","tongues","discernment",
+  "healing","faith","wisdom","mercy"];
+const RADAR_MAX = 20; // 4 questions × 5
+
+let lastRanked=null;
+
+function drawRadar(totals){
+  const cv=document.getElementById('radar');
+  const ctx=cv.getContext('2d');
+  const W=cv.width, H=cv.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#fffdf8';
+  ctx.fillRect(0,0,W,H);
+
+  const cx=W/2, cy=H/2+10;
+  const R=Math.min(W,H)*0.34;
+  const n=SPOKE_ORDER.length;
+  const ringVals=[5,10,15,20];
+  const ang=i=> -Math.PI/2 + i*(2*Math.PI/n); // start at top, clockwise
+
+  // grid rings
+  ctx.strokeStyle='#cfc4ac';
+  ctx.lineWidth=1;
+  ringVals.forEach(rv=>{
+    const rr=R*(rv/RADAR_MAX);
+    ctx.beginPath();
+    for(let i=0;i<=n;i++){
+      const a=ang(i%n), x=cx+rr*Math.cos(a), y=cy+rr*Math.sin(a);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  });
+  // spokes
+  ctx.strokeStyle='#d8cdb6';
+  for(let i=0;i<n;i++){
+    const a=ang(i);
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+R*Math.cos(a), cy+R*Math.sin(a));
+    ctx.stroke();
+  }
+  // ring value labels along the right-up axis
+  ctx.fillStyle='#8a8170';
+  ctx.font='600 18px Inter, sans-serif';
+  ctx.textAlign='left'; ctx.textBaseline='middle';
+  ringVals.forEach(rv=>{
+    const rr=R*(rv/RADAR_MAX);
+    ctx.fillText(String(rv), cx+6, cy-rr);
+  });
+
+  // data polygon
+  ctx.beginPath();
+  for(let i=0;i<n;i++){
+    const v=totals[SPOKE_ORDER[i]]||0;
+    const rr=R*(Math.max(0,v)/RADAR_MAX);
+    const a=ang(i), x=cx+rr*Math.cos(a), y=cy+rr*Math.sin(a);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle='rgba(120,166,206,0.32)';
+  ctx.fill();
+  ctx.strokeStyle='#2f74a8';
+  ctx.lineWidth=3;
+  ctx.stroke();
+
+  // gift labels
+  ctx.fillStyle='#3a352c';
+  ctx.font='600 19px Fraunces, serif';
+  for(let i=0;i<n;i++){
+    const a=ang(i);
+    const lr=R+34;
+    let x=cx+lr*Math.cos(a), y=cy+lr*Math.sin(a);
+    const cos=Math.cos(a);
+    ctx.textAlign = cos>0.25?'left':(cos<-0.25?'right':'center');
+    ctx.textBaseline = Math.sin(a)>0.25?'top':(Math.sin(a)<-0.25?'bottom':'middle');
+    ctx.fillText(GIFTS[SPOKE_ORDER[i]].name, x, y);
+  }
+}
+
+document.getElementById('retake').addEventListener('click',()=>{
+  answers.fill(null);
+  document.querySelectorAll('.opt.sel').forEach(o=>o.classList.remove('sel'));
+  updateProgress();
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('assessment').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+document.getElementById('pdfBtn').addEventListener('click',()=>{
+  if(!lastRanked) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'pt', format:'a4'}); // 595 x 842
+  const pw=doc.internal.pageSize.getWidth();
+  const M=48;
+  let y=58;
+
+  // Title
+  doc.setFont('helvetica','bold'); doc.setFontSize(22);
+  doc.setTextColor(28,26,23);
+  doc.text('Spiritual Gifts Profile', pw/2, y, {align:'center'});
+  y+=20;
+  doc.setFont('helvetica','normal'); doc.setFontSize(10);
+  doc.setTextColor(143,100,32);
+  doc.text('TRANSFORMATION BUILDER  ·  '+new Date().toLocaleDateString(), pw/2, y, {align:'center'});
+  y+=24;
+
+  // Radar image
+  const img=document.getElementById('radar').toDataURL('image/png',1.0);
+  const imgW=pw-2*M, imgH=imgW; // square
+  doc.addImage(img, 'PNG', M, y, imgW, imgH);
+  y+=imgH+10;
+
+  // Top 3 summary
+  doc.setFont('helvetica','bold'); doc.setFontSize(13);
+  doc.setTextColor(28,26,23);
+  doc.text('Your strongest gifts', M, y); y+=18;
+  doc.setFontSize(10);
+  lastRanked.slice(0,3).forEach((r,i)=>{
+    const g=GIFTS[r.k];
+    doc.setFont('helvetica','bold'); doc.setTextColor(143,100,32);
+    doc.text(`${i+1}. ${g.name}  (${r.score}/20)`, M, y);
+    doc.setFont('helvetica','normal'); doc.setTextColor(90,84,72);
+    const lines=doc.splitTextToSize(g.desc, pw-2*M-130);
+    doc.text(lines, M+130, y);
+    y+=Math.max(14, lines.length*12);
+  });
+
+  // Page 2: full ranked table
+  doc.addPage();
+  let y2=58;
+  doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.setTextColor(28,26,23);
+  doc.text('All seventeen gifts, ranked', M, y2); y2+=26;
+  doc.setFontSize(10);
+  lastRanked.forEach((r)=>{
+    const g=GIFTS[r.k];
+    const barX=M+170, barW=pw-2*M-210, frac=(r.score-4)/16;
+    doc.setFont('helvetica','normal'); doc.setTextColor(40,36,29);
+    doc.text(g.name, M, y2+9);
+    // track
+    doc.setFillColor(233,231,214); doc.roundedRect(barX, y2, barW, 9, 4, 4, 'F');
+    // fill
+    doc.setFillColor(143,100,32);
+    doc.roundedRect(barX, y2, Math.max(6,barW*Math.max(0.04,frac)), 9, 4, 4, 'F');
+    doc.setTextColor(133,123,102);
+    doc.text(String(r.score), pw-M, y2+9, {align:'right'});
+    y2+=24;
+  });
+  doc.setFont('helvetica','italic'); doc.setFontSize(8); doc.setTextColor(169,158,133);
+  doc.text('Scores range 4–20 per gift (four reflections, each rated 1–5).', M, y2+8);
+
+  doc.save('spiritual-gifts-profile.pdf');
+});
+
+updateProgress();
+</script>
+</body>
+</html>

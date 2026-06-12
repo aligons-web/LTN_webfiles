@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiritual Fruits Assessment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4A5899;
+            --secondary: #7B88B8;
+            --accent: #C65D47;
+            --light: #F5F3EF;
+            --dark: #2A2A2A;
+            --success: #5A8D6C;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background: linear-gradient(135deg, #F5F3EF 0%, #E8E4DC 100%);
+            color: var(--dark);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h1 {
+            font-family: 'Crimson Text', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .verse {
+            font-size: 1rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        .intro-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .intro-section h2 {
+            font-family: 'Crimson Text', serif;
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .fruits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .fruit-item {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .fruit-name {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .fruit-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .instructions {
+            background: #FFF9F0;
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .instructions h3 {
+            color: var(--accent);
+            margin-bottom: 12px;
+            font-family: 'Crimson Text', serif;
+        }
+
+        .rating-scale {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .scale-item {
+            text-align: center;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .scale-number {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .scale-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .start-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.1rem;
+            font-family: 'Crimson Text', serif;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto;
+            box-shadow: 0 4px 15px rgba(74, 88, 153, 0.3);
+        }
+
+        .start-btn:hover {
+            background: #3d4a7d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 88, 153, 0.4);
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.95rem;
+            color: #666;
+            font-family: 'Crimson Text', serif;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .fruit-category {
+            display: inline-block;
+            background: var(--light);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            color: var(--dark);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .rating-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .rating-btn {
+            width: 70px;
+            height: 70px;
+            border: 2px solid var(--secondary);
+            background: white;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rating-btn:hover {
+            background: var(--light);
+            transform: scale(1.1);
+            border-color: var(--primary);
+        }
+
+        .rating-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(1.15);
+        }
+
+        .rating-btn-label {
+            font-size: 0.65rem;
+            font-weight: 400;
+            margin-top: 3px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Crimson Text', serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3d4a7d;
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #E0DCD4;
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            display: none;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .results-header h2 {
+            font-family: 'Crimson Text', serif;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .summary-card h3 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .summary-label {
+            font-size: 1.2rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .chart-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .fruit-result {
+            margin-bottom: 25px;
+        }
+
+        .fruit-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .fruit-result-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .fruit-result-score {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .fruit-result-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            margin-left: 10px;
+        }
+
+        .level-strong {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .level-moderate {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+
+        .level-developing {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .level-growth {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .bar-wrapper {
+            background: var(--light);
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .interpretation {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .interpretation h3 {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .interpretation-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .interpretation-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .interpretation-text {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .question-text {
+                font-size: 1.2rem;
+            }
+
+            .rating-buttons {
+                gap: 10px;
+            }
+
+            .rating-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Spiritual Fruits Assessment</h1>
+            <p class="verse">
+                "But the fruit of the Spirit is love, joy, peace, patience, kindness, goodness,<br>
+                faithfulness, gentleness, self-control; against such things there is no law."<br>
+                <strong>- Galatians 5:22-23</strong>
+            </p>
+        </header>
+
+        <div id="intro" class="intro-section">
+            <h2>Understanding the Nine Fruits</h2>
+            
+            <div class="fruits-grid">
+                <div class="fruit-item">
+                    <div class="fruit-name">Love</div>
+                    <div class="fruit-desc">Acting in the best interest of others</div>
+                </div>
+                <div class="fruit-item">
+                    <div class="fruit-name">Joy</div>
+                    <div class="fruit-desc">Deep-seated gladness</div>
+                </div>
+                <div class="fruit-item">
+                    <div class="fruit-name">Peace</div>
+                    <div class="fruit-desc">Inner tranquility</div>
+                </div>
+                <div class="fruit-item">
+                    <div class="fruit-name">Patience</div>
+                    <div class="fruit-desc">Steadfastness with difficulty</div>
+                </div>
+                <div class="fruit-item">
+                    <div class="fruit-name">Kindness</div>
+                    <div class="fruit-desc">Gentle, benevolent behavior</div>
+                </div>
+                <div class="fruit-item">
+                    <div class="fruit-name">Goodness</div>
+                    <div class="fruit-desc">Moral excellence</div>
+                </div>
+                <div class="fruit-item">
+                    <div class="fruit-name">Faithfulness</div>
+                    <div class="fruit-desc">Loyalty and trustworthiness</div>
+                </div>
+                <div class="fruit-item">
+                    <div class="fruit-name">Gentleness</div>
+                    <div class="fruit-desc">Humility and teachability</div>
+                </div>
+                <div class="fruit-item">
+                    <div class="fruit-name">Self-Control</div>
+                    <div class="fruit-desc">Moderation and restraint</div>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <h3>Assessment Instructions</h3>
+                <p>This assessment contains 45 statements (5 per fruit). Rate yourself honestly on each statement using the following scale:</p>
+                
+                <div class="rating-scale">
+                    <div class="scale-item">
+                        <div class="scale-number">1</div>
+                        <div class="scale-label">Rarely/Never</div>
+                    </div>
+                    <div class="scale-item">
+                        <div class="scale-number">2</div>
+                        <div class="scale-label">Sometimes</div>
+                    </div>
+                    <div class="scale-item">
+                        <div class="scale-number">3</div>
+                        <div class="scale-label">Often</div>
+                    </div>
+                    <div class="scale-item">
+                        <div class="scale-number">4</div>
+                        <div class="scale-label">Usually</div>
+                    </div>
+                    <div class="scale-item">
+                        <div class="scale-number">5</div>
+                        <div class="scale-label">Always</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="start-btn" onclick="startAssessment()">Begin Assessment</button>
+        </div>
+
+        <div id="assessment" style="display: none;">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText"></div>
+            </div>
+
+            <div class="question-card">
+                <div class="fruit-category" id="fruitCategory"></div>
+                <div class="question-text" id="questionText"></div>
+                
+                <div class="rating-buttons" id="ratingButtons"></div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>← Previous</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+            </div>
+        </div>
+
+        <div id="results" class="results-container">
+            <div class="results-header">
+                <h2>Your Spiritual Fruits Profile</h2>
+                <p class="verse">Discover your strengths and areas for growth</p>
+            </div>
+
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3>Strongest Fruit</h3>
+                    <div class="summary-value" id="strongestFruit"></div>
+                    <div class="summary-label" id="strongestScore"></div>
+                </div>
+                <div class="summary-card">
+                    <h3>Growth Opportunity</h3>
+                    <div class="summary-value" id="weakestFruit"></div>
+                    <div class="summary-label" id="weakestScore"></div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">Your Spiritual Fruits Scores</h3>
+                <div id="resultsChart"></div>
+            </div>
+
+            <div class="interpretation">
+                <h3>Interpretation Guide</h3>
+                <div class="interpretation-item">
+                    <div class="interpretation-title">Strong (21-25 points)</div>
+                    <div class="interpretation-text">You consistently demonstrate this fruit. Continue to let this strength shine and use it to serve others.</div>
+                </div>
+                <div class="interpretation-item">
+                    <div class="interpretation-title">Moderate (16-20 points)</div>
+                    <div class="interpretation-text">Good demonstration with room for growth. Focus on specific areas where you can deepen this fruit.</div>
+                </div>
+                <div class="interpretation-item">
+                    <div class="interpretation-title">Developing (11-15 points)</div>
+                    <div class="interpretation-text">This is a growing area that needs attention. Identify specific practices to develop this fruit.</div>
+                </div>
+                <div class="interpretation-item">
+                    <div class="interpretation-title">Growth Area (5-10 points)</div>
+                    <div class="interpretation-text">Significant opportunity for development. Pray for guidance and seek accountability in growing this fruit.</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="restartAssessment()">Take Assessment Again</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Love (5 questions)
+            { fruit: "Love", text: "I prioritize others' needs above my own convenience" },
+            { fruit: "Love", text: "I show genuine care for people, even when it's difficult" },
+            { fruit: "Love", text: "I actively look for ways to serve and help others" },
+            { fruit: "Love", text: "I treat everyone with respect, regardless of how they treat me" },
+            { fruit: "Love", text: "I forgive others quickly and don't hold grudges" },
+            
+            // Joy (5 questions)
+            { fruit: "Joy", text: "I maintain a positive outlook even during challenging times" },
+            { fruit: "Joy", text: "My happiness is rooted in something deeper than circumstances" },
+            { fruit: "Joy", text: "I find reasons to be grateful in all situations" },
+            { fruit: "Joy", text: "I encourage others and spread positivity" },
+            { fruit: "Joy", text: "I experience contentment regardless of my external situation" },
+            
+            // Peace (5 questions)
+            { fruit: "Peace", text: "I remain calm when others around me are anxious or upset" },
+            { fruit: "Peace", text: "I trust God/Higher Power even when I don't understand the situation" },
+            { fruit: "Peace", text: "I don't let worry dominate my thoughts" },
+            { fruit: "Peace", text: "I help bring calm and resolution to tense situations" },
+            { fruit: "Peace", text: "I sleep well at night, free from excessive anxiety" },
+            
+            // Patience (5 questions)
+            { fruit: "Patience", text: "I stay calm when things don't go as planned" },
+            { fruit: "Patience", text: "I don't lose my temper easily with difficult people" },
+            { fruit: "Patience", text: "I can wait without complaining or becoming frustrated" },
+            { fruit: "Patience", text: "I give people the benefit of the doubt rather than judging quickly" },
+            { fruit: "Patience", text: "I remain steady and composed during long-term challenges" },
+            
+            // Kindness (5 questions)
+            { fruit: "Kindness", text: "I speak gently and considerately to everyone" },
+            { fruit: "Kindness", text: "I notice when others are hurting and reach out to them" },
+            { fruit: "Kindness", text: "I perform small acts of kindness without expecting recognition" },
+            { fruit: "Kindness", text: "I go out of my way to make others feel valued and appreciated" },
+            { fruit: "Kindness", text: "My words build people up rather than tear them down" },
+            
+            // Goodness (5 questions)
+            { fruit: "Goodness", text: "I consistently choose what is right, even when it's hard" },
+            { fruit: "Goodness", text: "My private behavior matches my public behavior" },
+            { fruit: "Goodness", text: "I stand up for what is right, even when others don't" },
+            { fruit: "Goodness", text: "I maintain high moral and ethical standards in all areas of life" },
+            { fruit: "Goodness", text: "I pursue excellence and integrity in my work and relationships" },
+            
+            // Faithfulness (5 questions)
+            { fruit: "Faithfulness", text: "I keep my promises and commitments, no matter what" },
+            { fruit: "Faithfulness", text: "Others can count on me to be reliable and dependable" },
+            { fruit: "Faithfulness", text: "I remain loyal to people even when it's inconvenient" },
+            { fruit: "Faithfulness", text: "I follow through on what I say I'll do" },
+            { fruit: "Faithfulness", text: "I am consistent in my spiritual practices and beliefs" },
+            
+            // Gentleness (5 questions)
+            { fruit: "Gentleness", text: "I respond to criticism with humility rather than defensiveness" },
+            { fruit: "Gentleness", text: "I am willing to admit when I'm wrong" },
+            { fruit: "Gentleness", text: "I don't insist on having my own way" },
+            { fruit: "Gentleness", text: "I listen to others' perspectives with an open mind" },
+            { fruit: "Gentleness", text: "I approach difficult conversations with humility and care" },
+            
+            // Self-Control (5 questions)
+            { fruit: "Self-Control", text: "I manage my emotions rather than letting them control me" },
+            { fruit: "Self-Control", text: "I exercise discipline in my eating, spending, and habits" },
+            { fruit: "Self-Control", text: "I resist temptations that I know are harmful" },
+            { fruit: "Self-Control", text: "I think before I speak, especially when I'm upset" },
+            { fruit: "Self-Control", text: "I maintain healthy boundaries and say 'no' when needed" }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+
+        function startAssessment() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('assessment').style.display = 'block';
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('fruitCategory').textContent = question.fruit;
+            document.getElementById('questionText').textContent = question.text;
+            
+            const ratingButtons = document.getElementById('ratingButtons');
+            ratingButtons.innerHTML = '';
+            
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'rating-btn';
+                if (answers[currentQuestion] === i) {
+                    btn.classList.add('selected');
+                }
+                btn.innerHTML = `${i}`;
+                btn.onclick = () => selectRating(i);
+                ratingButtons.appendChild(btn);
+            }
+            
+            updateProgress();
+            updateNavButtons();
+        }
+
+        function selectRating(rating) {
+            answers[currentQuestion] = rating;
+            document.querySelectorAll('.rating-btn').forEach((btn, index) => {
+                btn.classList.remove('selected');
+                if (index + 1 === rating) {
+                    btn.classList.add('selected');
+                }
+            });
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = 
+                `Question ${currentQuestion + 1} of ${questions.length} - ${questions[currentQuestion].fruit}`;
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').disabled = !answers.hasOwnProperty(currentQuestion);
+            
+            if (currentQuestion === questions.length - 1 && answers.hasOwnProperty(currentQuestion)) {
+                document.getElementById('nextBtn').textContent = 'View Results →';
+            } else {
+                document.getElementById('nextBtn').textContent = 'Next →';
+            }
+        }
+
+        function calculateResults() {
+            const fruits = ['Love', 'Joy', 'Peace', 'Patience', 'Kindness', 'Goodness', 'Faithfulness', 'Gentleness', 'Self-Control'];
+            const scores = {};
+            
+            fruits.forEach(fruit => {
+                scores[fruit] = 0;
+            });
+            
+            questions.forEach((question, index) => {
+                if (answers[index]) {
+                    scores[question.fruit] += answers[index];
+                }
+            });
+            
+            return scores;
+        }
+
+        function getLevel(score) {
+            if (score >= 21) return { text: 'Strong', class: 'level-strong' };
+            if (score >= 16) return { text: 'Moderate', class: 'level-moderate' };
+            if (score >= 11) return { text: 'Developing', class: 'level-developing' };
+            return { text: 'Growth Area', class: 'level-growth' };
+        }
+
+        function showResults() {
+            const scores = calculateResults();
+            const sortedFruits = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            
+            document.getElementById('assessment').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            // Display strongest and weakest
+            document.getElementById('strongestFruit').textContent = sortedFruits[0][0];
+            document.getElementById('strongestScore').textContent = `${sortedFruits[0][1]} out of 25`;
+            document.getElementById('weakestFruit').textContent = sortedFruits[sortedFruits.length - 1][0];
+            document.getElementById('weakestScore').textContent = `${sortedFruits[sortedFruits.length - 1][1]} out of 25`;
+            
+            // Create chart
+            const chartContainer = document.getElementById('resultsChart');
+            chartContainer.innerHTML = '';
+            
+            sortedFruits.forEach(([fruit, score]) => {
+                const level = getLevel(score);
+                const percentage = (score / 25) * 100;
+                
+                const fruitResult = document.createElement('div');
+                fruitResult.className = 'fruit-result';
+                fruitResult.innerHTML = `
+                    <div class="fruit-result-header">
+                        <span class="fruit-result-name">${fruit}</span>
+                        <span>
+                            <span class="fruit-result-score">${score}/25</span>
+                            <span class="fruit-result-level ${level.class}">${level.text}</span>
+                        </span>
+                    </div>
+                    <div class="bar-wrapper">
+                        <div class="bar-fill" style="width: 0%"></div>
+                    </div>
+                `;
+                chartContainer.appendChild(fruitResult);
+                
+                // Animate bar
+                setTimeout(() => {
+                    fruitResult.querySelector('.bar-fill').style.width = percentage + '%';
+                }, 300);
+            });
+        }
+
+        function restartAssessment() {
+            currentQuestion = 0;
+            answers = {};
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('intro').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
