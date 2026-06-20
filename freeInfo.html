@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Transformation Assessments | Transformation Builder</title>
+
+<style>
+:root {
+    --bg-deep:     #0c0620;
+    --bg-mid:      #1a0f3d;
+    --bg-violet:   #2d1565;
+    --gold:        #ffb627;
+    --gold-bright: #ffd66b;
+    --violet:      #8b5cf6;
+    --blue:        #3b82f6;
+    --magenta:     #d946a6;
+    --orange:      #ff7a3c;
+    --text:        #ede9ff;
+    --text-dim:    rgba(237,233,255,.72);
+    --card-bg:     rgba(255,255,255,.045);
+    --card-border: rgba(139,92,246,.22);
+    --card-hover:  rgba(139,92,246,.10);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(circle at 12% 88%, rgba(255,122,60,.18), transparent 42%),
+        radial-gradient(circle at 88% 8%, rgba(139,92,246,.22), transparent 45%),
+        radial-gradient(circle at 70% 60%, rgba(59,130,246,.12), transparent 50%),
+        linear-gradient(160deg, var(--bg-deep) 0%, var(--bg-mid) 50%, var(--bg-violet) 100%);
+    background-attachment: fixed;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- HEADER ---------- */
+header {
+    text-align: center;
+    padding: 80px 24px 30px;
+}
+
+.eyebrow {
+    display: inline-block;
+    font-size: .8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    font-weight: 700;
+    margin-bottom: 18px;
+    opacity: .9;
+}
+
+header h1 {
+    font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+    margin: 0 0 18px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(110deg, #fff 20%, var(--gold-bright) 55%, var(--gold) 80%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+header > p {
+    font-size: 1.12rem;
+    max-width: 820px;
+    margin: auto;
+    color: var(--text-dim);
+}
+
+.container {
+    max-width: 1280px;
+    margin: auto;
+    padding: 20px 24px 40px;
+}
+
+/* ---------- FREE BADGE ---------- */
+.free-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #1a0f3d;
+    background: linear-gradient(100deg, var(--gold-bright), var(--gold));
+    padding: 7px 18px;
+    border-radius: 999px;
+    margin-bottom: 22px;
+    box-shadow: 0 6px 20px -8px rgba(255,182,39,.6);
+}
+
+/* ---------- INTRO ---------- */
+.intro-box {
+    max-width: 940px;
+    margin: 0 auto 55px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 38px;
+    text-align: center;
+    backdrop-filter: blur(6px);
+}
+
+.intro-box h2 {
+    margin-top: 0;
+    font-size: 1.6rem;
+    background: linear-gradient(100deg, var(--gold-bright), var(--orange));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.intro-box p { color: var(--text-dim); margin-bottom: 0; }
+.intro-box p + p { margin-top: 16px; }
+
+.intro-box .highlight { color: var(--gold-bright); font-weight: 600; }
+
+/* ---------- HOW IT WORKS ---------- */
+.how {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    max-width: 940px;
+    margin: 0 auto 60px;
+}
+
+.how-item {
+    text-align: center;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 26px 20px;
+}
+
+.how-num {
+    width: 44px; height: 44px;
+    margin: 0 auto 14px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    font-weight: 800; font-size: 1.15rem;
+    color: #1a0f3d;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+}
+
+.how-item h3 { margin: 0 0 8px; font-size: 1.05rem; color: #fff; }
+.how-item p  { margin: 0; font-size: .92rem; color: var(--text-dim); }
+
+@media (max-width: 760px) { .how { grid-template-columns: 1fr; } }
+
+/* ---------- SECTION TITLES ---------- */
+.section-head { text-align: center; margin: 0 auto 40px; }
+
+.section-head h2 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    margin: 0 0 12px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+}
+
+.section-head h2 .accent {
+    background: linear-gradient(100deg, var(--violet), var(--magenta), var(--orange));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section-head p { color: var(--text-dim); max-width: 640px; margin: 0 auto; }
+
+.section-head .rule {
+    width: 70px; height: 3px; margin: 18px auto 0;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--violet), var(--magenta), var(--orange));
+}
+
+/* ---------- SAMPLE CARDS ---------- */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 70px;
+}
+
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+
+.card {
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    padding: 30px 26px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform .25s ease, background .25s ease, border-color .25s ease;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--blue), var(--violet), var(--magenta), var(--orange));
+    opacity: .85;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    background: var(--card-hover);
+    border-color: rgba(139,92,246,.5);
+}
+
+.step-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    padding: 6px 12px;
+    border: 1px solid rgba(255,182,39,.35);
+    border-radius: 999px;
+    background: rgba(255,182,39,.07);
+    margin-bottom: 18px;
+}
+
+.sample-tag {
+    position: absolute;
+    top: 16px; right: 16px;
+    font-size: .62rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border: 1px solid var(--card-border);
+    border-radius: 999px;
+    padding: 4px 10px;
+}
+
+.card h3 {
+    margin: 0 0 12px;
+    font-size: 1.3rem;
+    color: #fff;
+    font-weight: 700;
+}
+
+.card h3 .sub {
+    display: inline-block;
+    font-size: .85rem;
+    font-weight: 500;
+    color: var(--gold-bright);
+    margin-left: 4px;
+}
+
+.card p {
+    margin: 0 0 24px;
+    color: var(--text-dim);
+    font-size: .97rem;
+}
+
+.btn {
+    align-self: flex-start;
+    margin-top: auto;
+    padding: 12px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: .92rem;
+    color: #1a0f3d;
+    background: linear-gradient(100deg, var(--gold-bright), var(--gold));
+    transition: filter .2s ease, transform .2s ease, box-shadow .2s ease;
+    box-shadow: 0 6px 20px -8px rgba(255,182,39,.6);
+}
+
+.btn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px -8px rgba(255,182,39,.75);
+}
+
+/* ---------- CTA / APP BOX ---------- */
+.app-box {
+    max-width: 980px;
+    margin: 0 auto 30px;
+    padding: 48px 40px;
+    border-radius: 22px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 10% 100%, rgba(255,122,60,.25), transparent 55%),
+        radial-gradient(circle at 95% 0%, rgba(139,92,246,.32), transparent 55%),
+        linear-gradient(135deg, rgba(45,21,101,.6), rgba(26,15,61,.6));
+    border: 1px solid rgba(255,182,39,.3);
+}
+
+.app-box h2 {
+    margin-top: 0;
+    font-size: 2rem;
+    background: linear-gradient(100deg, #fff, var(--gold-bright));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.app-box p { color: var(--text-dim); max-width: 720px; margin: 16px auto 0; }
+.app-box .btn { display: inline-block; margin-top: 30px; padding: 15px 36px; font-size: 1rem; }
+
+/* ---------- FOOTER ---------- */
+footer {
+    text-align: center;
+    padding: 40px 24px 50px;
+    color: var(--text-dim);
+    font-size: .9rem;
+    border-top: 1px solid rgba(139,92,246,.18);
+    margin-top: 30px;
+}
+
+footer strong { color: var(--gold-bright); font-weight: 700; }
+
+@media (max-width: 600px) {
+    header { padding-top: 56px; }
+    .intro-box, .app-box { padding: 28px 22px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <span class="eyebrow">Empowering Founders · Transforming Futures</span>
+    <h1>Life Transformation Assessments</h1>
+    <p>
+        Get a real taste of the Transformation Builder Program. The tools below are samples drawn
+        from the full curriculum — try them to see how the program guides you through meaningful,
+        intentional change.
+    </p>
+</header>
+
+<div class="container">
+
+    <div class="intro-box">
+        <div class="free-pill">100% Free · No Sign-Up Required</div>
+        <h2>What these mini-assessments are:</h2>
+        <p>
+            Each link below is a <span class="highlight">life transformation mini-assessment</span> designed to help you
+            get familiar with what the full Transformation Builder Program offers. They're abbreviated versions
+            of the deeper tools inside the program — enough to spark real reflection and show you how the
+            process works.
+        </p>
+        <p>
+            Think of these as a hands-on preview. Work through any of them at your own pace, notice what they
+            surface, and when you're ready to go further, the full program expands every one of these into
+            guided exercises, saved progress, and a personalized transformation blueprint.
+        </p>
+    </div>
+
+    <div class="how">
+        <div class="how-item">
+            <div class="how-num">1</div>
+            <h3>Pick a Sample</h3>
+            <p>Choose any assessment below — there's no required order. Start wherever you feel drawn.</p>
+        </div>
+        <div class="how-item">
+            <div class="how-num">2</div>
+            <h3>Reflect &amp; Respond</h3>
+            <p>Answer honestly. Each tool guides you through one stage of the transformation journey.</p>
+        </div>
+        <div class="how-item">
+            <div class="how-num">3</div>
+            <h3>See the Bigger Picture</h3>
+            <p>Discover how the full program builds on these insights to create lasting change.</p>
+        </div>
+    </div>
+
+    <section class="section-head">
+        <h2>Explore the Free <span class="accent">Sample Assessments</span></h2>
+        <p>Six quick-start tools, each previewing one step of the full transformation roadmap.</p>
+        <div class="rule"></div>
+    </section>
+
+    <div class="grid">
+
+        <div class="card">
+            <span class="sample-tag">1st Assessment</span>
+            <div class="step-badge">Step 1 · Current Reality</div>
+            <h3>Life Transformation Scorecard</h3>
+            <p>
+                Complete a brief evaluation of key life areas to identify where growth,
+                alignment, and improvement may be needed.
+            </p>
+            <a class="btn" href="transformation-scorecard.html" target="_blank" rel="noopener">Try Sample</a>
+        </div>
+
+        <div class="card">
+            <span class="sample-tag">2nd Assessment</span>
+            <div class="step-badge">Step 2 · Desired Future</div>
+            <h3>Future Vision Worksheet</h3>
+            <p>
+                Explore a simplified future planning exercise that helps you clarify
+                where you want to go and what success could look like.
+            </p>
+            <a class="btn" href="future-vision.html" target="_blank" rel="noopener">Try Sample</a>
+        </div>
+
+        <div class="card">
+            <span class="sample-tag">3rd Assessment</span>
+            <div class="step-badge">Step 3 · Discover Purpose</div>
+            <h3>Purpose Assessment</h3>
+            <p>
+                Reflect on key experiences, strengths, passions, and burdens that may provide
+                clues to your unique purpose and calling.
+            </p>
+            <a class="btn" href="purpose.html" target="_blank" rel="noopener">Try Sample</a>
+        </div>
+
+        <div class="card">
+            <span class="sample-tag">4th Assessment</span>
+            <div class="step-badge">Step 4 · Analyze Change</div>
+            <h3>Analyze Change Assessment</h3>
+            <p>
+                Examine important areas where change may be required in your mindset,
+                habits, environment, relationships, skills, and daily actions.
+            </p>
+            <a class="btn" href="analyze.html" target="_blank" rel="noopener">Try Sample</a>
+        </div>
+
+        <div class="card">
+            <span class="sample-tag">5th Assessment</span>
+            <div class="step-badge">Step 5 · Clarify Focus</div>
+            <h3>Focus Assessment</h3>
+            <p>
+                Identify distractions, competing priorities, and the most important areas
+                that deserve your time, attention, and energy.
+            </p>
+            <a class="btn" href="focus.html" target="_blank" rel="noopener">Try Sample</a>
+        </div>
+
+        <div class="card">
+            <span class="sample-tag">6th Assessment</span>
+            <div class="step-badge">Step 6 · Build Transformation</div>
+            <h3>Transformation Challenge <span class="sub">21-Day</span></h3>
+            <p>
+                Apply what you've learned through a guided challenge designed to create
+                momentum, consistency, and measurable progress.
+            </p>
+            <a class="btn" href="21-dayTransformation.html" target="_blank" rel="noopener">Try Sample</a>
+        </div>
+
+    </div>
+
+    <div class="app-box">
+        <h2>Like What You See?</h2>
+        <p>
+            These samples are just the beginning. The full Transformation Builder Program expands every
+            assessment above into deeper guided exercises, saved reflections, goal-building, progress tracking,
+            community support, and a complete personalized transformation blueprint.
+        </p>
+        <p>
+            Move beyond the preview and begin implementing meaningful, lasting change.
+        </p>
+        <a class="btn" href="index.html" target="_blank" rel="noopener">Explore the Full Program</a>
+    </div>
+
+</div>
+
+<footer>
+    LIFE Transformation Network © 2026 &nbsp;|&nbsp;
+    <strong>Preparing Today for a Brighter Future</strong> Through Intentional Transformation
+</footer>
+
+</body>
+</html>
