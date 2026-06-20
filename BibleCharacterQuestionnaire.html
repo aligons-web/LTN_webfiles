@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which Bible Character Are You? — LIFE Transformation Network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --parch:#F4EEE2; --parch-2:#EDE4D3; --ink:#3A3228; --ink-soft:#6B5E4C;
+    --line:#D8CBB3; --gold:#B8893B; --gold-deep:#9A6F2A; --teal:#3E6E63;
+    --teal-soft:#6A958B; --card:#FBF7EF; --shadow:rgba(58,50,40,.10);
+    --good:#5C8A57; --warn:#C2772E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Inter',system-ui,sans-serif; color:var(--ink);
+    background:
+      radial-gradient(circle at 12% 8%, #F8F3E8 0%, transparent 45%),
+      radial-gradient(circle at 88% 92%, #EFE6D5 0%, transparent 50%),
+      var(--parch);
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px 120px}
+
+  /* ---------- Header ---------- */
+  header{padding:48px 0 28px;text-align:center}
+  .eyebrow{
+    font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--gold-deep);font-weight:600;margin-bottom:14px;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:2.55rem;
+    line-height:1.12;letter-spacing:-.01em;color:var(--ink);
+  }
+  h1 em{font-style:italic;color:var(--gold-deep)}
+  .sub{
+    margin:16px auto 0;max-width:560px;color:var(--ink-soft);font-size:1.04rem;
+  }
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{
+    display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
+    margin:26px 0 6px;
+  }
+  .tbtn{
+    font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;
+    letter-spacing:.02em;color:var(--ink-soft);background:var(--card);
+    border:1px solid var(--line);border-radius:999px;padding:8px 16px;
+    cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:6px;
+  }
+  .tbtn:hover{border-color:var(--gold);color:var(--gold-deep);transform:translateY(-1px)}
+  .saved-flag{font-size:.74rem;color:var(--teal);text-align:center;height:18px;margin-top:4px;opacity:0;transition:.3s}
+  .saved-flag.show{opacity:1}
+
+  /* ---------- Progress ---------- */
+  .progress-shell{
+    position:sticky;top:0;z-index:50;background:rgba(244,238,226,.94);
+    backdrop-filter:blur(8px);padding:14px 0 12px;margin:0 -20px 8px;
+    border-bottom:1px solid var(--line);
+  }
+  .progress-inner{max-width:820px;margin:0 auto;padding:0 20px}
+  .progress-meta{display:flex;justify-content:space-between;font-size:.78rem;
+    color:var(--ink-soft);margin-bottom:7px;font-weight:500}
+  .progress-meta b{color:var(--gold-deep)}
+  .bar{height:7px;background:var(--parch-2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+  .bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-deep));
+    border-radius:99px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+
+  /* ---------- Intro ---------- */
+  .intro{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:26px 28px;margin:22px 0 30px;box-shadow:0 4px 18px var(--shadow);
+  }
+  .intro p{color:var(--ink-soft);font-size:.97rem}
+  .intro p+p{margin-top:12px}
+  .scale-key{display:flex;gap:6px;flex-wrap:wrap;margin-top:18px}
+  .scale-key span{
+    flex:1;min-width:90px;text-align:center;font-size:.72rem;font-weight:600;
+    color:var(--ink-soft);background:var(--parch-2);border:1px solid var(--line);
+    border-radius:8px;padding:7px 4px;line-height:1.3;
+  }
+
+  /* ---------- Questions ---------- */
+  .qcard{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:22px 24px;margin-bottom:16px;box-shadow:0 2px 10px var(--shadow);
+    transition:border-color .2s;
+  }
+  .qcard.answered{border-color:var(--teal-soft)}
+  .qnum{font-family:'Fraunces',serif;font-size:.85rem;color:var(--gold-deep);
+    font-weight:600;letter-spacing:.04em;margin-bottom:6px}
+  .qtext{font-size:1.04rem;font-weight:500;color:var(--ink);margin-bottom:16px;line-height:1.45}
+  .opts{display:flex;gap:7px}
+  .opt{
+    flex:1;text-align:center;cursor:pointer;border:1px solid var(--line);
+    background:var(--parch);border-radius:9px;padding:11px 4px 9px;
+    transition:.15s;user-select:none;
+  }
+  .opt:hover{border-color:var(--gold);background:var(--parch-2)}
+  .opt input{display:none}
+  .opt .dot{font-family:'Fraunces',serif;font-weight:600;font-size:1.15rem;display:block;color:var(--ink-soft)}
+  .opt .lbl{font-size:.64rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;font-weight:600;margin-top:3px;display:block}
+  .opt.sel{background:linear-gradient(180deg,var(--gold) ,var(--gold-deep));border-color:var(--gold-deep)}
+  .opt.sel .dot,.opt.sel .lbl{color:#fff}
+
+  /* ---------- Submit ---------- */
+  .submit-row{text-align:center;margin:34px 0}
+  .submit-btn{
+    font-family:'Fraunces',serif;font-size:1.08rem;font-weight:600;color:#fff;
+    background:linear-gradient(180deg,var(--teal),#345d54);border:none;
+    border-radius:12px;padding:16px 44px;cursor:pointer;letter-spacing:.01em;
+    box-shadow:0 6px 18px rgba(62,110,99,.28);transition:.2s;
+  }
+  .submit-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(62,110,99,.34)}
+  .submit-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+  .submit-hint{font-size:.8rem;color:var(--warn);margin-top:10px;min-height:18px}
+
+  /* ---------- Results ---------- */
+  #results{display:none;margin-top:10px}
+  .result-hero{
+    background:linear-gradient(160deg,#FBF7EF,#F0E7D6);
+    border:1px solid var(--gold);border-radius:18px;padding:34px 30px;
+    text-align:center;box-shadow:0 8px 28px var(--shadow);position:relative;overflow:hidden;
+  }
+  .result-hero::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 50% -10%,rgba(184,137,59,.16),transparent 60%);pointer-events:none}
+  .r-eyebrow{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-deep);font-weight:600}
+  .r-name{font-family:'Fraunces',serif;font-size:2.5rem;font-weight:600;color:var(--ink);margin:8px 0 4px;line-height:1.1}
+  .r-theme{font-family:'Fraunces',serif;font-style:italic;font-size:1.2rem;color:var(--teal);margin-bottom:6px}
+  .r-verse{font-size:.92rem;color:var(--ink-soft);max-width:520px;margin:14px auto 0;font-style:italic}
+  .r-verse-ref{display:block;font-style:normal;font-weight:600;color:var(--gold-deep);margin-top:6px;font-size:.82rem;letter-spacing:.03em}
+
+  .r-section{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:24px 26px;margin-top:16px;box-shadow:0 2px 10px var(--shadow)}
+  .r-section h3{font-family:'Fraunces',serif;font-size:1.18rem;font-weight:600;color:var(--gold-deep);
+    margin-bottom:12px;display:flex;align-items:center;gap:9px}
+  .r-section h3 .ic{font-size:1.05rem}
+  .r-section p{color:var(--ink-soft);font-size:.97rem}
+  .r-section p+p{margin-top:11px}
+  .r-list{list-style:none;margin-top:6px}
+  .r-list li{padding:8px 0 8px 26px;position:relative;color:var(--ink-soft);font-size:.95rem;border-bottom:1px dashed var(--line)}
+  .r-list li:last-child{border-bottom:none}
+  .r-list li::before{content:"✦";position:absolute;left:4px;color:var(--gold);font-size:.85rem;top:9px}
+
+  /* runner-up bars */
+  .ru-row{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+  .ru-name{width:130px;font-size:.85rem;font-weight:600;color:var(--ink);flex-shrink:0}
+  .ru-bar{flex:1;height:9px;background:var(--parch-2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+  .ru-fill{height:100%;background:linear-gradient(90deg,var(--teal-soft),var(--teal));border-radius:99px}
+  .ru-pct{width:42px;text-align:right;font-size:.78rem;color:var(--ink-soft);font-weight:600}
+
+  .result-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+
+  footer{text-align:center;color:var(--ink-soft);font-size:.78rem;padding-top:30px;border-top:1px solid var(--line);margin-top:40px}
+  footer b{color:var(--gold-deep);font-family:'Fraunces',serif}
+
+  @media(max-width:560px){
+    h1{font-size:2rem}
+    .qcard{padding:18px 16px}
+    .opt .lbl{display:none}
+    .opt{padding:13px 4px}
+    .ru-name{width:96px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">LIFE Transformation Network · Transformation Builder</div>
+    <h1>Which Bible Character is <em>Your Story</em> Right Now?</h1>
+    <p class="sub">Fifty honest questions reveal which of sixteen biblical journeys most mirrors your present season — and what it means for the next step of your transformation.</p>
+    <div class="toolbar">
+      <button class="tbtn" onclick="backup()">⬇ Backup</button>
+      <label class="tbtn" style="margin:0">⬆ Restore<input type="file" accept="application/json" onchange="restore(event)" hidden></label>
+      <button class="tbtn" onclick="resetAll()">↺ Start Over</button>
+    </div>
+    <div class="saved-flag" id="savedFlag">Progress saved</div>
+  </header>
+
+  <div class="progress-shell">
+    <div class="progress-inner">
+      <div class="progress-meta"><span><b id="answeredCount">0</b> of 50 answered</span><span id="pctLabel">0%</span></div>
+      <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+    </div>
+  </div>
+
+  <div class="intro" id="introBox">
+    <p>This isn't a personality test — it's a <strong>mirror for your current season</strong>. Answer how you actually feel <em>today</em>, not how you wish you felt or how you used to be. The character you most relate to reveals where God may be doing His deepest work in you right now.</p>
+    <p>For each statement, mark how true it is for you:</p>
+    <div class="scale-key">
+      <span>1<br>Not at all</span><span>2<br>Rarely</span><span>3<br>Sometimes</span><span>4<br>Often</span><span>5<br>Deeply true</span>
+    </div>
+  </div>
+
+  <form id="quizForm"></form>
+
+  <div class="submit-row">
+    <button type="button" class="submit-btn" id="submitBtn" onclick="computeResult()">Reveal My Character</button>
+    <div class="submit-hint" id="submitHint"></div>
+  </div>
+
+  <div id="results"></div>
+
+  <footer>
+    A free preview tool from <b>LIFE Transformation Network</b> · Your responses stay on your device.
+  </footer>
+</div>
+
+<script>
+/* ============ CHARACTER DATA ============ */
+const CHARS = {
+  adam:{name:"Adam & Eve",theme:"Brokenness → New Beginnings",icon:"🌿",
+    verse:"As in Adam all die, so in Christ all will be made alive.",ref:"1 Corinthians 15:22",
+    meaning:"You're in a season marked by the weight of brokenness — choices, losses, or shame that pulled you from where you were meant to be. Like Adam and Eve outside the garden, you feel the distance between the life you have and the life you sense you were made for. This is sacred ground: every transformation story begins here, with honesty about what's broken.",
+    walk:[
+      "Stop hiding. The fig leaves of self-protection keep you from the grace already reaching for you.",
+      "Name the brokenness specifically — vague guilt heals slowly; named wounds heal fully.",
+      "Receive that your story isn't over at the fall; redemption is the larger arc you're standing inside.",
+      "Let God clothe you. Restoration is something done *for* you before it's something you do."],
+    purpose:"Your purpose begins by becoming someone who knows, deeply, that brokenness is not the final word. The very awareness of how far you've fallen is the first evidence that you were made for more."},
+  noah:{name:"Noah",theme:"Obedience in the Unseen",icon:"🛶",
+    verse:"By faith Noah... in holy fear built an ark to save his family.",ref:"Hebrews 11:7",
+    meaning:"You sense God asking you to build something before you can see why it matters. Like Noah hammering an ark on dry ground, you're obeying instructions that others may question and that won't make sense until later. This season is about faithfulness to the next instruction, not certainty about the full outcome.",
+    walk:[
+      "Obey in the small, repeated tasks — the ark was built one plank at a time over decades.",
+      "Don't wait for the crowd's approval; Noah built while being misunderstood.",
+      "Trust that obedience now is preparation for provision you can't yet see.",
+      "Steward the people in your boat — your faithfulness shelters more than just you."],
+    purpose:"You are called to be a builder of refuge. Your obedience creates safety and continuity for those who come after you, even when its purpose stays hidden for a long time."},
+  abraham:{name:"Abraham",theme:"Faith That Goes First",icon:"⭐",
+    verse:"By faith Abraham... obeyed and went, even though he did not know where he was going.",ref:"Hebrews 11:8",
+    meaning:"You're being called to leave the familiar for a promise you can't fully verify. Like Abraham leaving Ur, you feel the pull toward a future bigger than your current vision, and the tension of trusting a God who reveals the path one step at a time. This is the season of stepping out before the map is complete.",
+    walk:[
+      "Act on the promise, not the proof — faith moves before it sees.",
+      "Hold both the waiting and the believing; Abraham trusted across decades of delay.",
+      "Surrender your 'Isaacs' — the very promises you cling to may need to be placed back in God's hands.",
+      "Let your obedience become a blessing that outlives you and reaches generations."],
+    purpose:"You are meant to be a person of legacy and faith — one whose trust opens doors for many. Your willingness to go first makes you a father or mother of those who follow."},
+  joseph:{name:"Joseph",theme:"Purpose Through Adversity",icon:"🌾",
+    verse:"You intended to harm me, but God intended it for good.",ref:"Genesis 50:20",
+    meaning:"You've walked through betrayal, injustice, or long detours — the pit and the prison before the palace. Like Joseph, you're learning that God is weaving purpose through pain that was never your fault. This season refines character in hidden places before public elevation.",
+    walk:[
+      "Keep your integrity in the prison; how you steward obscurity prepares you for influence.",
+      "Refuse bitterness — Joseph wept but forgave, and that freed his future.",
+      "Trust the timing; the dream took decades and the detours were part of the design.",
+      "Watch for the moment to serve those who once wounded you — redemption often arrives as reconciliation."],
+    purpose:"You are positioned to preserve and provide for others through the very suffering you endured. Your scars become a storehouse that saves lives in famine."},
+  moses:{name:"Moses",theme:"Calling & Reluctant Yes",icon:"🔥",
+    verse:"Who am I that I should go...? I will be with you.",ref:"Exodus 3:11-12",
+    meaning:"You feel a calling larger than your sense of qualification. Like Moses at the burning bush, you're wrestling with 'who am I?' and listing every reason you're not the right person. This season is about discovering that the call rests on God's presence, not your adequacy.",
+    walk:[
+      "Stop disqualifying yourself — God answers 'who am I?' with 'I will be with you.'",
+      "Bring your weakness (Moses' slow speech) as the very place God's strength shows up.",
+      "Lead from intimacy; your time on the mountain fuels your authority in the valley.",
+      "Delegate and share the weight — even Moses needed Aaron, Jethro, and the seventy."],
+    purpose:"You are called to lead people out of bondage toward promise. Your reluctance, surrendered, becomes the humility that makes you a leader God can trust."},
+  joshua:{name:"Joshua & Caleb",theme:"Courage to Possess",icon:"🗡️",
+    verse:"Be strong and courageous... for the Lord your God will be with you.",ref:"Joshua 1:9",
+    meaning:"You stand at the edge of a promise that requires courage to claim. Like Joshua and Caleb among the spies, you can see the giants — but you choose to focus on God's faithfulness instead of the obstacles. This is a season of bold, faith-filled action to take new ground.",
+    walk:[
+      "Choose the minority report — see the giants, but declare 'we are well able.'",
+      "Cross your Jordan; some promises only open once you step in.",
+      "Pair courage with obedience — even Jericho fell through unusual, faithful instructions.",
+      "Wholeheartedness is your edge; Caleb 'followed the Lord fully' for forty-five years."],
+    purpose:"You are meant to take ground others fear to claim. Your courage gives a whole community permission to advance into their inheritance."},
+  gideon:{name:"Gideon",theme:"Overcoming Fear & Insecurity",icon:"🌬️",
+    verse:"The Lord is with you, mighty warrior.",ref:"Judges 6:12",
+    meaning:"You feel small, overlooked, and afraid — yet God keeps calling you something you don't yet believe you are. Like Gideon threshing wheat in hiding, you're being summoned out of the winepress into a calling that terrifies you. This season is about letting God redefine your identity.",
+    walk:[
+      "Receive your new name; God called Gideon 'mighty warrior' while he was hiding.",
+      "It's okay to need reassurance — God met Gideon's fleece with patience, not rejection.",
+      "Tear down the idols at home before the battle abroad; courage starts in private.",
+      "Let God shrink your army; victory comes so He gets the glory, not your strength."],
+    purpose:"You are called to deliver others from oppression precisely because you know weakness. God turns your insecurity into a testimony that His power, not yours, wins the day."},
+  ruth:{name:"Ruth",theme:"Faithfulness & Loyal Love",icon:"🌾",
+    verse:"Where you go I will go... your God will be my God.",ref:"Ruth 1:16",
+    meaning:"You're in a season of quiet, costly faithfulness — staying committed when leaving would be easier. Like Ruth choosing Naomi and a foreign God, you're discovering that loyal love and humble diligence place you inside a redemption story bigger than you can see.",
+    walk:[
+      "Stay faithful in the ordinary; Ruth's loyalty looked small but rewrote history.",
+      "Glean diligently — show up and work even when the harvest looks meager.",
+      "Trust your redeemer; positioning yourself in faith opens unexpected provision.",
+      "Let your character speak; Ruth was known throughout the town as a woman of worth."],
+    purpose:"You are woven into a lineage of redemption. Your steady, loyal love becomes the unlikely thread through which God brings blessing to generations — Ruth became great-grandmother to David and ancestor of Christ."},
+  david:{name:"David",theme:"Identity & Heart-Led Leadership",icon:"👑",
+    verse:"The Lord looks at the heart.",ref:"1 Samuel 16:7",
+    meaning:"You're discovering who you really are beneath others' expectations. Like David — anointed young, tested in fields and caves, and honest about both worship and failure — you lead from the heart and feel deeply. This season is about anchoring your identity in God's view of you, not the crowd's.",
+    walk:[
+      "Tend the sheep faithfully; private faithfulness shapes public destiny.",
+      "Face your Goliaths in God's name, with the simple tools already in your hand.",
+      "Wait for the throne without grasping it; David honored Saul even while anointed.",
+      "When you fall, run toward God, not from Him — repentance, not perfection, defined David's heart."],
+    purpose:"You are called to be a leader after God's own heart — one whose worship, courage, and honest repentance teach others that intimacy with God matters more than image."},
+  solomon:{name:"Solomon",theme:"Wisdom & Discernment",icon:"📜",
+    verse:"Give your servant a discerning heart... to distinguish between right and wrong.",ref:"1 Kings 3:9",
+    meaning:"You're in a season where the right *decisions* matter more than raw effort. Like Solomon asking for wisdom over wealth, you sense that discernment, good judgment, and the fear of the Lord are the doors to everything else. This is a time to build on understanding rather than impulse.",
+    walk:[
+      "Ask for wisdom first; God delights to give it and adds the rest besides.",
+      "Guard your heart against drift — even the wisest can be pulled off course by divided affections.",
+      "Build wisely and steward well; you're meant to construct things that last.",
+      "Remember that the fear of the Lord is the beginning, not the byproduct, of wisdom."],
+    purpose:"You are called to discern and to build — to bring God's order, beauty, and justice into the world through wise decisions that bless many people."},
+  elijah:{name:"Elijah",theme:"Burnout & Renewal",icon:"🌄",
+    verse:"A gentle whisper... 'What are you doing here, Elijah?'",ref:"1 Kings 19:12-13",
+    meaning:"You've poured yourself out and now feel depleted, isolated, maybe ready to quit. Like Elijah collapsed under the broom tree after a mountaintop victory, you're learning that even great faith needs rest, nourishment, and the quiet voice of God. This is a season of tender renewal.",
+    walk:[
+      "Let yourself rest and eat first; God fed Elijah before He spoke to him.",
+      "Tell God the raw truth — Elijah's honest despair was met with gentleness, not rebuke.",
+      "Listen for the whisper, not the wind; God often renews in stillness, not spectacle.",
+      "You're not as alone as you feel — God reminded Elijah of seven thousand others."],
+    purpose:"You are called to a prophetic, God-empowered life — but first to learn that sustainable purpose is rooted in rhythms of rest, honesty, and intimacy. Your renewal becomes your message."},
+  daniel:{name:"Daniel",theme:"Integrity Under Pressure",icon:"🦁",
+    verse:"Daniel resolved not to defile himself.",ref:"Daniel 1:8",
+    meaning:"You're being pressured to compromise — to blend in, bend the rules, or stay quiet. Like Daniel in Babylon, you're choosing convictions that cost you, holding your standards and your prayer life even when it's dangerous. This season forges unshakable integrity.",
+    walk:[
+      "Decide your non-negotiables in advance, before the pressure comes.",
+      "Keep your windows open; Daniel prayed the same whether it was legal or not.",
+      "Excel with grace; integrity plus excellence made even his enemies respect him.",
+      "Trust God with the lions' den outcomes — faithfulness is yours, deliverance is His."],
+    purpose:"You are called to be a person of distinction in a compromised culture — one whose consistency and prayerfulness give you influence with kings and a witness that outlasts empires."},
+  esther:{name:"Esther",theme:"Influence & Divine Timing",icon:"👑",
+    verse:"For such a time as this.",ref:"Esther 4:14",
+    meaning:"You've been placed in a position of unexpected influence, and you sense a moment that requires courage. Like Esther realizing her platform was given for a purpose, you're being called to use your voice and access for others, even at personal risk. This is a season of stepping into your 'such a time as this.'",
+    walk:[
+      "Recognize your position as providence, not coincidence — you're placed on purpose.",
+      "Prepare in prayer and fasting before you act; Esther sought God before the king.",
+      "Use your influence for others' deliverance, not your own comfort.",
+      "Embrace the risk: 'if I perish, I perish' is the surrender that unlocks courage."],
+    purpose:"You are called to leverage your platform, access, and voice to protect and deliver others. Your influence is a stewardship given for a moment only you can meet."},
+  nehemiah:{name:"Nehemiah",theme:"Vision & Building",icon:"🧱",
+    verse:"The God of heaven will give us success... let us start rebuilding.",ref:"Nehemiah 2:20",
+    meaning:"You see what's broken and feel a holy burden to rebuild it. Like Nehemiah weeping over Jerusalem's walls then organizing the whole city to restore them, you carry vision, planning, and the resolve to lead a rebuilding project — and to keep working despite opposition. This is a season of focused construction.",
+    walk:[
+      "Let the burden become a plan; Nehemiah turned grief into surveyed, sectioned action.",
+      "Build with a trowel in one hand and a sword in the other — expect and resist opposition.",
+      "Mobilize others; the wall rose because everyone built the section in front of their own house.",
+      "Refuse distraction — 'I am doing a great work and cannot come down' is your boundary."],
+    purpose:"You are called to restore what's broken and to rally people around a shared vision. Your blend of prayer, planning, and perseverance rebuilds walls — and dignity — for a whole community."},
+  peter:{name:"Peter",theme:"Restoration After Failure",icon:"🐟",
+    verse:"Do you love me?... Feed my sheep.",ref:"John 21:17",
+    meaning:"You've stumbled in a way that still stings — said the wrong thing, denied what you believe, or fallen short when it mattered. Like Peter after the rooster crowed, you're in the tender space between failure and restoration, learning that Jesus restores and recommissions rather than rejects.",
+    walk:[
+      "Receive restoration; Jesus met Peter's three denials with three invitations to love.",
+      "Let your failure soften, not silence, you — restored people make the gentlest leaders.",
+      "Get back in the boat and out onto the water; impulsive faith, redirected, becomes bold faith.",
+      "Your past doesn't disqualify your calling — Peter preached Pentecost weeks after denying Christ."],
+    purpose:"You are called to lead and feed others *because* of your restoration, not despite your failure. The one who was forgiven much becomes the one who shepherds with tenderness and fire."},
+  paul:{name:"Paul",theme:"Transformation & Mission",icon:"✝️",
+    verse:"I am the worst of sinners... that Christ might display his immense patience.",ref:"1 Timothy 1:15-16",
+    meaning:"You've experienced — or are experiencing — a dramatic turnaround, a redefinition of everything you thought you knew. Like Paul on the Damascus road, your past zeal is being redirected into mission. This season is about letting grace rewrite your story and pour your transformed life into a purpose bigger than yourself.",
+    walk:[
+      "Let grace fully redefine you; the persecutor became the apostle without earning it.",
+      "Pour your transformation outward — your testimony is fuel for others' freedom.",
+      "Embrace the cost of mission; Paul counted hardship as worth it for the calling.",
+      "Finish the race — run with endurance, knowing the goal is faithfulness to the end."],
+    purpose:"You are called to a life of mission shaped by grace — to take the radical change in you and multiply it in others, building, teaching, and planting wherever you go."}
+};
+
+/* ============ QUESTIONS (50) ============ */
+/* each: {t: text, c: character key} */
+const QUESTIONS = [
+  {t:"I'm carrying shame or regret over choices that pulled me away from who I want to be.",c:"adam"},
+  {t:"I feel a distance between the life I have and the life I sense I was made for.",c:"adam"},
+  {t:"Lately I catch myself hiding parts of who I am from God and others.",c:"adam"},
+
+  {t:"I sense God asking me to build or prepare something before I can see why it matters.",c:"noah"},
+  {t:"I'm willing to keep obeying even when people around me don't understand it.",c:"noah"},
+  {t:"I feel responsible for protecting and providing safety for the people in my care.",c:"noah"},
+
+  {t:"I feel pulled toward a future that's bigger than my current circumstances.",c:"abraham"},
+  {t:"I'm being asked to leave something familiar and trust a promise I can't fully verify.",c:"abraham"},
+  {t:"I'm learning to trust God's timing across long seasons of waiting.",c:"abraham"},
+
+  {t:"I've experienced betrayal or injustice that wasn't my fault.",c:"joseph"},
+  {t:"I believe God can weave good purpose out of painful detours in my story.",c:"joseph"},
+  {t:"I'm being shaped in hidden, obscure places before any public recognition.",c:"joseph"},
+
+  {t:"I feel a calling that's bigger than my sense of being qualified for it.",c:"moses"},
+  {t:"I often ask 'who am I to do this?' when I think about what God may be asking.",c:"moses"},
+  {t:"I'm drawn to lead people out of something toward something better.",c:"moses"},
+
+  {t:"I'm standing at the edge of a promise that will take real courage to claim.",c:"joshua"},
+  {t:"I tend to focus on God's faithfulness rather than the size of the obstacles.",c:"joshua"},
+  {t:"I'm ready to take new ground that others are too afraid to step into.",c:"joshua"},
+
+  {t:"I often feel small, overlooked, or afraid of what I'm being asked to do.",c:"gideon"},
+  {t:"God seems to call me something braver than I currently believe I am.",c:"gideon"},
+  {t:"I sometimes need extra reassurance before I'll step out in faith.",c:"gideon"},
+
+  {t:"I'm staying loyally committed to someone or something when leaving would be easier.",c:"ruth"},
+  {t:"I find meaning in quiet, humble faithfulness rather than the spotlight.",c:"ruth"},
+  {t:"My steady character is something others quietly notice and respect.",c:"ruth"},
+
+  {t:"I'm discovering who I really am beneath other people's expectations of me.",c:"david"},
+  {t:"I lead and worship from the heart, and I feel things deeply.",c:"david"},
+  {t:"When I fail, my instinct is to run toward God rather than away from Him.",c:"david"},
+
+  {t:"In this season, making wise decisions matters more than working harder.",c:"solomon"},
+  {t:"I find myself asking God for discernment and good judgment above other things.",c:"solomon"},
+  {t:"I'm meant to build things that are orderly and that will last.",c:"solomon"},
+
+  {t:"I've poured myself out and now feel depleted or close to burnout.",c:"elijah"},
+  {t:"Even after victories, I sometimes feel isolated or ready to quit.",c:"elijah"},
+  {t:"I most need rest, honesty, and the quiet voice of God right now.",c:"elijah"},
+
+  {t:"I'm being pressured to compromise my convictions to fit in or get ahead.",c:"daniel"},
+  {t:"I hold to my standards and prayer life even when it costs me something.",c:"daniel"},
+  {t:"I want to excel with excellence while keeping my integrity intact.",c:"daniel"},
+
+  {t:"I've been placed in a position of influence I didn't fully seek.",c:"esther"},
+  {t:"I sense a moment that requires me to use my voice or access for others.",c:"esther"},
+  {t:"I'm willing to take a personal risk to help deliver or protect people.",c:"esther"},
+
+  {t:"I see something broken and feel a holy burden to help rebuild it.",c:"nehemiah"},
+  {t:"I'm energized by vision, planning, and organizing people toward a goal.",c:"nehemiah"},
+  {t:"I can keep working on a mission even when others oppose or distract me.",c:"nehemiah"},
+
+  {t:"I've stumbled or fallen short recently in a way that still stings.",c:"peter"},
+  {t:"I'm learning that God restores and recommissions rather than rejects me.",c:"peter"},
+  {t:"My impulsiveness or boldness has gotten me into trouble — and into faith.",c:"peter"},
+
+  {t:"I've experienced a dramatic turnaround that redefined what I believed.",c:"paul"},
+  {t:"My past energy or zeal is being redirected toward a new mission.",c:"paul"},
+  {t:"I feel compelled to pour my transformation into helping others change.",c:"paul"},
+
+  {t:"I believe the hardest parts of my story can become a storehouse that helps others.",c:"joseph"},
+  {t:"I'd rather finish faithfully than comfortably — the mission is worth the cost.",c:"paul"}
+];
+
+/* ============ STATE ============ */
+const STORE_KEY = "ltn_bible_character_v1";
+let answers = {}; // index -> 1..5
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw){ answers = JSON.parse(raw)||{}; }
+  }catch(e){ answers = {}; }
+}
+function saveState(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(answers)); flagSaved(); }catch(e){}
+}
+let flagT;
+function flagSaved(){
+  const f=document.getElementById('savedFlag'); f.classList.add('show');
+  clearTimeout(flagT); flagT=setTimeout(()=>f.classList.remove('show'),1100);
+}
+
+/* ============ RENDER ============ */
+const SCALE=[["1","Not at all"],["2","Rarely"],["3","Sometimes"],["4","Often"],["5","Deeply"]];
+function renderQuestions(){
+  const form=document.getElementById('quizForm');
+  form.innerHTML = QUESTIONS.map((q,i)=>{
+    const sel=answers[i];
+    const opts=SCALE.map(([v,l])=>`
+      <label class="opt ${sel==v?'sel':''}" data-q="${i}" data-v="${v}">
+        <input type="radio" name="q${i}" value="${v}" ${sel==v?'checked':''}>
+        <span class="dot">${v}</span><span class="lbl">${l}</span>
+      </label>`).join('');
+    return `<div class="qcard ${sel?'answered':''}" id="qc${i}">
+      <div class="qnum">Question ${i+1}</div>
+      <div class="qtext">${q.t}</div>
+      <div class="opts">${opts}</div>
+    </div>`;
+  }).join('');
+
+  form.querySelectorAll('.opt').forEach(o=>{
+    o.addEventListener('click',()=>{
+      const qi=+o.dataset.q, v=+o.dataset.v;
+      answers[qi]=v;
+      const card=document.getElementById('qc'+qi);
+      card.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));
+      o.classList.add('sel'); card.classList.add('answered');
+      saveState(); updateProgress();
+    });
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  const n=Object.keys(answers).length;
+  const pct=Math.round(n/QUESTIONS.length*100);
+  document.getElementById('answeredCount').textContent=n;
+  document.getElementById('pctLabel').textContent=pct+"%";
+  document.getElementById('barFill').style.width=pct+"%";
+  const hint=document.getElementById('submitHint');
+  const btn=document.getElementById('submitBtn');
+  if(n<QUESTIONS.length){ hint.textContent=(QUESTIONS.length-n)+" question"+((QUESTIONS.length-n)>1?"s":"")+" left to answer."; }
+  else { hint.textContent=""; }
+}
+
+/* ============ SCORING ============ */
+function computeResult(){
+  const n=Object.keys(answers).length;
+  if(n<QUESTIONS.length){
+    document.getElementById('submitHint').textContent="Please answer all "+QUESTIONS.length+" questions first — "+(QUESTIONS.length-n)+" remaining.";
+    // scroll to first unanswered
+    for(let i=0;i<QUESTIONS.length;i++){ if(!answers[i]){ document.getElementById('qc'+i).scrollIntoView({behavior:'smooth',block:'center'}); break; } }
+    return;
+  }
+  const scores={}, counts={};
+  Object.keys(CHARS).forEach(k=>{scores[k]=0;counts[k]=0;});
+  QUESTIONS.forEach((q,i)=>{ scores[q.c]+=(answers[i]||0); counts[q.c]++; });
+  // normalize to percentage of max possible per character
+  const norm=Object.keys(scores).map(k=>({k,pct: scores[k]/(counts[k]*5)*100, raw:scores[k]}));
+  norm.sort((a,b)=>b.pct-a.pct);
+  renderResults(norm);
+}
+
+function renderResults(norm){
+  const top=norm[0], c=CHARS[top.k];
+  const runners=norm.slice(1,5);
+  const r=document.getElementById('results');
+  r.innerHTML=`
+    <div class="result-hero">
+      <div class="r-eyebrow">The character your season most mirrors</div>
+      <div class="r-name">${c.name}</div>
+      <div class="r-theme">${c.theme}</div>
+      <p class="r-verse">"${c.verse}"<span class="r-verse-ref">— ${c.ref}</span></p>
+    </div>
+
+    <div class="r-section">
+      <h3><span class="ic">🪞</span>What this means for you</h3>
+      <p>${c.meaning}</p>
+    </div>
+
+    <div class="r-section">
+      <h3><span class="ic">🚶</span>Your walk — the next steps</h3>
+      <ul class="r-list">${c.walk.map(w=>`<li>${w}</li>`).join('')}</ul>
+    </div>
+
+    <div class="r-section">
+      <h3><span class="ic">🎯</span>Your purpose in transformation</h3>
+      <p>${c.purpose}</p>
+    </div>
+
+    <div class="r-section">
+      <h3><span class="ic">📊</span>Other journeys close to your heart</h3>
+      <p style="margin-bottom:14px">Transformation is rarely a single thread. These characters also resonate with your current season:</p>
+      ${runners.map(ru=>`
+        <div class="ru-row">
+          <span class="ru-name">${CHARS[ru.k].name}</span>
+          <div class="ru-bar"><div class="ru-fill" style="width:${ru.pct.toFixed(0)}%"></div></div>
+          <span class="ru-pct">${ru.pct.toFixed(0)}%</span>
+        </div>`).join('')}
+    </div>
+
+    <div class="result-actions">
+      <button class="tbtn" onclick="exportPDF()">📄 Save as PDF</button>
+      <button class="tbtn" onclick="document.getElementById('quizForm').scrollIntoView({behavior:'smooth'})">↑ Review Answers</button>
+      <button class="tbtn" onclick="resetAll()">↺ Take Again</button>
+    </div>
+  `;
+  r.style.display="block";
+  window._lastResult={top:c, runners:runners.map(x=>({name:CHARS[x.k].name,pct:x.pct.toFixed(0)}))};
+  r.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ============ PDF ============ */
+function exportPDF(){
+  if(!window._lastResult){return;}
+  const {top,runners}=window._lastResult;
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'pt',format:'letter'});
+  const W=612, M=54; let y=70;
+  const ink=[58,50,40], gold=[154,111,42], teal=[62,110,99], soft=[107,94,76];
+
+  function wrap(text,size,color,font,lh,maxW){
+    doc.setFont('times',font); doc.setFontSize(size); doc.setTextColor(...color);
+    const lines=doc.splitTextToSize(text, maxW||(W-2*M));
+    lines.forEach(l=>{ if(y>740){doc.addPage();y=70;} doc.text(l,M,y); y+=lh; });
+  }
+  doc.setFont('times','italic'); doc.setFontSize(11); doc.setTextColor(...gold);
+  doc.text("LIFE TRANSFORMATION NETWORK · TRANSFORMATION BUILDER", M, 44);
+  doc.setDrawColor(216,203,179); doc.line(M,52,W-M,52);
+
+  wrap("Which Bible Character Is Your Story?", 22, ink, 'bold', 28);
+  y+=4;
+  wrap("Your character: "+top.name, 16, teal, 'bold', 22);
+  wrap(top.theme, 12, soft, 'italic', 18); y+=6;
+  wrap('"'+top.verse+'"  — '+top.ref, 11, gold, 'italic', 16); y+=12;
+
+  wrap("What this means for you", 13, gold, 'bold', 18);
+  wrap(top.meaning, 11, ink, 'normal', 16); y+=10;
+
+  wrap("Your walk — the next steps", 13, gold, 'bold', 18);
+  top.walk.forEach(w=>{ wrap("•  "+w, 11, ink, 'normal', 16); }); y+=10;
+
+  wrap("Your purpose in transformation", 13, gold, 'bold', 18);
+  wrap(top.purpose, 11, ink, 'normal', 16); y+=12;
+
+  wrap("Other journeys close to your heart", 13, gold, 'bold', 18);
+  runners.forEach(ru=>{ wrap("•  "+ru.name+" — "+ru.pct+"%", 11, soft, 'normal', 15); });
+
+  y+=24; if(y>720){doc.addPage();y=70;}
+  doc.setDrawColor(216,203,179); doc.line(M,y,W-M,y); y+=16;
+  wrap("A free preview tool from the LIFE Transformation Network. Continue your journey in the Transformation Builder program.", 9, soft, 'italic', 13);
+
+  doc.save("My-Bible-Character-"+top.name.replace(/[^a-z]/gi,'')+".pdf");
+}
+
+/* ============ BACKUP / RESTORE / RESET ============ */
+function backup(){
+  const blob=new Blob([JSON.stringify({answers},null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download="bible-character-progress.json"; a.click();
+}
+function restore(e){
+  const file=e.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      answers=data.answers||{}; saveState(); renderQuestions();
+      document.getElementById('results').style.display='none';
+    }catch(err){ alert("That file couldn't be read. Please choose a valid backup file."); }
+  };
+  reader.readAsText(file);
+  e.target.value='';
+}
+function resetAll(){
+  if(!confirm("Start over? This clears all your answers on this device.")) return;
+  answers={}; localStorage.removeItem(STORE_KEY);
+  document.getElementById('results').style.display='none';
+  renderQuestions();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ============ INIT ============ */
+loadState();
+renderQuestions();
+</script>
+</body>
+</html>
