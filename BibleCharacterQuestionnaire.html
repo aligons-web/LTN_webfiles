@@ -165,6 +165,19 @@
     .opt{padding:13px 4px}
     .ru-name{width:96px}
   }
+
+  /* ---------- Print to PDF ---------- */
+  @media print{
+    body{background:#fff !important}
+    .wrap{max-width:100%;padding:0 12px}
+    .toolbar,.saved-flag,.progress-shell,.submit-row,.result-actions{display:none !important}
+    .qcard,.r-section,.result-hero,.intro{
+      box-shadow:none !important;break-inside:avoid;page-break-inside:avoid;
+    }
+    .opt.sel{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .result-hero,.bar-fill,.ru-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    header{padding-top:18px}
+  }
 </style>
 </head>
 <body>
@@ -178,6 +191,7 @@
       <button class="tbtn" onclick="backup()">⬇ Backup</button>
       <label class="tbtn" style="margin:0">⬆ Restore<input type="file" accept="application/json" onchange="restore(event)" hidden></label>
       <button class="tbtn" onclick="resetAll()">↺ Start Over</button>
+      <button class="tbtn" onclick="window.print()">🖨 Print to PDF</button>
     </div>
     <div class="saved-flag" id="savedFlag">Progress saved</div>
   </header>
