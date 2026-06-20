@@ -188,8 +188,6 @@
     <h1>Which Bible Character is <em>Your Story</em> Right Now?</h1>
     <p class="sub">Fifty honest questions reveal which of sixteen biblical journeys most mirrors your present season — and what it means for the next step of your transformation.</p>
     <div class="toolbar">
-      <button class="tbtn" onclick="backup()">⬇ Backup</button>
-      <label class="tbtn" style="margin:0">⬆ Restore<input type="file" accept="application/json" onchange="restore(event)" hidden></label>
       <button class="tbtn" onclick="resetAll()">↺ Start Over</button>
       <button class="tbtn" onclick="window.print()">🖨 Print to PDF</button>
     </div>
@@ -216,6 +214,10 @@
   <div class="submit-row">
     <button type="button" class="submit-btn" id="submitBtn" onclick="computeResult()">Reveal My Character</button>
     <div class="submit-hint" id="submitHint"></div>
+    <div class="toolbar" style="margin-top:18px">
+      <button class="tbtn" onclick="resetAll()">↺ Start Over</button>
+      <button class="tbtn" onclick="window.print()">🖨 Print to PDF</button>
+    </div>
   </div>
 
   <div id="results"></div>
